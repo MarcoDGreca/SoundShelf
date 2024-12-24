@@ -1,7 +1,7 @@
 package entity;
 
 public enum Ruolo {
-    ADMIN("Admin"),
+    GESTORESITO("Gestore Sito"),
     UTENTE("User");
 
     private final String ruolo;

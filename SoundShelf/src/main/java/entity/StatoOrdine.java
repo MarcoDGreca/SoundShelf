@@ -1,13 +1,13 @@
 package entity;
 
-public enum Stato {
+public enum StatoOrdine {
 	IN_LAVORAZIONE("In lavorazione"),
     COMPLETATO("Completato"),
     RICHIESTO_RIMBORSO("Richiesto Rimborso");
 
     private final String stato;
 
-    Stato(String stato) {
+    StatoOrdine(String stato) {
         this.stato = stato;
     }
 
@@ -15,8 +15,8 @@ public enum Stato {
         return this.stato;
     }
 
-    public static Stato fromString(String stato) {
-        for (Stato s : Stato.values()) {
+    public static StatoOrdine fromString(String stato) {
+        for (StatoOrdine s : StatoOrdine.values()) {
             if (s.getStato().equalsIgnoreCase(stato)) {
                 return s;
             }

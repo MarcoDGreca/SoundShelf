@@ -7,19 +7,17 @@ public class Utente {
 	private String cognome;
 	private String tel;
 	private String indirizzo;
-	private String numero;
 	private Ruolo ruolo;
 
 public Utente() {}
 
-public Utente(String email, String passwordUser, String nome, String cognome, String indirizzo, String telefono, String numero, Ruolo ruolo) {
+public Utente(String email, String passwordUser, String nome, String cognome, String indirizzo, String telefono, Ruolo ruolo) {
     this.email = email;
     this.passwordUser = passwordUser;
     this.nome = nome;
     this.cognome = cognome;
     this.indirizzo = indirizzo;
     this.tel = telefono;
-    this.numero = numero;
     this.ruolo = ruolo;
 }
 
@@ -69,14 +67,6 @@ public String getTelefono() {
 
 public void setTelefono(String telefono) {
     this.tel = telefono;
-}
-
-public String getNumero() {
-    return numero;
-}
-
-public void setNumero(String numero) {
-    this.numero = numero;
 }
 
 public Ruolo getRuolo() {

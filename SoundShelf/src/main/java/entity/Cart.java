@@ -10,23 +10,23 @@ public class Cart {
         this.items = new ArrayList<>();
     }
 
-    public void addTicket(Ticket ticket) {
+    public void addProduct(Product product) {
         for (CartItem item : items) {
-            if (item.getTicket().getCodiceBiglietto() == ticket.getCodiceBiglietto()) {
+            if (item.getProduct().getProductCode() == product.getProductCode()) {
                 item.setQuantity(item.getQuantity() + 1);
                 return;
             }
         }
-        items.add(new CartItem(ticket, 1));
+        items.add(new CartItem(product, 1));
     }
 
-    public void removeTicket(Ticket ticket) {
-        items.removeIf(item -> item.getTicket().getCodiceBiglietto() == ticket.getCodiceBiglietto());
+    public void removeProduct(Product product) {
+        items.removeIf(item -> item.getProduct().getProductCode() == product.getProductCode());
     }
 
-    public void updateQuantity(Ticket ticket, int quantity) {
+    public void updateQuantity(Product product, int quantity) {
         for (CartItem item : items) {
-            if (item.getTicket().getCodiceBiglietto() == ticket.getCodiceBiglietto()) {
+            if (item.getProduct().getProductCode() == product.getProductCode()) {
                 if (quantity > 0) {
                     item.setQuantity(quantity);
                 } else {

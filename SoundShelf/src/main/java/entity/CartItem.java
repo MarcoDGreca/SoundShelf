@@ -3,21 +3,21 @@ package entity;
 import java.sql.SQLException;
 
 public class CartItem {
-    private Ticket ticket;
+    private Product product;
     private int quantity;
-    private EventDAO eventDAO = new EventDAO();
+    private ProductDAO productDAO = new ProductDAO();
 
-    public CartItem(Ticket ticket, int quantity) {
-        this.ticket = ticket;
+    public CartItem(Product product, int quantity) {
+        this.product = product;
         this.quantity = quantity;
     }
 
-    public Ticket getTicket() {
-        return ticket;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public int getQuantity() {
@@ -29,15 +29,15 @@ public class CartItem {
     }
 
     public double getTotalPrice() {
-        return ticket.getPrezzoUnitario() * quantity;
+        return product.getSalePrice() * quantity;
     }
     
     public int getCodiceEventoBiglietto() {
-        return ticket.getCodiceEvento();
+        return product.getProductCode();
     }
     
     public String getImageItem() throws SQLException {
-		return eventDAO.getImage(ticket.getCodiceEvento());
+		return productDAO.getImage(product.getProductCode());
     }
 }
 

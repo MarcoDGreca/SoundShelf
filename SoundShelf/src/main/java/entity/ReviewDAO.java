@@ -10,120 +10,108 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewDAO {
-    private DataSource dataSource;
 
-    public ReviewDAO() {
-        this.dataSource = DataSource.getInstance();;
+	private DataSource dataSource;
+
+    public ReviewDAO(Connection connection) {
+    	this.dataSource = DataSource.getInstance();
     }
 
-    public synchronized Review getReviewById(int reviewId) {
-        String query = "SELECT * FROM Recensione WHERE codiceRecensione = ?";
+    public void saveReview(Review review) throws SQLException {
+        String query = "INSERT INTO product_reviews (codiceProdotto, emailCliente, votazione, testo, dataRecensione) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, reviewId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new Review(
-                        resultSet.getInt("codiceRecensione"),
-                        resultSet.getInt("codiceEvento"),
-                        resultSet.getString("emailCliente"),
-                        resultSet.getInt("votazione"),
-                        resultSet.getString("testo"),
-                        resultSet.getDate("dataRecensione")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public void addReview(Review review) {
-        String sql = "INSERT INTO Recensione (codiceEvento, emailCliente, votazione, testo, dataRecensione) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DataSource.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, review.getCodiceEvento());
-            ps.setString(2, review.getEmailCliente());
-            ps.setInt(3, review.getVotazione());
-            ps.setString(4, review.getTesto());
-            ps.setDate(5, review.getDataRecensione());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+                PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1, review.getCodiceProdotto());
+            statement.setString(2, review.getEmailCliente());
+            statement.setInt(3, review.getVotazione());
+            statement.setString(4, review.getTesto());
+            statement.setDate(5, review.getDataRecensione());
+            statement.executeUpdate();
         }
     }
 
-    public synchronized void updateReview(Review review) {
-        String query = "UPDATE Recensione SET codiceEvento = ?, emailCliente = ?, votazione = ?, testo = ?, dataRecensione = ? WHERE codiceRecensione = ?";
+    public void updateReview(Review review) throws SQLException {
+        String query = "UPDATE product_reviews SET codiceProdotto = ?, emailCliente = ?, votazione = ?, testo = ?, dataRecensione = ? WHERE codiceRecensione = ?";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, review.getCodiceEvento());
+                PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1, review.getCodiceProdotto());
             statement.setString(2, review.getEmailCliente());
             statement.setInt(3, review.getVotazione());
             statement.setString(4, review.getTesto());
             statement.setDate(5, review.getDataRecensione());
             statement.setInt(6, review.getCodiceRecensione());
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    public synchronized void deleteReview(int reviewId) {
-        String query = "DELETE FROM Recensione WHERE codiceRecensione = ?";
+    public void deleteReview(int reviewId) throws SQLException {
+        String query = "DELETE FROM product_reviews WHERE codiceRecensione = ?";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+                PreparedStatement statement = connection.prepareStatement(query)){
             statement.setInt(1, reviewId);
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
-    public synchronized List<Review> getAllReviews() {
-        List<Review> reviews = new ArrayList<>();
-        String query = "SELECT * FROM Recensione";
+    public Review getReviewById(int reviewId) throws SQLException {
+        String query = "SELECT * FROM product_reviews WHERE codiceRecensione = ?";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-            while (resultSet.next()) {
-                Review review = new Review(
-                    resultSet.getInt("codiceRecensione"),
-                    resultSet.getInt("codiceEvento"),
-                    resultSet.getString("emailCliente"),
-                    resultSet.getInt("votazione"),
-                    resultSet.getString("testo"),
-                    resultSet.getDate("dataRecensione")
-                );
-                reviews.add(review);
+                PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1, reviewId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Review(
+                            resultSet.getInt("codiceRecensione"),
+                            resultSet.getInt("codiceProdotto"),
+                            resultSet.getString("emailCliente"),
+                            resultSet.getInt("votazione"),
+                            resultSet.getString("testo"),
+                            resultSet.getDate("dataRecensione")
+                    );
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Review> getAllReviews() throws SQLException {
+        List<Review> reviews = new ArrayList<>();
+        String query = "SELECT * FROM product_reviews";
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+        	ResultSet resultSet = statement.executeQuery(query);
+            while (resultSet.next()) {
+                reviews.add(new Review(
+                        resultSet.getInt("codiceRecensione"),
+                        resultSet.getInt("codiceProdotto"),
+                        resultSet.getString("emailCliente"),
+                        resultSet.getInt("votazione"),
+                        resultSet.getString("testo"),
+                        resultSet.getDate("dataRecensione")
+                ));
+            }
         }
         return reviews;
     }
-    
-    public List<Review> getReviewsByEventId(int eventId) {
+
+    public List<Review> getReviewsByProductId(int productId) throws SQLException {
         List<Review> reviews = new ArrayList<>();
-        String sql = "SELECT * FROM Recensione WHERE codiceEvento = ?";
-        try (Connection conn = DataSource.getInstance().getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, eventId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Review review = new Review();
-                    review.setCodiceRecensione(rs.getInt("codiceRecensione"));
-                    review.setCodiceEvento(rs.getInt("codiceEvento"));
-                    review.setEmailCliente(rs.getString("emailCliente"));
-                    review.setVotazione(rs.getInt("votazione"));
-                    review.setTesto(rs.getString("testo"));
-                    review.setDataRecensione(rs.getDate("dataRecensione"));
-                    reviews.add(review);
+        String query = "SELECT * FROM product_reviews WHERE codiceProdotto = ?";
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1, productId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    reviews.add(new Review(
+                            resultSet.getInt("codiceRecensione"),
+                            resultSet.getInt("codiceProdotto"),
+                            resultSet.getString("emailCliente"),
+                            resultSet.getInt("votazione"),
+                            resultSet.getString("testo"),
+                            resultSet.getDate("dataRecensione")
+                    ));
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return reviews;
     }

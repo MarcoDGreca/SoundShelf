@@ -3,28 +3,32 @@ package entity;
 import java.sql.Date;
 
 public class Order {
-    private int codiceOrdine;
+    private int numeroOrdine;
     private String emailCliente;
     private double prezzoTotale;
-    private Date dataAcquisto;
-    private Stato stato;
+    private Date dataOrdine;
+    private Date dataConsegna;
+    private String indirizzoSpedizione;
+    private StatoOrdine stato;
 
     public Order() {}
 
-    public Order(int codiceOrdine, String emailCliente, double prezzoTotale, Date dataAcquisto, Stato stato) {
-        this.codiceOrdine = codiceOrdine;
+    public Order(int codiceOrdine, String emailCliente, double prezzoTotale, Date dataOrdine, Date dataConsegna, String indirizzoSpedizione, StatoOrdine stato) {
+        this.numeroOrdine = codiceOrdine;
         this.emailCliente = emailCliente;
         this.prezzoTotale = prezzoTotale;
-        this.dataAcquisto = dataAcquisto;
+        this.dataOrdine = dataOrdine;
+        this.dataConsegna = dataConsegna;
+        this.indirizzoSpedizione = indirizzoSpedizione;
         this.stato = stato;
     }
 
-    public int getCodiceOrdine() {
-        return codiceOrdine;
+    public int getNumeroOrdine() {
+        return numeroOrdine;
     }
 
-    public void setCodiceOrdine(int codiceOrdine) {
-        this.codiceOrdine = codiceOrdine;
+    public void setNumeroOrdine(int codiceOrdine) {
+        this.numeroOrdine = codiceOrdine;
     }
 
     public String getEmailCliente() {
@@ -43,19 +47,35 @@ public class Order {
         this.prezzoTotale = prezzoTotale;
     }
 
-    public Date getDataAcquisto() {
-        return dataAcquisto;
+    public Date getDataOrdine() {
+        return dataOrdine;
     }
 
-    public void setDataAcquisto(Date dataAcquisto) {
-        this.dataAcquisto = dataAcquisto;
+    public void setDataOrdine(Date dataOrdine) {
+        this.dataOrdine = dataOrdine;
     }
 
-    public Stato getStato() {
+    public StatoOrdine getStato() {
         return stato;
     }
 
-    public void setStato(Stato stato) {
+    public void setStato(StatoOrdine stato) {
         this.stato = stato;
     }
+
+	public Date getDataConsegna() {
+		return dataConsegna;
+	}
+
+	public void setDataConsegna(Date dataConsegna) {
+		this.dataConsegna = dataConsegna;
+	}
+
+	public String getIndirizzoSpedizione() {
+		return indirizzoSpedizione;
+	}
+
+	public void setIndirizzoSpedizione(String indirizzoSpedizione) {
+		this.indirizzoSpedizione = indirizzoSpedizione;
+	}
 }

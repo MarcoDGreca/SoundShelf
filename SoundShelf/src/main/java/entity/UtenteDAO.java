@@ -30,7 +30,6 @@ public class UtenteDAO {
                         resultSet.getString("cognome"),
                         resultSet.getString("indirizzo"),
                         resultSet.getString("telefono"),
-                        resultSet.getString("numero"),
                         Ruolo.fromString(resultSet.getString("ruolo"))
                     );
                 }
@@ -42,7 +41,7 @@ public class UtenteDAO {
     }
 
     public synchronized void addUser(Utente utente) {
-        String query = "INSERT INTO Utente (email, passwordUser, nome, cognome, indirizzo, telefono, numero, ruolo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Utente (email, passwordUser, nome, cognome, indirizzo, telefono, ruolo) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, utente.getEmail());
@@ -51,7 +50,6 @@ public class UtenteDAO {
             statement.setString(4, utente.getCognome());
             statement.setString(5, utente.getIndirizzo());
             statement.setString(6, utente.getTelefono());
-            statement.setString(7, utente.getNumero());
             statement.setString(8, utente.getRuolo().getRuolo());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -60,7 +58,7 @@ public class UtenteDAO {
     }
 
     public synchronized void updateUser(Utente utente) {
-        String query = "UPDATE Utente SET passwordUser = ?, nome = ?, cognome = ?, indirizzo = ?, telefono = ?, numero = ?, ruolo = ? WHERE email = ?";
+        String query = "UPDATE Utente SET passwordUser = ?, nome = ?, cognome = ?, indirizzo = ?, telefono = ?, ruolo = ? WHERE email = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, utente.getPasswordUser());
@@ -68,7 +66,6 @@ public class UtenteDAO {
             statement.setString(3, utente.getCognome());
             statement.setString(4, utente.getIndirizzo());
             statement.setString(5, utente.getTelefono());
-            statement.setString(6, utente.getNumero());
             statement.setString(7, utente.getRuolo().getRuolo());
             statement.setString(8, utente.getEmail());
             statement.executeUpdate();
@@ -102,7 +99,6 @@ public class UtenteDAO {
                     resultSet.getString("cognome"),
                     resultSet.getString("indirizzo"),
                     resultSet.getString("telefono"),
-                    resultSet.getString("numero"),
                     Ruolo.fromString(resultSet.getString("ruolo"))
                 );
                 users.add(utente);
@@ -128,7 +124,6 @@ public class UtenteDAO {
                     user.setCognome(resultSet.getString("cognome"));
                     user.setIndirizzo(resultSet.getString("indirizzo"));
                     user.setTelefono(resultSet.getString("telefono"));
-                    user.setNumero(resultSet.getString("numero"));
                     user.setRuolo(Ruolo.fromString(resultSet.getString("ruolo")));
                     return user;
                 }
