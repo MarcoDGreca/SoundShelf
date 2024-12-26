@@ -14,8 +14,9 @@ public class SupportRequestDAO {
         this.dataSource = DataSource.getInstance();
     }
 
+
     public void saveSupportRequest(SupportRequest supportRequest) throws SQLException {
-        String query = "INSERT INTO support_requests (name, email, description, data_invio, orario_invio, stato) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO support_requests (name, email, description, data_invio, orario_invio, stato, informazioni_aggiuntive) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, supportRequest.getName());
@@ -24,12 +25,13 @@ public class SupportRequestDAO {
             statement.setDate(4, supportRequest.getDataInvio());
             statement.setString(5, supportRequest.getOrarioInvio());
             statement.setString(6, supportRequest.getStato().getStato());
+            statement.setString(7, supportRequest.getInformazioniAggiuntive());
             statement.executeUpdate();
         }
     }
 
     public void updateSupportRequest(SupportRequest supportRequest) throws SQLException {
-        String query = "UPDATE support_requests SET email = ?, description = ?, data_invio = ?, orario_invio = ?, stato = ? WHERE name = ?";
+        String query = "UPDATE support_requests SET email = ?, description = ?, data_invio = ?, orario_invio = ?, stato = ?, informazioni_aggiuntive = ? WHERE name = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, supportRequest.getEmail());
@@ -37,16 +39,8 @@ public class SupportRequestDAO {
             statement.setDate(3, supportRequest.getDataInvio());
             statement.setString(4, supportRequest.getOrarioInvio());
             statement.setString(5, supportRequest.getStato().getStato());
-            statement.setString(6, supportRequest.getName());
-            statement.executeUpdate();
-        }
-    }
-
-    public void deleteSupportRequest(String name) throws SQLException {
-        String query = "DELETE FROM support_requests WHERE name = ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, name);
+            statement.setString(6, supportRequest.getInformazioniAggiuntive());
+            statement.setString(7, supportRequest.getName());
             statement.executeUpdate();
         }
     }
@@ -64,7 +58,8 @@ public class SupportRequestDAO {
                             resultSet.getString("description"),
                             resultSet.getDate("data_invio"),
                             resultSet.getString("orario_invio"),
-                            StatoSupporto.fromString(resultSet.getString("stato"))
+                            StatoSupporto.fromString(resultSet.getString("stato")),
+                            resultSet.getString("informazioni_aggiuntive")
                     );
                 }
             }
@@ -72,6 +67,7 @@ public class SupportRequestDAO {
         return null;
     }
 
+    // Metodo aggiornato per recuperare tutte le richieste di supporto
     public List<SupportRequest> getAllSupportRequests() throws SQLException {
         List<SupportRequest> supportRequests = new ArrayList<>();
         String query = "SELECT * FROM support_requests";
@@ -85,7 +81,8 @@ public class SupportRequestDAO {
                         resultSet.getString("description"),
                         resultSet.getDate("data_invio"),
                         resultSet.getString("orario_invio"),
-                        StatoSupporto.fromString(resultSet.getString("stato"))
+                        StatoSupporto.fromString(resultSet.getString("stato")),
+                        resultSet.getString("informazioni_aggiuntive")
                 ));
             }
         }

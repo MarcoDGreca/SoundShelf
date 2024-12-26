@@ -4,21 +4,24 @@ import java.util.List;
 
 public class Product {
 
-	private int productCode;
+    private int productCode;
     private String name;
-    private List<Artist> artists;
+    private List<Artist> artists;  // Lista di artisti
     private String releaseDate;
     private String description;
     private boolean availability;
     private double salePrice;
     private double originalPrice;
     private String supportedDevice;
-    private List<Genre> genre;
+    private List<Genre> genres;  // Lista di generi
     private String image;
 
-    public Product(int code, String name, List<Artist> artists, String releaseDate, String description, boolean availability, double salePrice, double originalPrice, String supportedDevice, List<Genre> genre, String image) {
-        this.productCode = code;
-    	this.name = name;
+    // Costruttore completo
+    public Product(int productCode, String name, List<Artist> artists, String releaseDate, String description, 
+                   boolean availability, double salePrice, double originalPrice, String supportedDevice, 
+                   List<Genre> genres, String image) {
+        this.productCode = productCode;
+        this.name = name;
         this.artists = artists;
         this.releaseDate = releaseDate;
         this.description = description;
@@ -26,14 +29,24 @@ public class Product {
         this.salePrice = salePrice;
         this.originalPrice = originalPrice;
         this.supportedDevice = supportedDevice;
-        this.genre = genre;
+        this.genres = genres;
         this.image = image;
     }
 
+    // Costruttore vuoto
     public Product() {
-	}
+    }
 
-	public String getName() {
+    // Getter e Setter per i vari campi
+    public int getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(int productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getName() {
         return name;
     }
 
@@ -97,12 +110,12 @@ public class Product {
         this.supportedDevice = supportedDevice;
     }
 
-    public List<Genre> getGenre() {
-        return genre;
+    public List<Genre> getGenres() {
+        return genres;
     }
 
-    public void setGenre(List<Genre> genre) {
-        this.genre = genre;
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 
     public String getImage() {
@@ -112,12 +125,12 @@ public class Product {
     public void setImage(String image) {
         this.image = image;
     }
+    
+    public void addArtist(Artist artist) {
+        this.artists.add(artist);
+    }
 
-	public int getProductCode() {
-		return productCode;
-	}
-
-	public void setProductCode(int i) {
-		this.productCode = i;
-	}
+    public void addGenre(Genre genre) {
+        this.genres.add(genre);
+    }
 }

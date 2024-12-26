@@ -1,9 +1,11 @@
 package entity;
 
 public enum StatoOrdine {
-	IN_LAVORAZIONE("In lavorazione"),
+    IN_LAVORAZIONE("In lavorazione"),
     COMPLETATO("Completato"),
-    RICHIESTO_RIMBORSO("Richiesto Rimborso");
+    RICHIESTO_RIMBORSO("Richiesto Rimborso"),
+    ANNULLATO("Annullato"),
+    NON_RICEVUTO("Non ricevuto");
 
     private final String stato;
 
@@ -24,4 +26,3 @@ public enum StatoOrdine {
         throw new IllegalArgumentException("Stato non valido: " + stato);
     }
 }
-

@@ -37,7 +37,7 @@ public class CarrelloControl extends HttpServlet {
             int productId = Integer.parseInt(request.getParameter("productId"));
 			Product product = null;
 			try {
-				product = productDAO.getProductbyId(productId);
+				product = productDAO.getProductById(productId);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

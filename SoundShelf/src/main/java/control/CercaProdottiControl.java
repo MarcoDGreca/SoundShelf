@@ -52,7 +52,7 @@ public class CercaProdottiControl extends HttpServlet {
                 jsonObject.put("availability", product.isAvailability());
                 jsonObject.put("salePrice", product.getSalePrice());
                 jsonObject.put("originalPrice", product.getOriginalPrice());
-                jsonObject.put("genres", product.getGenre().stream()
+                jsonObject.put("genres", product.getGenres().stream()
                         .map(Genre::getName)
                         .toArray());
                 jsonObject.put("image", product.getImage());

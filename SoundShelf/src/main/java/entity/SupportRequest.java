@@ -10,14 +10,33 @@ public class SupportRequest {
     private Date dataInvio;
     private String orarioInvio;
     private StatoSupporto stato;
+    private String informazioniAggiuntive;
 
+    public SupportRequest(String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato, String informazioniAggiuntive) {
+        this.name = name;
+        this.email = email;
+        this.description = description;
+        this.dataInvio = dataInvio;
+        this.orarioInvio = orarioInvio;
+        this.stato = stato;
+        this.informazioniAggiuntive = informazioniAggiuntive;
+    }
+    
     public SupportRequest(String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato) {
         this.name = name;
         this.email = email;
         this.description = description;
-        this.orarioInvio = orarioInvio;
         this.dataInvio = dataInvio;
+        this.orarioInvio = orarioInvio;
         this.stato = stato;
+    }
+
+    public String getInformazioniAggiuntive() {
+        return informazioniAggiuntive;
+    }
+
+    public void setInformazioniAggiuntive(String informazioniAggiuntive) {
+        this.informazioniAggiuntive = informazioniAggiuntive;
     }
 
     public String getName() {
@@ -52,19 +71,19 @@ public class SupportRequest {
         this.stato = stato;
     }
 
-	public Date getDataInvio() {
-		return dataInvio;
-	}
+    public Date getDataInvio() {
+        return dataInvio;
+    }
 
-	public void setDataInvio(Date dataInvio) {
-		this.dataInvio = dataInvio;
-	}
+    public void setDataInvio(Date dataInvio) {
+        this.dataInvio = dataInvio;
+    }
 
-	public String getOrarioInvio() {
-		return orarioInvio;
-	}
+    public String getOrarioInvio() {
+        return orarioInvio;
+    }
 
-	public void setOrarioInvio(String orarioInvio) {
-		this.orarioInvio = orarioInvio;
-	}
+    public void setOrarioInvio(String orarioInvio) {
+        this.orarioInvio = orarioInvio;
+    }
 }

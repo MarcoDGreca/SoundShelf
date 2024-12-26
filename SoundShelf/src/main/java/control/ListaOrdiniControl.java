@@ -51,7 +51,7 @@ public class ListaOrdiniControl extends HttpServlet {
             for (OrderDetail detail : orderDetails) {
                 Product product = null;
 				try {
-					product = productDAO.getProductbyId(detail.getCodiceBiglietto());
+					product = productDAO.getProductById(detail.getCodiceBiglietto());
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
