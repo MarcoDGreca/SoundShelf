@@ -1,7 +1,7 @@
 package control;
 
-import model.Utente;
-import model.UtenteDAO;
+import entity.Utente;
+import entity.UtenteDAO;
 import util.InputSanitizer;
 
 import javax.servlet.ServletException;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/manageUsers")
-public class AdminUserServlet extends HttpServlet {
+public class GestioneUtentiControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UtenteDAO userDAO;
 

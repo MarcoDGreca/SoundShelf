@@ -62,11 +62,11 @@ public class ProductDAO {
         }
     }
 
-    public Product getProduct(String name) throws SQLException {
-        String query = "SELECT * FROM products WHERE name = ?";
+    public Product getProductbyId(int productID) throws SQLException {
+        String query = "SELECT * FROM products WHERE productCode = ?";
         try (Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, name);
+            statement.setInt(1, productID);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Product(
@@ -158,6 +158,87 @@ public class ProductDAO {
         for (String genreName : genresString.split(",")) {
             if (!genreName.trim().isEmpty()) {
                 genres.add(new Genre(genreName.trim())); 
+            }
+        }
+        return genres;
+    }
+    
+    public List<Product> searchProducts(String name, String genre, String artist) {
+        List<Product> products = new ArrayList<>();
+
+        String query = "SELECT p.productCode, p.name, p.releaseDate, p.description, p.availability, p.salePrice, p.originalPrice, p.supportedDevice, p.image " +
+                "FROM Prodotto p " +
+                "JOIN Prodotto_Genere pg ON p.productCode = pg.productCode " +
+                "JOIN Genere g ON pg.genreCode = g.genreCode " +
+                "JOIN Prodotto_Artista pa ON p.productCode = pa.productCode " +
+                "JOIN Artista a ON pa.artistCode = a.artistCode " +
+                "WHERE (p.name LIKE ? OR ? IS NULL) " +
+                "AND (g.name LIKE ? OR ? IS NULL) " +
+                "AND (a.stageName LIKE ? OR ? IS NULL)";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, name);
+            statement.setString(2, name != null ? "%" + name + "%" : null);
+            statement.setString(3, genre);
+            statement.setString(4, genre != null ? "%" + genre + "%" : null);
+            statement.setString(5, artist);
+            statement.setString(6, artist != null ? "%" + artist + "%" : null);
+            statement.setString(7, artist != null ? "%" + artist + "%" : null);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Product product = new Product();
+                product.setProductCode(resultSet.getInt("product_code"));
+                product.setName(resultSet.getString("name"));
+                product.setReleaseDate(resultSet.getString("release_date"));
+                product.setDescription(resultSet.getString("description"));
+                product.setAvailability(resultSet.getBoolean("availability"));
+                product.setSalePrice(resultSet.getDouble("sale_price"));
+                product.setOriginalPrice(resultSet.getDouble("original_price"));
+                product.setImage(resultSet.getString("image"));
+
+                product.setArtists(getArtistsByProductCode(product.getProductCode(), connection));
+                product.setGenre(getGenresByProductCode(product.getProductCode(), connection));
+
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    private List<Artist> getArtistsByProductCode(int productCode, Connection connection) throws SQLException {
+        List<Artist> artists = new ArrayList<>();
+        String query = "SELECT * FROM artists a " +
+                       "JOIN product_artists pa ON a.artist_id = pa.artist_id " +
+                       "WHERE pa.product_code = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, productCode);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                artists.add(new Artist(
+                        resultSet.getString("first_name"),
+                        resultSet.getString("last_name"),
+                        resultSet.getString("stage_name")
+                ));
+            }
+        }
+        return artists;
+    }
+
+    private List<Genre> getGenresByProductCode(int productCode, Connection connection) throws SQLException {
+        List<Genre> genres = new ArrayList<>();
+        String query = "SELECT * FROM genres g " +
+                       "JOIN product_genres pg ON g.genre_id = pg.genre_id " +
+                       "WHERE pg.product_code = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, productCode);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                genres.add(new Genre(resultSet.getString("name")));
             }
         }
         return genres;

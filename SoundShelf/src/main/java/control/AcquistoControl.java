@@ -1,13 +1,13 @@
 package control;
 
-import model.Cart;
-import model.CartItem;
-import model.Order;
-import model.OrderDAO;
-import model.OrderDetailDAO;
-import model.Stato;
-import model.Ticket;
-import model.Utente;
+import entity.Cart;
+import entity.CartItem;
+import entity.Order;
+import entity.OrderDAO;
+import entity.OrderDetailDAO;
+import entity.StatoOrdine;
+import entity.Product;
+import entity.Utente;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,9 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 @WebServlet("/checkout")
-public class CheckoutServlet extends HttpServlet {
+public class AcquistoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private OrderDAO orderDAO;
     private OrderDetailDAO orderDetailDAO;
@@ -55,16 +56,20 @@ public class CheckoutServlet extends HttpServlet {
             Order order = new Order();
             order.setEmailCliente(user.getEmail());
             order.setPrezzoTotale(cart.getTotalPrice());
-            order.setDataAcquisto(new java.sql.Date(System.currentTimeMillis()));
-            order.setStato(Stato.IN_LAVORAZIONE);
+            order.setDataOrdine(new java.sql.Date(System.currentTimeMillis()));
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_MONTH, 7);
+            java.sql.Date dataConsegna = new java.sql.Date(calendar.getTimeInMillis());
+            order.setDataConsegna(dataConsegna);
+            order.setStato(StatoOrdine.IN_LAVORAZIONE);
 
             try {
                 int orderId = orderDAO.addOrder(order);
 
                 for (CartItem item : cart.getItems()) {
-                    Ticket ticket = item.getTicket();
+                    Product product = item.getProduct();
                     int quantity = item.getQuantity();
-                    orderDetailDAO.addOrderDetail(orderId, ticket.getCodiceBiglietto(), quantity);
+                    orderDetailDAO.addOrderDetail(orderId, product.getProductCode(), quantity);
                 }
 
                 cart.clear();

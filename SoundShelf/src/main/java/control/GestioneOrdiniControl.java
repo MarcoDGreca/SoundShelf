@@ -1,8 +1,8 @@
 package control;
 
-import model.Order;
-import model.OrderDAO;
-import model.Stato;
+import entity.Order;
+import entity.OrderDAO;
+import entity.StatoOrdine;
 import util.InputSanitizer;
 
 import javax.servlet.ServletException;
@@ -15,7 +15,7 @@ import java.sql.Date;
 import java.util.List;
 
 @WebServlet("/manageOrders")
-public class AdminOrderServlet extends HttpServlet {
+public class GestioneOrdiniControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private OrderDAO orderDAO;
 
@@ -87,7 +87,7 @@ public class AdminOrderServlet extends HttpServlet {
 
         Order order = orderDAO.getOrderById(orderId);
         if (order != null) {
-            order.setStato(Stato.fromString(stato));
+            order.setStato(StatoOrdine.fromString(stato));
             orderDAO.updateStatoOrder(order);
         }
     }

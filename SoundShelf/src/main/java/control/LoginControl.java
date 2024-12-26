@@ -1,7 +1,7 @@
 package control;
 
-import model.Utente;
-import model.UtenteDAO;
+import entity.Utente;
+import entity.UtenteDAO;
 import util.InputSanitizer;
 
 import javax.servlet.ServletException;
@@ -15,7 +15,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+public class LoginControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UtenteDAO userDAO;
 

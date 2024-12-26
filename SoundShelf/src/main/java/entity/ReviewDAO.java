@@ -13,11 +13,12 @@ public class ReviewDAO {
 
 	private DataSource dataSource;
 
-    public ReviewDAO(Connection connection) {
+    public ReviewDAO() {
     	this.dataSource = DataSource.getInstance();
     }
 
-    public void saveReview(Review review) throws SQLException {
+
+	public void saveReview(Review review) throws SQLException {
         String query = "INSERT INTO product_reviews (codiceProdotto, emailCliente, votazione, testo, dataRecensione) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)){

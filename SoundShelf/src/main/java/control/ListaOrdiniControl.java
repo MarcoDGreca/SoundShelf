@@ -1,14 +1,12 @@
 package control;
 
-import model.Order;
-import model.OrderDAO;
-import model.OrderDetail;
-import model.OrderDetailDAO;
-import model.Ticket;
-import model.TicketDAO;
-import model.Event;
-import model.EventDAO;
-import model.Utente;
+import entity.Order;
+import entity.OrderDAO;
+import entity.OrderDetail;
+import entity.OrderDetailDAO;
+import entity.Product;
+import entity.ProductDAO;
+import entity.Utente;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,21 +15,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/orderDetails")
-public class OrderDetailsServlet extends HttpServlet {
+public class ListaOrdiniControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private OrderDAO orderDAO;
-    private TicketDAO ticketDAO;
-    private EventDAO eventDAO;
+    private ProductDAO productDAO;
     private OrderDetailDAO orderDetailDAO;
 
     @Override
     public void init() throws ServletException {
         orderDAO = new OrderDAO();
-        ticketDAO = new TicketDAO();
-        eventDAO = new EventDAO();
+        productDAO = new ProductDAO();
         orderDetailDAO = new OrderDetailDAO();
     }
 
@@ -50,13 +47,16 @@ public class OrderDetailsServlet extends HttpServlet {
         request.setAttribute("orders", orders);
 
         for (Order order : orders) {
-            List<OrderDetail> orderDetails = orderDetailDAO.getOrderDetailsByOrderId(order.getCodiceOrdine());
+            List<OrderDetail> orderDetails = orderDetailDAO.getOrderDetailsByOrderId(order.getNumeroOrdine());
             for (OrderDetail detail : orderDetails) {
-                Ticket ticket = ticketDAO.getTicketByIdDeleted(detail.getCodiceBiglietto());
-                Event event = eventDAO.getEventByIdDeleted(ticket.getCodiceEvento());
+                Product product = null;
+				try {
+					product = productDAO.getProductbyId(detail.getCodiceBiglietto());
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
                 request.setAttribute("orderDetail_" + detail.getCodiceBiglietto(), detail);
-                request.setAttribute("ticket_" + detail.getCodiceBiglietto(), ticket);
-                request.setAttribute("event_" + ticket.getCodiceEvento(), event);
+                request.setAttribute("product_" + detail.getCodiceBiglietto(), product);
             }
         }
 

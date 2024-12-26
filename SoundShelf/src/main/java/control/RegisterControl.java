@@ -1,8 +1,8 @@
 package control;
 
-import model.Ruolo;
-import model.Utente;
-import model.UtenteDAO;
+import entity.Ruolo;
+import entity.Utente;
+import entity.UtenteDAO;
 import util.InputSanitizer;
 
 import javax.servlet.ServletException;
@@ -15,7 +15,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @WebServlet("/register")
-public class RegisterServlet extends HttpServlet {
+public class RegisterControl extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private UtenteDAO userDAO;
@@ -36,13 +36,12 @@ public class RegisterServlet extends HttpServlet {
         String provincia = InputSanitizer.sanitize(request.getParameter("provincia"));
         String citta = InputSanitizer.sanitize(request.getParameter("citta"));
         String telefono = InputSanitizer.sanitize(request.getParameter("telefono"));
-        String numeroT = InputSanitizer.sanitize(request.getParameter("numeroT"));
         
         String indirizzo = via + ", " + numero + ", " + cap + ", " + citta + ", " + provincia;
 
         String hashedPassword = hashPassword(password);
 
-        Utente newUser = new Utente(email, hashedPassword, nome, cognome, indirizzo, telefono, numeroT, Ruolo.UTENTE);
+        Utente newUser = new Utente(email, hashedPassword, nome, cognome, indirizzo, telefono, Ruolo.UTENTE);
 
         userDAO.addUser(newUser);
 

@@ -215,4 +215,42 @@ public class OrderDAO {
         }
         return orders;
     }
+    
+    public synchronized List<Product> getPurchasedProductsByEmail(String emailCliente) {
+        List<Product> products = new ArrayList<>();
+        String query = """
+            SELECT p.codiceProdotto, p.name, p.description, p.availability, p.salePrice, 
+                   p.originalPrice, p.supportedDevice, p.image
+            FROM Prodotti p
+            JOIN DettagliOrdine dt ON p.codiceProdotto = dt.codiceProdotto
+            JOIN Ordine o ON po.codiceOrdine = o.codiceOrdine
+            WHERE o.emailCliente = ?
+        """;
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            
+            statement.setString(1, emailCliente);
+            
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Product product = new Product();
+                    product.setProductCode(resultSet.getInt("codiceProdotto"));
+                    product.setName(resultSet.getString("name"));
+                    product.setDescription(resultSet.getString("description"));
+                    product.setAvailability(resultSet.getBoolean("availability"));
+                    product.setSalePrice(resultSet.getDouble("salePrice"));
+                    product.setOriginalPrice(resultSet.getDouble("originalPrice"));
+                    product.setSupportedDevice(resultSet.getString("supportedDevice"));
+                    product.setImage(resultSet.getString("image"));
+                    products.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
 }

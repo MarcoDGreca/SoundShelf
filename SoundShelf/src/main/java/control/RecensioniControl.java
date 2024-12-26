@@ -1,11 +1,11 @@
 package control;
 
-import model.Review;
-import model.ReviewDAO;
-import model.Utente;
+import entity.Review;
+import entity.ReviewDAO;
+import entity.Utente;
 import util.InputSanitizer;
-import model.Event;
-import model.OrderDAO;
+import entity.Product;
+import entity.OrderDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,10 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/addReview")
-public class AddReviewServlet extends HttpServlet {
+public class RecensioniControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ReviewDAO reviewDAO;
     private OrderDAO orderDAO;
@@ -39,8 +40,8 @@ public class AddReviewServlet extends HttpServlet {
             return;
         }
 
-        List<Event> purchasedEvents = orderDAO.getPurchasedEventsByUser(user.getEmail());
-        request.setAttribute("purchasedEvents", purchasedEvents);
+        List<Product> purchasedProduct = orderDAO.getPurchasedProductsByEmail(user.getEmail());
+        request.setAttribute("purchasedProducts", purchasedProduct);
         request.getRequestDispatcher("/addReview.jsp").forward(request, response);
     }
 
@@ -54,18 +55,22 @@ public class AddReviewServlet extends HttpServlet {
             return;
         }
 
-        int eventId = Integer.parseInt(request.getParameter("eventId"));
+        int productId = Integer.parseInt(request.getParameter("productId"));
         int rating = Integer.parseInt(request.getParameter("rating"));
         String comment = InputSanitizer.sanitize(request.getParameter("comment"));
 
         Review review = new Review();
-        review.setCodiceEvento(eventId);
+        review.setCodiceProdotto(productId);
         review.setEmailCliente(user.getEmail());
         review.setVotazione(rating);
         review.setTesto(comment);
         review.setDataRecensione(new Date(System.currentTimeMillis()));
 
-        reviewDAO.addReview(review);
+        try {
+			reviewDAO.saveReview(review);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
         response.sendRedirect("home");
     }
 }

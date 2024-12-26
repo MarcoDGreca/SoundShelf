@@ -1,8 +1,8 @@
 package control;
 
-import model.Cart;
-import model.Ticket;
-import model.TicketDAO;
+import entity.Cart;
+import entity.Product;
+import entity.ProductDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,15 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/cart")
-public class CartServlet extends HttpServlet {
+public class CarrelloControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private TicketDAO ticketDAO;
+    private ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
-        ticketDAO = new TicketDAO();
+    	productDAO = new ProductDAO();
     }
 
     @Override
@@ -33,19 +34,24 @@ public class CartServlet extends HttpServlet {
 
         String action = request.getParameter("action");
         if (action != null) {
-            int ticketId = Integer.parseInt(request.getParameter("ticketId"));
-			Ticket ticket = ticketDAO.getTicketById(ticketId);
+            int productId = Integer.parseInt(request.getParameter("productId"));
+			Product product = null;
+			try {
+				product = productDAO.getProductbyId(productId);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 
 			switch (action) {
 			    case "add":
-			        cart.addTicket(ticket);
+			        cart.addProduct(product);
 			        break;
 			    case "remove":
-			        cart.removeTicket(ticket);
+			        cart.removeProduct(product);
 			        break;
 			    case "update":
 			        int quantity = Integer.parseInt(request.getParameter("quantity"));
-			        cart.updateQuantity(ticket, quantity);
+			        cart.updateQuantity(product, quantity);
 			        break;
 			    case "clear":
 			        cart.clear();
