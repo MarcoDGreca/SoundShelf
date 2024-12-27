@@ -23,7 +23,7 @@ public class GestioneOrdiniControl extends HttpServlet {
     public void init() throws ServletException {
         orderDAO = new OrderDAO();
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -31,16 +31,21 @@ public class GestioneOrdiniControl extends HttpServlet {
             action = "list";
         }
 
-        switch (action) {
-            case "list":
-                listOrders(request, response);
-                break;
-            case "filter":
-                filterOrders(request, response);
-                break;
-            default:
-                listOrders(request, response);
-                break;
+        try {
+            switch (action) {
+                case "list":
+                    listOrders(request, response);
+                    break;
+                case "filter":
+                    filterOrders(request, response);
+                    break;
+                default:
+                    listOrders(request, response);
+                    break;
+            }
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Errore durante la gestione degli ordini.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
         }
     }
 
@@ -48,15 +53,21 @@ public class GestioneOrdiniControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         if (action != null) {
-            switch (action) {
-                case "update":
-                    updateOrder(request, response);
-                    break;
-                case "delete":
-                    deleteOrder(request, response);
-                    break;
-                default:
-                    break;
+            try {
+                switch (action) {
+                    case "update":
+                        updateOrder(request, response);
+                        break;
+                    case "delete":
+                        deleteOrder(request, response);
+                        break;
+                    default:
+                        break;
+                }
+            } catch (Exception e) {
+                request.setAttribute("errorMessage", "Errore durante l'aggiornamento o la cancellazione dell'ordine.");
+                request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+                return;
             }
         }
         doGet(request, response);
@@ -64,6 +75,11 @@ public class GestioneOrdiniControl extends HttpServlet {
 
     private void listOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Order> orders = orderDAO.getAllOrders();
+        if (orders == null) {
+            request.setAttribute("errorMessage", "Impossibile recuperare gli ordini.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            return;
+        }
         request.setAttribute("orders", orders);
         request.getRequestDispatcher("/admin/manageOrders.jsp").forward(request, response);
     }
@@ -77,23 +93,39 @@ public class GestioneOrdiniControl extends HttpServlet {
         Date dataFine = dataFineStr != null && !dataFineStr.isEmpty() ? Date.valueOf(dataFineStr) : null;
 
         List<Order> orders = orderDAO.filterOrders(emailCliente, dataInizio, dataFine);
+        if (orders == null) {
+            request.setAttribute("errorMessage", "Impossibile filtrare gli ordini.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            return;
+        }
         request.setAttribute("orders", orders);
         request.getRequestDispatcher("/admin/manageOrders.jsp").forward(request, response);
     }
 
-    private void updateOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void updateOrder(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
         String stato = InputSanitizer.sanitize(request.getParameter("stato"));
 
-        Order order = orderDAO.getOrderById(orderId);
-        if (order != null) {
-            order.setStato(StatoOrdine.fromString(stato));
-            orderDAO.updateStatoOrder(order);
+        try {
+            Order order = orderDAO.getOrderById(orderId);
+            if (order != null) {
+                order.setStato(StatoOrdine.fromString(stato));
+                orderDAO.updateStatoOrder(order);
+            }
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Errore nell'aggiornamento dello stato dell'ordine.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
         }
     }
 
-    private void deleteOrder(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void deleteOrder(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         int orderId = Integer.parseInt(request.getParameter("orderId"));
-        orderDAO.deleteOrder(orderId);
+
+        try {
+            orderDAO.deleteOrder(orderId);
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Errore nella cancellazione dell'ordine.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+        }
     }
 }

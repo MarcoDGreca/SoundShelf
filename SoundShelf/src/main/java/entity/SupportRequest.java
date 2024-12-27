@@ -11,6 +11,18 @@ public class SupportRequest {
     private String orarioInvio;
     private StatoSupporto stato;
     private String informazioniAggiuntive;
+    private String rispostaUtente;
+
+    public SupportRequest(String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato, String informazioniAggiuntive, String rispostaUtente) {
+        this.name = name;
+        this.email = email;
+        this.description = description;
+        this.dataInvio = dataInvio;
+        this.orarioInvio = orarioInvio;
+        this.stato = stato;
+        this.informazioniAggiuntive = informazioniAggiuntive;
+        this.rispostaUtente = rispostaUtente; 
+    }
 
     public SupportRequest(String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato, String informazioniAggiuntive) {
         this.name = name;
@@ -20,15 +32,12 @@ public class SupportRequest {
         this.orarioInvio = orarioInvio;
         this.stato = stato;
         this.informazioniAggiuntive = informazioniAggiuntive;
+        this.rispostaUtente = null; 
     }
-    
+
+
     public SupportRequest(String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato) {
-        this.name = name;
-        this.email = email;
-        this.description = description;
-        this.dataInvio = dataInvio;
-        this.orarioInvio = orarioInvio;
-        this.stato = stato;
+        this(name, email, description, dataInvio, orarioInvio, stato, null);
     }
 
     public String getInformazioniAggiuntive() {
@@ -39,6 +48,14 @@ public class SupportRequest {
         this.informazioniAggiuntive = informazioniAggiuntive;
     }
 
+    public String getRispostaUtente() {
+        return rispostaUtente;
+    }
+
+    public void setRispostaUtente(String rispostaUtente) {
+        this.rispostaUtente = rispostaUtente;
+    }
+
     public String getName() {
         return name;
     }
@@ -46,7 +63,7 @@ public class SupportRequest {
     public void setName(String name) {
         this.name = name;
     }
-
+    
     public String getEmail() {
         return email;
     }

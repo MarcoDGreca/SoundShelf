@@ -9,8 +9,8 @@ import java.sql.*;
 import java.util.List;
 
 public class GestisciCatalogoProdottiControl extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private ProductDAO productDAO;
+    private static final long serialVersionUID = 1L;
+    private ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
@@ -19,19 +19,19 @@ public class GestisciCatalogoProdottiControl extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Product> products;
         try {
-            products = productDAO.getAllProducts();
+            List<Product> products = productDAO.getAllProducts();
+            request.setAttribute("products", products);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/catalogoProdotti.jsp");
+            dispatcher.forward(request, response);
         } catch (SQLException e) {
-            throw new ServletException("Errore durante il recupero dei prodotti", e);
+            request.setAttribute("errorMessage", "Errore durante il recupero dei prodotti.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
         }
-        request.setAttribute("products", products);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/catalogoProdotti.jsp");
-        dispatcher.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	doGet(request, response);
+        doGet(request, response);
     }
 }

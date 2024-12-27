@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/informazioniControl")
 public class InformazioniControl extends HttpServlet {
-	
-	private static final long serialVersionUID = 1L;
-	private SupportRequestDAO supportRequestDAO;
+    
+    private static final long serialVersionUID = 1L;
+    private SupportRequestDAO supportRequestDAO;
 
     @Override
     public void init() throws ServletException {
@@ -26,13 +26,20 @@ public class InformazioniControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nomeRichiesta = request.getParameter("name");
         String informazioniAggiuntive = request.getParameter("informazioniAggiuntive");
+        String rispostaUtente = request.getParameter("rispostaUtente");
 
         try {
             SupportRequest supportRequest = supportRequestDAO.getSupportRequest(nomeRichiesta);
 
             if (supportRequest != null) {
                 supportRequest.setInformazioniAggiuntive(informazioniAggiuntive);
+                
+                if (rispostaUtente != null && !rispostaUtente.isEmpty()) {
+                    supportRequest.setRispostaUtente(rispostaUtente);
+                }
+
                 supportRequestDAO.updateSupportRequest(supportRequest);
+
                 supportRequest.setStato(StatoSupporto.IN_LAVORAZIONE);
                 supportRequestDAO.updateSupportRequest(supportRequest);
 

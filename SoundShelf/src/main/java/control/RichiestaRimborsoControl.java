@@ -6,47 +6,49 @@ import entity.StatoRimborso;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
-@WebServlet("/manageRefund")
+@WebServlet("/richiestaRimborso")
 public class RichiestaRimborsoControl extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    private RefoundRequestDAO refoundRequestDAO;
+	private static final long serialVersionUID = 1L;
+	private RefoundRequestDAO refoundRequestDAO;
 
     @Override
     public void init() throws ServletException {
+        super.init();
         refoundRequestDAO = new RefoundRequestDAO();
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int productCode = Integer.parseInt(request.getParameter("productCode"));
-        String action = request.getParameter("action");
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            RefoundRequest refoundRequest = refoundRequestDAO.getRefoundRequest(productCode);
-
-            if (refoundRequest != null) {
-                if ("accept".equalsIgnoreCase(action)) {
-                    refoundRequest.setStato(StatoRimborso.ACCETTATO);
-                } else if ("reject".equalsIgnoreCase(action)) {
-                    refoundRequest.setStato(StatoRimborso.RIFIUTATO);
-                } else {
-                    response.sendRedirect("refundManagement.jsp?error=invalidaction");
-                    return;
-                }
-
-                refoundRequestDAO.updateRefoundRequest(refoundRequest);
-                response.sendRedirect("refundManagement.jsp?success=" + action);
-            } else {
-                response.sendRedirect("refundManagement.jsp?error=notfound");
-            }
+            List<RefoundRequest> refoundRequests = refoundRequestDAO.getAllRefoundRequests();
+            request.setAttribute("refoundRequests", refoundRequests);
         } catch (SQLException e) {
-            throw new ServletException("Errore nella gestione del rimborso", e);
+            e.printStackTrace();
+            request.setAttribute("error", "Si è verificato un errore durante il recupero delle richieste di rimborso.");
         }
+        request.getRequestDispatcher("/richiestaRimborsoForm.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int productCode = Integer.parseInt(request.getParameter("productCode"));
+            String reason = request.getParameter("reason");
+            String iban = request.getParameter("iban");
+
+            RefoundRequest refoundRequest = new RefoundRequest(productCode, reason, iban, StatoRimborso.IN_LAVORAZIONE);
+            refoundRequestDAO.saveRefoundRequest(refoundRequest);
+            request.setAttribute("message", "Richiesta di rimborso inviata con successo.");
+
+        } catch (SQLException | NumberFormatException e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Si è verificato un errore durante l'invio della richiesta di rimborso.");
+        }
+        doGet(request, response);
     }
 }

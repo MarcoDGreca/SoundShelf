@@ -20,7 +20,7 @@ public class CarrelloControl extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-    	productDAO = new ProductDAO();
+        productDAO = new ProductDAO();
     }
 
     @Override
@@ -35,28 +35,30 @@ public class CarrelloControl extends HttpServlet {
         String action = request.getParameter("action");
         if (action != null) {
             int productId = Integer.parseInt(request.getParameter("productId"));
-			Product product = null;
-			try {
-				product = productDAO.getProductById(productId);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+            Product product = null;
+            try {
+                product = productDAO.getProductById(productId);
+            } catch (SQLException e) {
+                request.setAttribute("errorMessage", "Errore nel recupero del prodotto.");
+                request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+                return;
+            }
 
-			switch (action) {
-			    case "add":
-			        cart.addProduct(product);
-			        break;
-			    case "remove":
-			        cart.removeProduct(product);
-			        break;
-			    case "update":
-			        int quantity = Integer.parseInt(request.getParameter("quantity"));
-			        cart.updateQuantity(product, quantity);
-			        break;
-			    case "clear":
-			        cart.clear();
-			        break;
-			}
+            switch (action) {
+                case "add":
+                    cart.addProduct(product);
+                    break;
+                case "remove":
+                    cart.removeProduct(product);
+                    break;
+                case "update":
+                    int quantity = Integer.parseInt(request.getParameter("quantity"));
+                    cart.updateQuantity(product, quantity);
+                    break;
+                case "clear":
+                    cart.clear();
+                    break;
+            }
         }
 
         response.sendRedirect("cart.jsp");

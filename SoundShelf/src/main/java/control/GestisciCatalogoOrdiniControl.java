@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/gestisciCatalogoOrdiniControl")
 public class GestisciCatalogoOrdiniControl extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-	private OrderDAO orderDAO;
+    private static final long serialVersionUID = 1L;
+    private OrderDAO orderDAO;
     private OrderDetailDAO orderDetailDAO;
 
     @Override
@@ -29,15 +29,20 @@ public class GestisciCatalogoOrdiniControl extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Order> ordini = orderDAO.getAllOrders();
-		Map<Integer, List<OrderDetail>> ordineDetailsMap = new HashMap<>();
-		for (Order ordine : ordini) {
-		    List<OrderDetail> orderDetails = orderDetailDAO.getOrderDetailsByOrderId(ordine.getNumeroOrdine());
-		    ordineDetailsMap.put(ordine.getNumeroOrdine(), orderDetails);
-		}
-		
-		request.setAttribute("ordineDetailsMap", ordineDetailsMap);
-		request.setAttribute("ordini", ordini);
-		request.getRequestDispatcher("/paginaCatalogoOrdini.jsp").forward(request, response);
+        try {
+            List<Order> ordini = orderDAO.getAllOrders();
+            Map<Integer, List<OrderDetail>> ordineDetailsMap = new HashMap<>();
+            for (Order ordine : ordini) {
+                List<OrderDetail> orderDetails = orderDetailDAO.getOrderDetailsByOrderId(ordine.getNumeroOrdine());
+                ordineDetailsMap.put(ordine.getNumeroOrdine(), orderDetails);
+            }
+
+            request.setAttribute("ordineDetailsMap", ordineDetailsMap);
+            request.setAttribute("ordini", ordini);
+            request.getRequestDispatcher("/paginaCatalogoOrdini.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Errore durante il recupero degli ordini.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+        }
     }
 }

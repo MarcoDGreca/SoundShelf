@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/OrdineRicevutoControl")
 public class OrdineRicevutoControl extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-	private OrderDAO ordineDAO;
+    private static final long serialVersionUID = 1L;
+    private OrderDAO ordineDAO;
 
     public OrdineRicevutoControl() {
         ordineDAO = new OrderDAO();
@@ -27,17 +27,17 @@ public class OrdineRicevutoControl extends HttpServlet {
 
         Order ordine = ordineDAO.getOrderById(Integer.parseInt(ordineId));
 
-		if (ordine != null) {
-		    if ("si".equals(conferma)) {
-		        ordine.setStato(StatoOrdine.COMPLETATO);
-		        ordineDAO.updateOrder(ordine);
-		        request.setAttribute("messaggio", "Ordine confermato come ricevuto.");
-		    } else {
-		        request.setAttribute("messaggio", "Conferma della ricezione annullata.");
-		    }
-		} else {
-		    request.setAttribute("messaggio", "Ordine non trovato.");
-		}
-        request.getRequestDispatcher("risultatoOrdine.jsp").forward(request, response);
+        if (ordine != null) {
+            if ("si".equals(conferma)) {
+                ordine.setStato(StatoOrdine.COMPLETATO);
+                ordineDAO.updateOrder(ordine);
+                request.setAttribute("messaggio", "Ordine confermato come ricevuto.");
+            } else {
+                request.setAttribute("messaggio", "Conferma della ricezione annullata.");
+            }
+        } else {
+            request.setAttribute("messaggio", "Ordine non trovato.");
+        }
+        request.getRequestDispatcher("storicoOrdini.jsp").forward(request, response);
     }
 }

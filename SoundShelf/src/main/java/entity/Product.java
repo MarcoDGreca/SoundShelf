@@ -6,17 +6,16 @@ public class Product {
 
     private int productCode;
     private String name;
-    private List<Artist> artists;  // Lista di artisti
+    private List<Artist> artists;
     private String releaseDate;
     private String description;
     private boolean availability;
     private double salePrice;
     private double originalPrice;
     private String supportedDevice;
-    private List<Genre> genres;  // Lista di generi
+    private List<Genre> genres; 
     private String image;
 
-    // Costruttore completo
     public Product(int productCode, String name, List<Artist> artists, String releaseDate, String description, 
                    boolean availability, double salePrice, double originalPrice, String supportedDevice, 
                    List<Genre> genres, String image) {
@@ -33,11 +32,9 @@ public class Product {
         this.image = image;
     }
 
-    // Costruttore vuoto
     public Product() {
     }
 
-    // Getter e Setter per i vari campi
     public int getProductCode() {
         return productCode;
     }

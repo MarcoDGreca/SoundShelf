@@ -186,40 +186,65 @@ public class ProductDAO {
         }
         return null; 
     }
-    public List<Product> searchProducts(String name, String genre, String artist) {
+    public List<Product> searchProducts(String name, List<String> genres, List<String> artists) {
         List<Product> products = new ArrayList<>();
+        
+        StringBuilder query = new StringBuilder("SELECT p.productCode, p.name, p.releaseDate, p.description, p.availability, p.salePrice, p.originalPrice, p.supportedDevice, p.image " +
+                "FROM products p " +
+                "LEFT JOIN product_genres pg ON p.productCode = pg.productCode " +
+                "LEFT JOIN genres g ON pg.genreCode = g.genreCode " +
+                "LEFT JOIN product_artists pa ON p.productCode = pa.productCode " +
+                "LEFT JOIN artists a ON pa.artistCode = a.artistCode " +
+                "WHERE 1=1");
 
-        String query = "SELECT p.productCode, p.name, p.releaseDate, p.description, p.availability, p.salePrice, p.originalPrice, p.supportedDevice, p.image " +
-                "FROM Prodotto p " +
-                "JOIN Prodotto_Genere pg ON p.productCode = pg.productCode " +
-                "JOIN Genere g ON pg.genreCode = g.genreCode " +
-                "JOIN Prodotto_Artista pa ON p.productCode = pa.productCode " +
-                "JOIN Artista a ON pa.artistCode = a.artistCode " +
-                "WHERE (p.name LIKE ? OR ? IS NULL) " +
-                "AND (g.name LIKE ? OR ? IS NULL) " +
-                "AND (a.stageName LIKE ? OR ? IS NULL)";
+        List<String> parameters = new ArrayList<>();
+
+        if (name != null && !name.isEmpty()) {
+            query.append(" AND p.name LIKE ?");
+            parameters.add("%" + name + "%");
+        }
+
+        if (genres != null && !genres.isEmpty()) {
+            query.append(" AND g.name IN (");
+            for (int i = 0; i < genres.size(); i++) {
+                query.append("?");
+                if (i < genres.size() - 1) {
+                    query.append(", ");
+                }
+                parameters.add(genres.get(i));
+            }
+            query.append(")");
+        }
+        if (artists != null && !artists.isEmpty()) {
+            query.append(" AND a.stageName IN (");
+            for (int i = 0; i < artists.size(); i++) {
+                query.append("?");
+                if (i < artists.size() - 1) {
+                    query.append(", ");
+                }
+                parameters.add(artists.get(i));
+            }
+            query.append(")");
+        }
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(query.toString())) {
 
-            statement.setString(1, name);
-            statement.setString(2, name != null ? "%" + name + "%" : null);
-            statement.setString(3, genre);
-            statement.setString(4, genre != null ? "%" + genre + "%" : null);
-            statement.setString(5, artist);
-            statement.setString(6, artist != null ? "%" + artist + "%" : null);
-            statement.setString(7, artist != null ? "%" + artist + "%" : null);
+            for (int i = 0; i < parameters.size(); i++) {
+                statement.setString(i + 1, parameters.get(i));
+            }
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Product product = new Product();
-                product.setProductCode(resultSet.getInt("product_code"));
+                product.setProductCode(resultSet.getInt("productCode"));
                 product.setName(resultSet.getString("name"));
-                product.setReleaseDate(resultSet.getString("release_date"));
+                product.setReleaseDate(resultSet.getString("releaseDate"));
                 product.setDescription(resultSet.getString("description"));
                 product.setAvailability(resultSet.getBoolean("availability"));
-                product.setSalePrice(resultSet.getDouble("sale_price"));
-                product.setOriginalPrice(resultSet.getDouble("original_price"));
+                product.setSalePrice(resultSet.getDouble("salePrice"));
+                product.setOriginalPrice(resultSet.getDouble("originalPrice"));
+                product.setSupportedDevice(resultSet.getString("supportedDevice"));
                 product.setImage(resultSet.getString("image"));
 
                 product.setArtists(getArtistsByProductCode(product.getProductCode(), connection));
@@ -230,8 +255,11 @@ public class ProductDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return products;
     }
+
+
     
     public String getImage(int productCode) throws SQLException {
         String query = "SELECT image FROM products WHERE productCode = ?";

@@ -31,10 +31,30 @@ public class CercaProdottiControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = InputSanitizer.sanitize(request.getParameter("name"));
-        String genre = InputSanitizer.sanitize(request.getParameter("genre"));
-        String artist = InputSanitizer.sanitize(request.getParameter("artist"));
+        String genreParam = InputSanitizer.sanitize(request.getParameter("genre"));
+        String artistParam = InputSanitizer.sanitize(request.getParameter("artist"));
 
-        List<Product> products = productDAO.searchProducts(name, genre, artist);
+        List<String> genres = (genreParam != null && !genreParam.isEmpty()) 
+            ? List.of(genreParam.split(",")) 
+            : null;
+        List<String> artists = (artistParam != null && !artistParam.isEmpty()) 
+            ? List.of(artistParam.split(","))
+            : null;
+
+        List<Product> products = null;
+        try {
+            products = productDAO.searchProducts(name, genres, artists);
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Errore nella ricerca dei prodotti.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            return;
+        }
+
+        if (products == null || products.isEmpty()) {
+            request.setAttribute("errorMessage", "Nessun prodotto trovato.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            return;
+        }
 
         JSONArray jsonArray = new JSONArray();
         for (Product product : products) {

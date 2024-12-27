@@ -1,2 +1,11 @@
 eclipse.preferences.version=1
+encoding//WebContent/view/admin/InserisciProdottoForm.jsp=UTF-8
+encoding//WebContent/view/admin/ModificaProdottoForm.jsp=UTF-8
+encoding//WebContent/view/admin/catalogoOrdini.jsp=UTF-8
+encoding//WebContent/view/admin/catalogoProdottiView.jsp=UTF-8
+encoding//WebContent/view/checkout.jsp=UTF-8
+encoding//WebContent/view/homeView.jsp=UTF-8
+encoding//WebContent/view/listaOrdiniView.jsp=UTF-8
+encoding//WebContent/view/orderConfirmation.jsp=UTF-8
+encoding//WebContent/view/productView.jsp=UTF-8
 encoding/<project>=UTF-8

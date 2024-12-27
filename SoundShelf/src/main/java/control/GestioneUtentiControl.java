@@ -19,25 +19,36 @@ public class GestioneUtentiControl extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-    	userDAO = new UtenteDAO();
+        userDAO = new UtenteDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Utente> users = userDAO.getAllUsers();
-        request.setAttribute("users", users);
-        request.getRequestDispatcher("/admin/manageUsers.jsp").forward(request, response);
+        try {
+            List<Utente> users = userDAO.getAllUsers();
+            request.setAttribute("users", users);
+            request.getRequestDispatcher("/admin/manageUsers.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Errore durante il recupero degli utenti.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = InputSanitizer.sanitize(request.getParameter("email"));
         String action = InputSanitizer.sanitize(request.getParameter("action"));
-        if ("delete".equals(action)) {
-        	userDAO.deleteUser(email);
-        } else if ("promote".equals(action)) {
-        	userDAO.promoteToAdmin(email);
+
+        try {
+            if ("delete".equals(action)) {
+                userDAO.deleteUser(email);
+            } else if ("promote".equals(action)) {
+                userDAO.promoteToAdmin(email);
+            }
+            response.sendRedirect("manageUsers");
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Errore durante l'operazione sugli utenti.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
         }
-        response.sendRedirect("manageUsers");
     }
 }

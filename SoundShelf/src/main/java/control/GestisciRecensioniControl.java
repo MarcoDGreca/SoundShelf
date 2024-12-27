@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/gestisciRecensioniControl")
 public class GestisciRecensioniControl extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-	private ReviewDAO reviewDAO;
+    private static final long serialVersionUID = 1L;
+    private ReviewDAO reviewDAO;
 
     @Override
     public void init() throws ServletException {
@@ -30,7 +30,9 @@ public class GestisciRecensioniControl extends HttpServlet {
             request.getRequestDispatcher("/paginaRecensioni.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore nel recupero delle recensioni");
+           
+            request.setAttribute("message", "Errore nel recupero delle recensioni.");
+            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
         }
     }
 }
