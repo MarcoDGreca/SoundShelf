@@ -2,7 +2,7 @@ package ordini;
 
 import prodotti.Product;
 import prodotti.ProductDAO;
-import utente.Utente;
+import utente.UtenteRegistrato;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,46 +17,45 @@ import java.util.List;
 @WebServlet("/listaOrdiniUtente")
 public class ListaOrdiniControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private OrderDAO orderDAO;
-    private ProductDAO productDAO;
-    private OrderDetailDAO orderDetailDAO;
+    private OrderDAO ordineDAO;
+    private ProductDAO prodottoDAO;
+    private ElementoOrdineDAO elementoOrdineDAO;
 
     @Override
     public void init() throws ServletException {
-        orderDAO = new OrderDAO();
-        productDAO = new ProductDAO();
-        orderDetailDAO = new OrderDetailDAO();
+        ordineDAO = new OrderDAO();
+        prodottoDAO = new ProductDAO();
+        elementoOrdineDAO = new ElementoOrdineDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Utente user = (Utente) session.getAttribute("user");
+        UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "utenteInterface/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/utenteInterface/login.jsp");
             return;
         }
 
         String emailCliente = user.getEmail();
-        List<Order> orders = orderDAO.getOrdersByEmail(emailCliente);
-        request.setAttribute("orders", orders);
+        List<Order> ordini = ordineDAO.getOrdersByEmail(emailCliente);
+        request.setAttribute("ordini", ordini);
 
-        for (Order order : orders) {
-            List<OrderDetail> orderDetails = orderDetailDAO.getOrderDetailsByOrderId(order.getNumeroOrdine());
-            for (OrderDetail detail : orderDetails) {
-                Product product = null;
-				try {
-					product = productDAO.getProductById(detail.getCodiceProdotto());
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-                request.setAttribute("orderDetail_" + detail.getCodiceProdotto(), detail);
-                request.setAttribute("product_" + detail.getCodiceProdotto(), product);
+        for (Order ordine : ordini) {
+            List<ElementoOrdine> dettagliOrdine = elementoOrdineDAO.getOrderDetailsByOrderId(ordine.getNumeroOrdine());
+            for (ElementoOrdine dettaglio : dettagliOrdine) {
+                Product prodotto = null;
+                try {
+                    prodotto = prodottoDAO.getProductById(dettaglio.getIdProdotto());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                request.setAttribute("dettaglioOrdine_" + dettaglio.getId(), dettaglio);
+                request.setAttribute("prodotto_" + dettaglio.getIdProdotto(), prodotto);
             }
         }
 
-        request.getRequestDispatcher("ordiniIntereface/listaOrdiniView.jsp").forward(request, response);
+        request.getRequestDispatcher("ordiniInterface/listaOrdiniView.jsp").forward(request, response);
     }
 }
-

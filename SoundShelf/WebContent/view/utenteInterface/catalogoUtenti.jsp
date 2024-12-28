@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="java.util.*,utente.Utente,utente.GestioneUtentiControl" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="java.util.*,utente.UtenteRegistrato,utente.GestioneUtentiControl" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -14,9 +14,9 @@
     <div id="main" class="clear">
         <h2>Gestione Utenti</h2>
 
-        <% 
-            List<Utente> users = (List<Utente>) request.getAttribute("users");
-            if (users != null && !users.isEmpty()) {
+        <%
+        List<UtenteRegistrato> users = (List<UtenteRegistrato>) request.getAttribute("users");
+                    if (users != null && !users.isEmpty()) {
         %>
             <table class="user-table">
                 <thead>
@@ -29,8 +29,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% 
-                        for (Utente user : users) {
+                    <%
+                    for (UtenteRegistrato user : users) {
                     %>
                     <tr>
                         <td><%= user.getEmail() %></td>

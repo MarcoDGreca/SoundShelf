@@ -20,7 +20,7 @@ public class OrderDAO {
     }
 
     public int addOrder(Order order) throws SQLException {
-        String sql = "INSERT INTO Ordine (emailCliente, prezzoTotale, dataAcquisto, dataConsegna, indirizzoSpedizione, stato) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Ordine (emailCliente, prezzoTotale, dataOrdine, dataConsegna, indirizzoSpedizione, stato) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, order.getEmailCliente());
@@ -45,18 +45,19 @@ public class OrderDAO {
         }
     }
 
+
     public synchronized Order getOrderById(int orderId) {
-        String query = "SELECT * FROM Ordine WHERE codiceOrdine = ?";
+        String query = "SELECT * FROM Ordine WHERE numeroOrdine = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, orderId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new Order(
-                        resultSet.getInt("codiceOrdine"),
+                        resultSet.getInt("numeroOrdine"),
                         resultSet.getString("emailCliente"),
                         resultSet.getDouble("prezzoTotale"),
-                        resultSet.getDate("dataAcquisto"),
+                        resultSet.getDate("dataOrdine"),
                         resultSet.getDate("dataConsegna"),
                         resultSet.getString("indirizzoSpedizione"),
                         StatoOrdine.fromString(resultSet.getString("stato"))
@@ -69,6 +70,7 @@ public class OrderDAO {
         return null;
     }
 
+
     public synchronized List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
         String query = "SELECT * FROM Ordine";
@@ -77,10 +79,10 @@ public class OrderDAO {
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Order order = new Order(
-                    resultSet.getInt("codiceOrdine"),
+                    resultSet.getInt("numeroOrdine"),
                     resultSet.getString("emailCliente"),
                     resultSet.getDouble("prezzoTotale"),
-                    resultSet.getDate("dataAcquisto"),
+                    resultSet.getDate("dataOrdine"),
                     resultSet.getDate("dataConsegna"),
                     resultSet.getString("indirizzoSpedizione"),
                     StatoOrdine.fromString(resultSet.getString("stato"))
@@ -94,7 +96,7 @@ public class OrderDAO {
     }
 
     public void updateStatoOrder(Order order) {
-        String sql = "UPDATE Ordine SET stato = ? WHERE codiceOrdine = ?";
+        String sql = "UPDATE Ordine SET stato = ? WHERE numeroOrdine = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, order.getStato().name().replace("_", " "));
@@ -105,8 +107,9 @@ public class OrderDAO {
         }
     }
 
+
     public synchronized void updateOrder(Order order) {
-        String query = "UPDATE Ordine SET emailCliente = ?, prezzoTotale = ?, dataAcquisto = ?, dataConsegna = ?, indirizzoSpedizione = ?, stato = ? WHERE codiceOrdine = ?";
+        String query = "UPDATE Ordine SET emailCliente = ?, prezzoTotale = ?, dataOrdine = ?, dataConsegna = ?, indirizzoSpedizione = ?, stato = ? WHERE numeroOrdine = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, order.getEmailCliente());
@@ -122,8 +125,9 @@ public class OrderDAO {
         }
     }
 
+
     public synchronized void deleteOrder(int orderId) {
-        String query = "DELETE FROM Ordine WHERE codiceOrdine = ?";
+        String query = "DELETE FROM Ordine WHERE numeroOrdine = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, orderId);
@@ -132,6 +136,7 @@ public class OrderDAO {
             e.printStackTrace();
         }
     }
+
 
     public synchronized List<Order> getOrdersByEmail(String emailCliente) {
         List<Order> orders = new ArrayList<>();
@@ -144,10 +149,10 @@ public class OrderDAO {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Order order = new Order();
-                    order.setNumeroOrdine(resultSet.getInt("codiceOrdine"));
+                    order.setNumeroOrdine(resultSet.getInt("numeroOrdine"));
                     order.setEmailCliente(resultSet.getString("emailCliente"));
                     order.setPrezzoTotale(resultSet.getDouble("prezzoTotale"));
-                    order.setDataOrdine(resultSet.getDate("dataAcquisto"));
+                    order.setDataOrdine(resultSet.getDate("dataOrdine"));
                     order.setDataConsegna(resultSet.getDate("dataConsegna"));
                     order.setIndirizzoSpedizione(resultSet.getString("indirizzoSpedizione"));
                     order.setStato(StatoOrdine.valueOf(resultSet.getString("stato").toUpperCase().replace(" ", "_")));
@@ -160,8 +165,9 @@ public class OrderDAO {
         return orders;
     }
 
+
     public void requestRefund(int orderId, String emailCliente) throws SQLException {
-        String sql = "UPDATE Ordine SET stato = 'Richiesto Rimborso' WHERE codiceOrdine = ? AND emailCliente = ?";
+        String sql = "UPDATE Ordine SET stato = 'Richiesto Rimborso' WHERE numeroOrdine = ? AND emailCliente = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
@@ -169,6 +175,7 @@ public class OrderDAO {
             ps.executeUpdate();
         }
     }
+
 
     public List<Order> filterOrders(String emailCliente, Date dataInizio, Date dataFine) {
         List<Order> orders = new ArrayList<>();
@@ -178,10 +185,10 @@ public class OrderDAO {
             sql.append(" AND emailCliente = ?");
         }
         if (dataInizio != null) {
-            sql.append(" AND dataAcquisto >= ?");
+            sql.append(" AND dataOrdine >= ?");
         }
         if (dataFine != null) {
-            sql.append(" AND dataAcquisto <= ?");
+            sql.append(" AND dataOrdine <= ?");
         }
 
         try (Connection conn = dataSource.getConnection();
@@ -202,10 +209,10 @@ public class OrderDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Order order = new Order();
-                    order.setNumeroOrdine(rs.getInt("codiceOrdine"));
+                    order.setNumeroOrdine(rs.getInt("numeroOrdine"));
                     order.setEmailCliente(rs.getString("emailCliente"));
                     order.setPrezzoTotale(rs.getDouble("prezzoTotale"));
-                    order.setDataOrdine(rs.getDate("dataAcquisto"));
+                    order.setDataOrdine(rs.getDate("dataOrdine"));
                     order.setDataConsegna(rs.getDate("dataConsegna"));
                     order.setIndirizzoSpedizione(rs.getString("indirizzoSpedizione"));
                     order.setStato(StatoOrdine.fromString(rs.getString("stato")));
@@ -217,16 +224,18 @@ public class OrderDAO {
         }
         return orders;
     }
+
     
     public synchronized List<Product> getPurchasedProductsByEmail(String emailCliente) {
         List<Product> products = new ArrayList<>();
         String query = """
-            SELECT p.codiceProdotto, p.name, p.description, p.availability, p.salePrice, 
-                   p.originalPrice, p.supportedDevice, p.image
-            FROM Prodotti p
-            JOIN DettagliOrdine dt ON p.codiceProdotto = dt.codiceProdotto
-            JOIN Ordine o ON po.codiceOrdine = o.codiceOrdine
-            WHERE o.emailCliente = ?
+            SELECT p.id AS codiceProdotto, p.nome, p.descrizione, p.disponibilita, p.prezzoVendita, 
+                   p.prezzoOriginale, p.formato, p.immagine
+            FROM Prodotto p
+            JOIN ElementoOrdine eo ON p.id = eo.idProdotto
+            JOIN Ordine o ON eo.idOrdine = o.numeroOrdine
+            JOIN UtenteRegistrato u ON o.emailCliente = u.email
+            WHERE u.email = ?
         """;
 
         try (Connection connection = dataSource.getConnection();
@@ -238,13 +247,13 @@ public class OrderDAO {
                 while (resultSet.next()) {
                     Product product = new Product();
                     product.setProductCode(resultSet.getInt("codiceProdotto"));
-                    product.setName(resultSet.getString("name"));
-                    product.setDescription(resultSet.getString("description"));
-                    product.setAvailability(resultSet.getBoolean("availability"));
-                    product.setSalePrice(resultSet.getDouble("salePrice"));
-                    product.setOriginalPrice(resultSet.getDouble("originalPrice"));
-                    product.setSupportedDevice(resultSet.getString("supportedDevice"));
-                    product.setImage(resultSet.getString("image"));
+                    product.setName(resultSet.getString("nome"));
+                    product.setDescription(resultSet.getString("descrizione"));
+                    product.setAvailability(resultSet.getBoolean("disponibilita"));
+                    product.setSalePrice(resultSet.getDouble("prezzoVendita"));
+                    product.setOriginalPrice(resultSet.getDouble("prezzoOriginale"));
+                    product.setSupportedDevice(resultSet.getString("formato"));
+                    product.setImage(resultSet.getString("immagine"));
                     products.add(product);
                 }
             }
@@ -254,16 +263,18 @@ public class OrderDAO {
 
         return products;
     }
+
     
     public boolean updateOrderStatus(int numeroOrdine, String nuovoStato) throws SQLException {
-        String query = "UPDATE ordini SET stato = ? WHERE numero_ordine = ?";
+        String query = "UPDATE Ordine SET stato = ? WHERE numeroOrdine = ?";
         try (Connection connection = dataSource.getConnection();
-                PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, nuovoStato);
             statement.setInt(2, numeroOrdine);
             return statement.executeUpdate() > 0;
         }
     }
+
 
 
 }

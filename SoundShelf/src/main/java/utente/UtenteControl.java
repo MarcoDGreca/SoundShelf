@@ -12,18 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/utenteControl")
 public class UtenteControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private UtenteDAO utenteDAO;
+    private UtenteRegistratoDAO utenteDAO;
 
     @Override
     public void init() throws ServletException {
-        utenteDAO = new UtenteDAO();
+        utenteDAO = new UtenteRegistratoDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
 
         if (email != null && !email.isEmpty()) {
-            Utente utente = utenteDAO.getUserByEmail(email);
+            UtenteRegistrato utente = utenteDAO.getUserByEmail(email);
             if (utente != null) {
                 request.setAttribute("utente", utente);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/visualizzaUtente.jsp");

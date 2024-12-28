@@ -16,11 +16,11 @@ import java.security.NoSuchAlgorithmException;
 @WebServlet("/login")
 public class LoginControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private UtenteDAO userDAO;
+    private UtenteRegistratoDAO userDAO;
 
     @Override
     public void init() throws ServletException {
-        userDAO = new UtenteDAO();
+        userDAO = new UtenteRegistratoDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,7 +34,7 @@ public class LoginControl extends HttpServlet {
         }
 
         String hashedPassword = hashPassword(password);
-        Utente user = userDAO.authenticate(email, hashedPassword);
+        UtenteRegistrato user = userDAO.authenticate(email, hashedPassword);
 
         if (user != null) {
             HttpSession session = request.getSession();

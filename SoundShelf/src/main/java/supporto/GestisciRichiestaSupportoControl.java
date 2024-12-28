@@ -38,11 +38,17 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
         if ("richiediInformazioni".equals(action)) {
             String nomeRichiesta = request.getParameter("name");
 
+            if (nomeRichiesta == null || nomeRichiesta.isEmpty()) {
+                request.setAttribute("message", "Nome della richiesta non valido.");
+                request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+                return;
+            }
+
             try {
-                SupportRequest supportRequest = supportRequestDAO.getSupportRequest(nomeRichiesta);
+                SupportRequest supportRequest = supportRequestDAO.getSupportRequestById(Integer.parseInt(nomeRichiesta));
 
                 if (supportRequest != null) {
-                    request.setAttribute("message", "Il gestore ha richiesto informazioni aggiuntive per la richiesta: " + nomeRichiesta);
+                    request.setAttribute("richiesta", supportRequest);
                     request.getRequestDispatcher("supportoInterface/richiestaSupportoView.jsp").forward(request, response);
                 } else {
                     request.setAttribute("message", "La richiesta di supporto non esiste.");
@@ -54,11 +60,17 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
             }
         }
         else if ("aggiornaStato".equals(action)) {
-            String nomeRichiesta = request.getParameter("name");
+            String idRichiesta = request.getParameter("id");
             String nuovoStato = request.getParameter("nuovoStato");
 
+            if (idRichiesta == null || idRichiesta.isEmpty() || nuovoStato == null || nuovoStato.isEmpty()) {
+                request.setAttribute("message", "ID richiesta o stato non valido.");
+                request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+                return;
+            }
+
             try {
-                SupportRequest supportRequest = supportRequestDAO.getSupportRequest(nomeRichiesta);
+                SupportRequest supportRequest = supportRequestDAO.getSupportRequestById(Integer.parseInt(idRichiesta));
 
                 if (supportRequest != null) {
                     StatoSupporto statoEnum = StatoSupporto.fromString(nuovoStato);
@@ -66,13 +78,12 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                     if (statoEnum != null) {
                         supportRequest.setStato(statoEnum);
                         supportRequestDAO.updateSupportRequest(supportRequest);
+                        request.setAttribute("message", "Lo stato della richiesta è stato aggiornato a: " + nuovoStato);
                     } else {
                         request.setAttribute("message", "Stato non valido.");
                         request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
                         return;
                     }
-
-                    request.setAttribute("message", "Lo stato della richiesta è stato aggiornato a: " + nuovoStato);
                 } else {
                     request.setAttribute("message", "La richiesta di supporto non esiste.");
                 }
@@ -80,6 +91,30 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                 request.setAttribute("message", "Errore nell'aggiornamento dello stato della richiesta.");
             }
             request.getRequestDispatcher("/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
+        }
+        else if ("salvaRichiesta".equals(action)) {
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String description = request.getParameter("description");
+            String stato = request.getParameter("stato");
+
+            if (name == null || email == null || description == null || stato == null) {
+                request.setAttribute("message", "Dati della richiesta incompleti.");
+                request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+                return;
+            }
+
+            SupportRequest newRequest = new SupportRequest(name, email, description, new java.sql.Date(System.currentTimeMillis()), 
+                                                          "12:00", StatoSupporto.fromString(stato));
+
+            try {
+                supportRequestDAO.saveSupportRequest(newRequest);
+                request.setAttribute("message", "Richiesta di supporto inviata con successo.");
+                request.getRequestDispatcher("/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
+            } catch (SQLException e) {
+                request.setAttribute("message", "Errore nel salvataggio della richiesta di supporto.");
+                request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            }
         }
     }
 }

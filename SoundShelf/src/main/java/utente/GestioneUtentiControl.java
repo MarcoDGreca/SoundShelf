@@ -14,17 +14,17 @@ import java.util.List;
 @WebServlet("/gestisciCatalogoUtentiControl")
 public class GestioneUtentiControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private UtenteDAO userDAO;
+    private UtenteRegistratoDAO userDAO;
 
     @Override
     public void init() throws ServletException {
-        userDAO = new UtenteDAO();
+        userDAO = new UtenteRegistratoDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<Utente> users = userDAO.getAllUsers();
+            List<UtenteRegistrato> users = userDAO.getAllUsers();
             request.setAttribute("users", users);
             request.getRequestDispatcher("/utenteInterface/catalogoUtenti.jsp").forward(request, response);
         } catch (Exception e) {

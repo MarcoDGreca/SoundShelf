@@ -2,7 +2,7 @@ package recensione;
 
 import ordini.OrderDAO;
 import prodotti.Product;
-import utente.Utente;
+import utente.UtenteRegistrato;
 import util.InputSanitizer;
 
 import javax.servlet.ServletException;
@@ -31,7 +31,7 @@ public class RecensioniControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Utente user = (Utente) session.getAttribute("user");
+        UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
             response.sendRedirect("utenteInterface/loginForm.jsp");
@@ -46,7 +46,7 @@ public class RecensioniControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Utente user = (Utente) session.getAttribute("user");
+        UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
             response.sendRedirect("utenteInterface/loginForm.jsp");

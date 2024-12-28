@@ -1,6 +1,6 @@
 package utente;
 
-public class Utente {
+public class UtenteRegistrato {
 	private String email;
 	private String passwordUser;
 	private String nome;
@@ -9,9 +9,9 @@ public class Utente {
 	private String indirizzo;
 	private Ruolo ruolo;
 
-public Utente() {}
+public UtenteRegistrato() {}
 
-public Utente(String email, String passwordUser, String nome, String cognome, String indirizzo, String telefono, Ruolo ruolo) {
+public UtenteRegistrato(String email, String passwordUser, String nome, String cognome, String indirizzo, String telefono, Ruolo ruolo) {
     this.email = email;
     this.passwordUser = passwordUser;
     this.nome = nome;

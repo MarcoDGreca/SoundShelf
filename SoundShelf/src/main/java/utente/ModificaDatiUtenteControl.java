@@ -14,17 +14,17 @@ import java.io.IOException;
 @WebServlet("/profileControl")
 public class ModificaDatiUtenteControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private UtenteDAO userDAO;
+    private UtenteRegistratoDAO userDAO;
 
     @Override
     public void init() throws ServletException {
-        userDAO = new UtenteDAO();
+        userDAO = new UtenteRegistratoDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Utente user = (Utente) session.getAttribute("user");
+        UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/utenteInterface/loginForm.jsp");
@@ -38,7 +38,7 @@ public class ModificaDatiUtenteControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Utente user = (Utente) session.getAttribute("user");
+        UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/utenteInterface/loginForm.jsp");

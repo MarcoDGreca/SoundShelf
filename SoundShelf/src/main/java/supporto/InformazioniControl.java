@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/informazioniControl")
 public class InformazioniControl extends HttpServlet {
-    
+
     private static final long serialVersionUID = 1L;
     private SupportRequestDAO supportRequestDAO;
 
@@ -25,12 +25,18 @@ public class InformazioniControl extends HttpServlet {
         String informazioniAggiuntive = request.getParameter("informazioniAggiuntive");
         String rispostaUtente = request.getParameter("rispostaUtente");
 
+        if (nomeRichiesta == null || nomeRichiesta.isEmpty()) {
+            request.setAttribute("message", "Nome della richiesta non valido.");
+            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            return;
+        }
+
         try {
-            SupportRequest supportRequest = supportRequestDAO.getSupportRequest(nomeRichiesta);
+            SupportRequest supportRequest = supportRequestDAO.getSupportRequestById(Integer.parseInt(nomeRichiesta));
 
             if (supportRequest != null) {
                 supportRequest.setInformazioniAggiuntive(informazioniAggiuntive);
-                
+
                 if (rispostaUtente != null && !rispostaUtente.isEmpty()) {
                     supportRequest.setRispostaUtente(rispostaUtente);
                 }
@@ -47,6 +53,8 @@ public class InformazioniControl extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             request.setAttribute("message", "Errore nell'aggiornamento della richiesta.");
+        } catch (NumberFormatException e) {
+            request.setAttribute("message", "ID richiesta non valido.");
         }
 
         request.getRequestDispatcher("/supportoInterface/richiestaSupportoView.jsp").forward(request, response);

@@ -9,21 +9,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtenteDAO {
+public class UtenteRegistratoDAO {
     private DataSource dataSource;
 
-    public UtenteDAO() {
+    public UtenteRegistratoDAO() {
         this.dataSource = DataSource.getInstance();
     }
 
-    public synchronized Utente getUserByEmail(String email) {
+    public synchronized UtenteRegistrato getUserByEmail(String email) {
         String query = "SELECT * FROM Utente WHERE email = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return new Utente(
+                    return new UtenteRegistrato(
                         resultSet.getString("email"),
                         resultSet.getString("passwordUser"),
                         resultSet.getString("nome"),
@@ -40,7 +40,7 @@ public class UtenteDAO {
         return null;
     }
 
-    public synchronized void addUser(Utente utente) {
+    public synchronized void addUser(UtenteRegistrato utente) {
         String query = "INSERT INTO Utente (email, passwordUser, nome, cognome, indirizzo, telefono, ruolo) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -57,7 +57,7 @@ public class UtenteDAO {
         }
     }
 
-    public synchronized void updateUser(Utente utente) {
+    public synchronized void updateUser(UtenteRegistrato utente) {
         String query = "UPDATE Utente SET passwordUser = ?, nome = ?, cognome = ?, indirizzo = ?, telefono = ?, ruolo = ? WHERE email = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -85,14 +85,14 @@ public class UtenteDAO {
         }
     }
 
-    public synchronized List<Utente> getAllUsers() {
-        List<Utente> users = new ArrayList<>();
+    public synchronized List<UtenteRegistrato> getAllUsers() {
+        List<UtenteRegistrato> users = new ArrayList<>();
         String query = "SELECT * FROM Utente";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
-                Utente utente = new Utente(
+                UtenteRegistrato utente = new UtenteRegistrato(
                     resultSet.getString("email"),
                     resultSet.getString("passwordUser"),
                     resultSet.getString("nome"),
@@ -109,7 +109,7 @@ public class UtenteDAO {
         return users;
     }
     
-    public synchronized Utente authenticate(String email, String password) {
+    public synchronized UtenteRegistrato authenticate(String email, String password) {
         String query = "SELECT * FROM Utente WHERE email = ? AND passwordUser = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -117,7 +117,7 @@ public class UtenteDAO {
             statement.setString(2, password);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    Utente user = new Utente();
+                    UtenteRegistrato user = new UtenteRegistrato();
                     user.setEmail(resultSet.getString("email"));
                     user.setPasswordUser(resultSet.getString("passwordUser"));
                     user.setNome(resultSet.getString("nome"));
@@ -144,4 +144,21 @@ public class UtenteDAO {
             e.printStackTrace();
         }
     }
+    
+    public synchronized int getUserIdByEmail(String email) {
+        String query = "SELECT id FROM Utente WHERE email = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
 }

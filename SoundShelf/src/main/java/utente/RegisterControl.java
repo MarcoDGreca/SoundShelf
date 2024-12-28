@@ -16,11 +16,11 @@ import java.security.NoSuchAlgorithmException;
 public class RegisterControl extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private UtenteDAO userDAO;
+    private UtenteRegistratoDAO userDAO;
 
     @Override
     public void init() throws ServletException {
-        userDAO = new UtenteDAO();
+        userDAO = new UtenteRegistratoDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,7 +39,7 @@ public class RegisterControl extends HttpServlet {
 
         String hashedPassword = hashPassword(password);
 
-        Utente newUser = new Utente(email, hashedPassword, nome, cognome, indirizzo, telefono, Ruolo.UTENTE);
+        UtenteRegistrato newUser = new UtenteRegistrato(email, hashedPassword, nome, cognome, indirizzo, telefono, Ruolo.UTENTE);
 
         userDAO.addUser(newUser);
 

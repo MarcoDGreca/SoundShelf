@@ -1,7 +1,8 @@
 package ordini;
 
 import prodotti.Product;
-import utente.Utente;
+import utente.UtenteRegistrato;
+import utente.UtenteRegistratoDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,12 +18,13 @@ import java.util.Calendar;
 public class AcquistoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private OrderDAO orderDAO;
-    private OrderDetailDAO orderDetailDAO;
+    private ElementoOrdineDAO elementoOrdineDAO;
+    private UtenteRegistratoDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         orderDAO = new OrderDAO();
-        orderDetailDAO = new OrderDetailDAO();
+        elementoOrdineDAO = new ElementoOrdineDAO();
     }
 
     @Override
@@ -39,7 +41,7 @@ public class AcquistoControl extends HttpServlet {
         double totalPrice = cart.getTotalPrice();
         request.setAttribute("totalPrice", totalPrice);
 
-        Utente user = (Utente) session.getAttribute("user");
+        UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
         if (user != null) {
             request.setAttribute("savedAddress", user.getIndirizzo());
         }
@@ -51,7 +53,7 @@ public class AcquistoControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
-        Utente user = (Utente) session.getAttribute("user");
+        UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (cart != null && !cart.isEmpty() && user != null) {
             String shippingAddress = request.getParameter("shippingAddress");
@@ -72,26 +74,31 @@ public class AcquistoControl extends HttpServlet {
             order.setStato(StatoOrdine.IN_LAVORAZIONE);
 
             try {
-                int orderId = orderDAO.addOrder(order);
+                int numeroOrdine = orderDAO.addOrder(order);
 
                 for (CartItem item : cart.getItems()) {
                     Product product = item.getProduct();
                     int quantity = item.getQuantity();
-                    orderDetailDAO.addOrderDetail(orderId, product.getProductCode(), quantity);
+                    ElementoOrdine elementoOrdine = new ElementoOrdine();
+                    elementoOrdine.setIdOrdine(numeroOrdine);
+                    elementoOrdine.setIdProdotto(product.getProductCode());
+                    elementoOrdine.setQuantita(quantity);
+                    elementoOrdine.setPrezzoUnitario(product.getSalePrice());
+                    elementoOrdineDAO.addOrderDetail(elementoOrdine);
                 }
 
                 cart.clear();
                 session.setAttribute("cart", cart);
 
-                response.sendRedirect(request.getContextPath() + "ordiniInterface/orderConfirmation.jsp");
+                response.sendRedirect(request.getContextPath() + "/ordiniInterface/orderConfirmation.jsp");
 
             } catch (SQLException e) {
                 request.setAttribute("errorMessage", "Errore nella creazione dell'ordine.");
-                request.getRequestDispatcher("error//MessaggioErrore.jsp").forward(request, response);
+                request.getRequestDispatcher("error/MessaggioErrore.jsp").forward(request, response);
             }
         } else {
             request.setAttribute("errorMessage", "Il carrello è vuoto o l'utente non è autenticato.");
-            request.getRequestDispatcher("error//MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 }

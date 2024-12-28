@@ -15,8 +15,8 @@
         <h2>Il Tuo Profilo</h2>
 
         <%
-            Utente user = (Utente) request.getAttribute("user");
-            if (user != null) {
+        UtenteRegistrato user = (UtenteRegistrato) request.getAttribute("user");
+                    if (user != null) {
         %>
         <table class="profile-table">
             <tr>

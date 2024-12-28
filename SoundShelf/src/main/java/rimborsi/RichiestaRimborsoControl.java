@@ -9,8 +9,8 @@ import java.util.List;
 
 @WebServlet("/richiestaRimborsoControl")
 public class RichiestaRimborsoControl extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private RefoundRequestDAO refoundRequestDAO;
+    private static final long serialVersionUID = 1L;
+    private RefoundRequestDAO refoundRequestDAO;
 
     @Override
     public void init() throws ServletException {
@@ -33,14 +33,14 @@ public class RichiestaRimborsoControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            int orderCode = Integer.parseInt(request.getParameter("orderCode"));
             int productCode = Integer.parseInt(request.getParameter("productCode"));
             String reason = request.getParameter("reason");
             String iban = request.getParameter("iban");
 
-            RefoundRequest refoundRequest = new RefoundRequest(productCode, reason, iban, StatoRimborso.IN_LAVORAZIONE);
+            RefoundRequest refoundRequest = new RefoundRequest(productCode, reason, iban, StatoRimborso.IN_LAVORAZIONE, orderCode, productCode);
             refoundRequestDAO.saveRefoundRequest(refoundRequest);
             request.setAttribute("message", "Richiesta di rimborso inviata con successo.");
-
         } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
             request.setAttribute("error", "Si è verificato un errore durante l'invio della richiesta di rimborso.");

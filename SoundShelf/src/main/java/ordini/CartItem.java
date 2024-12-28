@@ -40,7 +40,7 @@ public class CartItem {
     }
     
     public String getImageItem() throws SQLException {
-		return productDAO.getImage(product.getProductCode());
+		return productDAO.getImageByProductId(product.getProductCode());
     }
 }
 

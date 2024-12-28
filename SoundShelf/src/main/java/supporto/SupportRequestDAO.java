@@ -29,9 +29,8 @@ public class SupportRequestDAO {
         }
     }
 
-
     public void updateSupportRequest(SupportRequest supportRequest) throws SQLException {
-        String query = "UPDATE support_requests SET email = ?, description = ?, data_invio = ?, orario_invio = ?, stato = ?, informazioni_aggiuntive = ?, risposta_utente = ? WHERE name = ?";
+        String query = "UPDATE support_requests SET email = ?, description = ?, data_invio = ?, orario_invio = ?, stato = ?, informazioni_aggiuntive = ?, risposta_utente = ? WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, supportRequest.getEmail());
@@ -41,19 +40,20 @@ public class SupportRequestDAO {
             statement.setString(5, supportRequest.getStato().getStato());
             statement.setString(6, supportRequest.getInformazioniAggiuntive());
             statement.setString(7, supportRequest.getRispostaUtente());
-            statement.setString(8, supportRequest.getName());
+            statement.setInt(8, supportRequest.getId());
             statement.executeUpdate();
         }
     }
 
-    public SupportRequest getSupportRequest(String name) throws SQLException {
-        String query = "SELECT * FROM support_requests WHERE name = ?";
+    public SupportRequest getSupportRequestById(int id) throws SQLException {
+        String query = "SELECT * FROM support_requests WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, name);
+            statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return new SupportRequest(
+                            resultSet.getInt("id"),
                             resultSet.getString("name"),
                             resultSet.getString("email"),
                             resultSet.getString("description"),
@@ -77,6 +77,7 @@ public class SupportRequestDAO {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 supportRequests.add(new SupportRequest(
+                        resultSet.getInt("id"),
                         resultSet.getString("name"),
                         resultSet.getString("email"),
                         resultSet.getString("description"),

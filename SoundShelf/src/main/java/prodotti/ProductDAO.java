@@ -9,306 +9,195 @@ public class ProductDAO {
 
     private DataSource dataSource;
 
-    public ProductDAO(Connection connection) {
-        this.dataSource = DataSource.getInstance();
-    }
-
     public ProductDAO() {
+    	this.dataSource = DataSource.getInstance();
     }
 
-    public void saveProduct(Product product) throws SQLException {
-        String query = "INSERT INTO products (name, artists, release_date, description, availability, sale_price, original_price, supported_device, genres, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public Product getProductById(int productId) throws SQLException {
+        String query = "SELECT * FROM Prodotto WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Product(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("descrizione"),
+                        rs.getInt("disponibilita") > 0,
+                        rs.getDouble("prezzoVendita"),
+                        rs.getDouble("prezzoOriginale"),
+                        rs.getString("formato"),
+                        rs.getString("immagine"),
+                        rs.getString("dataPubblicazione"),
+                        rs.getBoolean("isDeleted")
+                    );
+                }
+                return null;
+            }
+        }
+    }
 
-            statement.setString(1, product.getName());
-            statement.setString(2, serializeArtists(product.getArtists()));
-            statement.setString(3, product.getReleaseDate());
-            statement.setString(4, product.getDescription());
-            statement.setBoolean(5, product.isAvailability());
-            statement.setDouble(6, product.getSalePrice());
-            statement.setDouble(7, product.getOriginalPrice());
-            statement.setString(8, product.getSupportedDevice());
-            statement.setString(9, serializeGenres(product.getGenres()));
-            statement.setString(10, product.getImage());
-            statement.executeUpdate();
+    public List<Product> getAllProducts() throws SQLException {
+        String query = "SELECT * FROM Prodotto";
+        List<Product> products = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                products.add(new Product(
+                    rs.getInt("id"),
+                    rs.getString("nome"),
+                    rs.getString("descrizione"),
+                    rs.getInt("disponibilita") > 0,
+                    rs.getDouble("prezzoVendita"),
+                    rs.getDouble("prezzoOriginale"),
+                    rs.getString("formato"),
+                    rs.getString("immagine"),
+                    rs.getString("dataPubblicazione"),
+                    rs.getBoolean("isDeleted")
+                ));
+            }
+        }
+        return products;
+    }
+
+    public void insertProduct(Product product) throws SQLException {
+        String query = "INSERT INTO Prodotto (nome, descrizione, disponibilita, prezzoVendita, prezzoOriginale, formato, immagine, dataPubblicazione, isDeleted) " +
+                       "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, product.getName());
+            ps.setString(2, product.getDescription());
+            ps.setInt(3, product.isAvailability() ? 1 : 0);
+            ps.setDouble(4, product.getSalePrice());
+            ps.setDouble(5, product.getOriginalPrice());
+            ps.setString(6, product.getSupportedDevice());
+            ps.setString(7, product.getImage());
+            ps.setString(8, product.getReleaseDate());
+            ps.setBoolean(9, product.isDeleted());
+            ps.executeUpdate();
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    product.setProductCode(generatedKeys.getInt(1));
+                }
+            }
         }
     }
 
     public void updateProduct(Product product) throws SQLException {
-        String query = "UPDATE products SET artists = ?, release_date = ?, description = ?, availability = ?, sale_price = ?, original_price = ?, supported_device = ?, genres = ?, image = ? WHERE productCode = ?";
+        String query = "UPDATE Prodotto SET nome = ?, descrizione = ?, disponibilita = ?, prezzoVendita = ?, prezzoOriginale = ?, formato = ?, immagine = ?, dataPubblicazione = ?, isDeleted = ? WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setString(1, serializeArtists(product.getArtists()));
-            statement.setString(2, product.getReleaseDate());
-            statement.setString(3, product.getDescription());
-            statement.setBoolean(4, product.isAvailability());
-            statement.setDouble(5, product.getSalePrice());
-            statement.setDouble(6, product.getOriginalPrice());
-            statement.setString(7, product.getSupportedDevice());
-            statement.setString(8, serializeGenres(product.getGenres()));
-            statement.setString(9, product.getImage());
-            statement.setInt(10, product.getProductCode());
-            statement.executeUpdate();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, product.getName());
+            ps.setString(2, product.getDescription());
+            ps.setInt(3, product.isAvailability() ? 1 : 0);
+            ps.setDouble(4, product.getSalePrice());
+            ps.setDouble(5, product.getOriginalPrice());
+            ps.setString(6, product.getSupportedDevice());
+            ps.setString(7, product.getImage());
+            ps.setString(8, product.getReleaseDate());
+            ps.setBoolean(9, product.isDeleted());
+            ps.setInt(10, product.getProductCode());
+            ps.executeUpdate();
         }
     }
 
-    public void deleteProduct(int productCode) throws SQLException {
-        String query = "DELETE FROM products WHERE productCode = ?";
+    public void deleteProduct(int productId) throws SQLException {
+        String query = "UPDATE Prodotto SET isDeleted = TRUE WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setInt(1, productCode);
-            statement.executeUpdate();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, productId);
+            ps.executeUpdate();
         }
     }
-
-    public Product getProductById(int productCode) throws SQLException {
-        String query = "SELECT * FROM products WHERE productCode = ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setInt(1, productCode);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new Product(
-                            resultSet.getInt("productCode"),
-                            resultSet.getString("name"),
-                            deserializeArtists(resultSet.getString("artists")),
-                            resultSet.getString("release_date"),
-                            resultSet.getString("description"),
-                            resultSet.getBoolean("availability"),
-                            resultSet.getDouble("sale_price"),
-                            resultSet.getDouble("original_price"),
-                            resultSet.getString("supported_device"),
-                            deserializeGenres(resultSet.getString("genres")),
-                            resultSet.getString("image")
-                    );
-                }
-            }
-        }
-        return null;
-    }
-
-    public List<Product> getAllProducts() throws SQLException {
-        List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                products.add(new Product(
-                        resultSet.getInt("productCode"),
-                        resultSet.getString("name"),
-                        deserializeArtists(resultSet.getString("artists")),
-                        resultSet.getString("release_date"),
-                        resultSet.getString("description"),
-                        resultSet.getBoolean("availability"),
-                        resultSet.getDouble("sale_price"),
-                        resultSet.getDouble("original_price"),
-                        resultSet.getString("supported_device"),
-                        deserializeGenres(resultSet.getString("genres")),
-                        resultSet.getString("image")
-                ));
-            }
-        }
-        return products;
-    }
-
-    private String serializeArtists(List<Artist> list) {
-        StringBuilder sb = new StringBuilder();
-        for (Artist artist : list) {
-            sb.append(artist.getStageName()).append(",");
-        }
-        return sb.toString();
-    }
-
-    private String serializeGenres(List<Genre> genres) {
-        StringBuilder sb = new StringBuilder();
-        for (Genre genre : genres) {
-            sb.append(genre.getName()).append(",");
-        }
-        return sb.toString();
-    }
-
-    private List<Artist> deserializeArtists(String artistsString) {
-        List<Artist> artists = new ArrayList<>();
-        for (String artistName : artistsString.split(",")) {
-            if (!artistName.trim().isEmpty()) {
-                artists.add(new Artist("", "", artistName.trim()));
-            }
-        }
-        return artists;
-    }
-
-    private List<Genre> deserializeGenres(String genresString) {
-        List<Genre> genres = new ArrayList<>();
-        for (String genreName : genresString.split(",")) {
-            if (!genreName.trim().isEmpty()) {
-                genres.add(new Genre(genreName.trim()));
-            }
-        }
-        return genres;
-    }
-    
-    public Artist findArtistByName(String artistName) throws SQLException {
-        String query = "SELECT * FROM artists WHERE stage_name = ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setString(1, artistName);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new Artist(
-                            resultSet.getString("first_name"),
-                            resultSet.getString("last_name"),
-                            resultSet.getString("stage_name")
-                    );
-                }
-            }
-        }
-        return null;
-    }
-
-    public Genre findGenreByName(String genreName) throws SQLException {
-        String query = "SELECT * FROM genres WHERE name = ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            statement.setString(1, genreName);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return new Genre(resultSet.getString("name"));
-                }
-            }
-        }
-        return null; 
-    }
-    public List<Product> searchProducts(String name, List<String> genres, List<String> artists) {
-        List<Product> products = new ArrayList<>();
-        
-        StringBuilder query = new StringBuilder("SELECT p.productCode, p.name, p.releaseDate, p.description, p.availability, p.salePrice, p.originalPrice, p.supportedDevice, p.image " +
-                "FROM products p " +
-                "LEFT JOIN product_genres pg ON p.productCode = pg.productCode " +
-                "LEFT JOIN genres g ON pg.genreCode = g.genreCode " +
-                "LEFT JOIN product_artists pa ON p.productCode = pa.productCode " +
-                "LEFT JOIN artists a ON pa.artistCode = a.artistCode " +
-                "WHERE 1=1");
-
-        List<String> parameters = new ArrayList<>();
-
+    public List<Product> searchProducts(String name, List<String> genres, List<String> artists) throws SQLException {
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Prodotto WHERE 1=1");
         if (name != null && !name.isEmpty()) {
-            query.append(" AND p.name LIKE ?");
-            parameters.add("%" + name + "%");
+            queryBuilder.append(" AND nome LIKE ?");
         }
-
         if (genres != null && !genres.isEmpty()) {
-            query.append(" AND g.name IN (");
-            for (int i = 0; i < genres.size(); i++) {
-                query.append("?");
-                if (i < genres.size() - 1) {
-                    query.append(", ");
-                }
-                parameters.add(genres.get(i));
-            }
-            query.append(")");
+            queryBuilder.append(" AND id IN (SELECT product_id FROM prodotto_genere WHERE genere_id IN (SELECT id FROM genere WHERE nome IN (?)))");
         }
         if (artists != null && !artists.isEmpty()) {
-            query.append(" AND a.stageName IN (");
-            for (int i = 0; i < artists.size(); i++) {
-                query.append("?");
-                if (i < artists.size() - 1) {
-                    query.append(", ");
-                }
-                parameters.add(artists.get(i));
-            }
-            query.append(")");
+            queryBuilder.append(" AND id IN (SELECT product_id FROM prodotto_artista WHERE artista_id IN (SELECT id FROM artista WHERE nome IN (?)))");
         }
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query.toString())) {
-
-            for (int i = 0; i < parameters.size(); i++) {
-                statement.setString(i + 1, parameters.get(i));
+             PreparedStatement ps = connection.prepareStatement(queryBuilder.toString())) {
+            int paramIndex = 1;
+            if (name != null && !name.isEmpty()) {
+                ps.setString(paramIndex++, "%" + name + "%");
+            }
+            if (genres != null && !genres.isEmpty()) {
+                ps.setString(paramIndex++, String.join(",", genres));
+            }
+            if (artists != null && !artists.isEmpty()) {
+                ps.setString(paramIndex++, String.join(",", artists));
             }
 
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Product product = new Product();
-                product.setProductCode(resultSet.getInt("productCode"));
-                product.setName(resultSet.getString("name"));
-                product.setReleaseDate(resultSet.getString("releaseDate"));
-                product.setDescription(resultSet.getString("description"));
-                product.setAvailability(resultSet.getBoolean("availability"));
-                product.setSalePrice(resultSet.getDouble("salePrice"));
-                product.setOriginalPrice(resultSet.getDouble("originalPrice"));
-                product.setSupportedDevice(resultSet.getString("supportedDevice"));
-                product.setImage(resultSet.getString("image"));
-
-                product.setArtists(getArtistsByProductCode(product.getProductCode(), connection));
-                product.setGenres(getGenresByProductCode(product.getProductCode(), connection));
-
-                products.add(product);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return products;
-    }
-
-
-    
-    public String getImage(int productCode) throws SQLException {
-        String query = "SELECT image FROM products WHERE productCode = ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, productCode);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getString("image");
+            try (ResultSet rs = ps.executeQuery()) {
+                List<Product> products = new ArrayList<>();
+                while (rs.next()) {
+                    Product product = new Product(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("descrizione"),
+                        rs.getInt("disponibilita") > 0,
+                        rs.getDouble("prezzoVendita"),
+                        rs.getDouble("prezzoOriginale"),
+                        rs.getString("formato"),
+                        rs.getString("immagine"),
+                        rs.getString("dataPubblicazione"),
+                        rs.getBoolean("isDeleted")
+                    );
+                    products.add(product);
                 }
+                return products;
             }
         }
-        return null;
     }
-    
-    private List<Artist> getArtistsByProductCode(int productCode, Connection connection) throws SQLException {
-        List<Artist> artists = new ArrayList<>();
-        String query = "SELECT * FROM artists a " +
-                       "JOIN product_artists pa ON a.artist_id = pa.artist_id " +
-                       "WHERE pa.product_code = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, productCode);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                artists.add(new Artist(
-                        resultSet.getString("first_name"),
-                        resultSet.getString("last_name"),
-                        resultSet.getString("stage_name")
-                ));
-            }
-        }
-        return artists;
-    }
-    
-    private List<Genre> getGenresByProductCode(int productCode, Connection connection) throws SQLException {
-        List<Genre> genres = new ArrayList<>();
-        String query = "SELECT * FROM genres g " +
-                       "JOIN product_genres pg ON g.genre_id = pg.genre_id " +
-                       "WHERE pg.product_code = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, productCode);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                genres.add(new Genre(resultSet.getString("name")));
-            }
-        }
-        return genres;
-    }
-    
-    
 
+    public Artist findArtistByName(String name) throws SQLException {
+        String query = "SELECT * FROM Artista WHERE nome = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Artist(rs.getString("nome"), rs.getString("cognome"), rs.getString("nomeArtistico"));
+                }
+                return null;
+            }
+        }
+    }
+
+    public Genre findGenreByName(String name) throws SQLException {
+        String query = "SELECT * FROM Genere WHERE nome = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Genre(rs.getString("nome"));
+                }
+                return null;
+            }
+        }
+    }
+    
+    public String getImageByProductId(int productId) throws SQLException {
+        String query = "SELECT immagine FROM Prodotto WHERE id = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("immagine");
+                }
+                return null;
+            }
+        }
+    }
 }

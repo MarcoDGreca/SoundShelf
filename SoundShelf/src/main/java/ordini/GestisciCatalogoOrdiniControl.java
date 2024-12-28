@@ -15,21 +15,21 @@ public class GestisciCatalogoOrdiniControl extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private OrderDAO orderDAO;
-    private OrderDetailDAO orderDetailDAO;
+    private ElementoOrdineDAO orderDetailDAO;
 
     @Override
     public void init() throws ServletException {
         orderDAO = new OrderDAO();
-        orderDetailDAO = new OrderDetailDAO();
+        orderDetailDAO = new ElementoOrdineDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<Order> ordini = orderDAO.getAllOrders();
-            Map<Integer, List<OrderDetail>> ordineDetailsMap = new HashMap<>();
+            Map<Integer, List<ElementoOrdine>> ordineDetailsMap = new HashMap<>();
             for (Order ordine : ordini) {
-                List<OrderDetail> orderDetails = orderDetailDAO.getOrderDetailsByOrderId(ordine.getNumeroOrdine());
+                List<ElementoOrdine> orderDetails = orderDetailDAO.getOrderDetailsByOrderId(ordine.getNumeroOrdine());
                 ordineDetailsMap.put(ordine.getNumeroOrdine(), orderDetails);
             }
 

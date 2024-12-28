@@ -70,7 +70,7 @@ public class InserisciNuovoProdottoControl extends HttpServlet {
                 }
             }
 
-            productDAO.saveProduct(newProduct);
+            productDAO.insertProduct(newProduct);
 
             response.sendRedirect("prodotti/gestisciCatalogoProdottiControl");
         } catch (NumberFormatException e) {

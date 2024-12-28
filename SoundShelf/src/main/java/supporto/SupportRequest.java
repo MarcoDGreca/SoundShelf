@@ -4,6 +4,7 @@ import java.sql.Date;
 
 public class SupportRequest {
 
+    private int id;
     private String name;
     private String email;
     private String description;
@@ -13,7 +14,8 @@ public class SupportRequest {
     private String informazioniAggiuntive;
     private String rispostaUtente;
 
-    public SupportRequest(String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato, String informazioniAggiuntive, String rispostaUtente) {
+    public SupportRequest(int id, String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato, String informazioniAggiuntive, String rispostaUtente) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.description = description;
@@ -24,20 +26,20 @@ public class SupportRequest {
         this.rispostaUtente = rispostaUtente; 
     }
 
-    public SupportRequest(String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato, String informazioniAggiuntive) {
-        this.name = name;
-        this.email = email;
-        this.description = description;
-        this.dataInvio = dataInvio;
-        this.orarioInvio = orarioInvio;
-        this.stato = stato;
-        this.informazioniAggiuntive = informazioniAggiuntive;
-        this.rispostaUtente = null; 
+    public SupportRequest(int id, String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato, String informazioniAggiuntive) {
+        this(id, name, email, description, dataInvio, orarioInvio, stato, informazioniAggiuntive, null);
     }
 
-
     public SupportRequest(String name, String email, String description, Date dataInvio, String orarioInvio, StatoSupporto stato) {
-        this(name, email, description, dataInvio, orarioInvio, stato, null);
+        this(0, name, email, description, dataInvio, orarioInvio, stato, null);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getInformazioniAggiuntive() {

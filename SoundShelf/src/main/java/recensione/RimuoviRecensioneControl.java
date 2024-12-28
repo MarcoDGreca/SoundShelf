@@ -1,6 +1,6 @@
 package recensione;
 
-import utente.Utente;
+import utente.UtenteRegistrato;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,7 +25,7 @@ public class RimuoviRecensioneControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Utente user = (Utente) session.getAttribute("user");
+        UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
             response.sendRedirect("utenteInterface/loginForm.jsp");
