@@ -1,9 +1,10 @@
 package control;
 
-import entity.Product;
-import entity.ProductDAO;
-import entity.Review;
-import entity.ReviewDAO;
+import prodotti.Product;
+import prodotti.ProductDAO;
+import recensione.Review;
+import recensione.ReviewDAO;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

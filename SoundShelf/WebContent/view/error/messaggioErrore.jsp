@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <jsp:include page="../header.jsp" />
+    <jsp:include page="../pagePieces/header.jsp" />
 
     <div id="main" class="clear">
         <h2>Errore</h2>
@@ -17,7 +17,7 @@
         <a href="${pageContext.request.contextPath}/productList" class="btn-return">Torna alla lista dei prodotti</a>
     </div>
 
-    <jsp:include page="../footer.jsp" />
+    <jsp:include page="../pagePieces/footer.jsp" />
 
 </body>
 </html>
