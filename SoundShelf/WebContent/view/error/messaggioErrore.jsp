@@ -14,7 +14,7 @@
     <div id="main" class="clear">
         <h2>Errore</h2>
         <p><%= request.getAttribute("errorMessage") %></p>
-        <a href="${pageContext.request.contextPath}/productList" class="btn-return">Torna alla lista dei prodotti</a>
+        <a href="${pageContext.request.contextPath}/home" class="btn-return">Torna alla home</a>
     </div>
 
     <jsp:include page="../pagePieces/footer.jsp" />

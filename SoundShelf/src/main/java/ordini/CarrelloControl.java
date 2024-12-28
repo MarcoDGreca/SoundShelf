@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/cart")
+@WebServlet("/carrelloControl")
 public class CarrelloControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ProductDAO productDAO;
@@ -60,7 +60,7 @@ public class CarrelloControl extends HttpServlet {
             }
         }
 
-        response.sendRedirect("cart.jsp");
+        response.sendRedirect("ordini/carrelloView.jsp");
     }
 
     @Override

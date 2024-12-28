@@ -27,7 +27,7 @@
                     <p><strong>Data Recensione:</strong> <%= recensione.getDataRecensione() %></p>
                     <p><strong>Testo:</strong> <%= recensione.getTesto() %></p>
 
-                    <form action="${pageContext.request.contextPath}/deleteReview" method="post" style="display:inline;">
+                    <form action="${pageContext.request.contextPath}/recensione/rimuoviRecensioneControl" method="post" style="display:inline;">
                         <input type="hidden" name="reviewId" value="<%= recensione.getCodiceRecensione() %>" />
                         <button type="submit" class="btn-delete" onclick="return confirm('Sei sicuro di voler eliminare questa recensione?')">Elimina Recensione</button>
                     </form>

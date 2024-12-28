@@ -4,7 +4,7 @@ function searchProducts(event) {
     const artist = document.getElementById('productArtist').value;
     const genre = document.getElementById('productGenre').value;
     
-    const url = `/searchProducts?name=${encodeURIComponent(name)}&artist=${encodeURIComponent(artist)}&genre=${encodeURIComponent(genre)}`;
+    const url = `prodotti/searchProducts?name=${encodeURIComponent(name)}&artist=${encodeURIComponent(artist)}&genre=${encodeURIComponent(genre)}`;
 
     const xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);

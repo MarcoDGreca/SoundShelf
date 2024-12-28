@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/manageUsers")
+@WebServlet("/gestisciCatalogoUtentiControl")
 public class GestioneUtentiControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UtenteDAO userDAO;
@@ -26,10 +26,10 @@ public class GestioneUtentiControl extends HttpServlet {
         try {
             List<Utente> users = userDAO.getAllUsers();
             request.setAttribute("users", users);
-            request.getRequestDispatcher("/admin/manageUsers.jsp").forward(request, response);
+            request.getRequestDispatcher("/utenteInterface/catalogoUtenti.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Errore durante il recupero degli utenti.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 
@@ -44,10 +44,10 @@ public class GestioneUtentiControl extends HttpServlet {
             } else if ("promote".equals(action)) {
                 userDAO.promoteToAdmin(email);
             }
-            response.sendRedirect("manageUsers");
+            response.sendRedirect("utente/gestisciCatalogoUtentiControl");
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Errore durante l'operazione sugli utenti.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 }

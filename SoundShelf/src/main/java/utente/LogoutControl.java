@@ -18,7 +18,7 @@ public class LogoutControl extends HttpServlet {
         if (session != null) {
             session.invalidate(); 
         }
-        response.sendRedirect(request.getContextPath() + "/home");
+        response.sendRedirect(request.getContextPath() + "/control/home");
     }
 
     @Override

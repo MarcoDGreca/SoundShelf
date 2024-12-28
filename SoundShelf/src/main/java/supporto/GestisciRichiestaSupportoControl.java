@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/gestisciRichiestaSupporto")
+@WebServlet("/gestisciRichiestaSupportoControl")
 public class GestisciRichiestaSupportoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private SupportRequestDAO supportRequestDAO;
@@ -24,10 +24,10 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
         try {
             List<SupportRequest> richieste = supportRequestDAO.getAllSupportRequests();
             request.setAttribute("richieste", richieste);
-            request.getRequestDispatcher("/paginaGestioneRichieste.jsp").forward(request, response);
+            request.getRequestDispatcher("/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
         } catch (SQLException e) {
             request.setAttribute("message", "Errore nel recupero delle richieste di supporto.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 
@@ -43,14 +43,14 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
 
                 if (supportRequest != null) {
                     request.setAttribute("message", "Il gestore ha richiesto informazioni aggiuntive per la richiesta: " + nomeRichiesta);
-                    request.getRequestDispatcher("/paginaInvioInformazioni.jsp").forward(request, response);
+                    request.getRequestDispatcher("supportoInterface/richiestaSupportoView.jsp").forward(request, response);
                 } else {
                     request.setAttribute("message", "La richiesta di supporto non esiste.");
-                    request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+                    request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
                 }
             } catch (SQLException e) {
                 request.setAttribute("message", "Errore nel recupero della richiesta.");
-                request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+                request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
             }
         }
         else if ("aggiornaStato".equals(action)) {
@@ -68,7 +68,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                         supportRequestDAO.updateSupportRequest(supportRequest);
                     } else {
                         request.setAttribute("message", "Stato non valido.");
-                        request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+                        request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
                         return;
                     }
 
@@ -79,7 +79,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
             } catch (SQLException e) {
                 request.setAttribute("message", "Errore nell'aggiornamento dello stato della richiesta.");
             }
-            request.getRequestDispatcher("/paginaGestioneRichieste.jsp").forward(request, response);
+            request.getRequestDispatcher("/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
         }
     }
 }

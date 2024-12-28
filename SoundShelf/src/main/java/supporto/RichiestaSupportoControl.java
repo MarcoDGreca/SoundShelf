@@ -42,6 +42,6 @@ public class RichiestaSupportoControl extends HttpServlet {
             request.setAttribute("message", "Si è verificato un errore nell'invio della richiesta. Riprova.");
             e.printStackTrace();
         }
-        request.getRequestDispatcher("/paginaConfermaRichiesta.jsp").forward(request, response);
+        request.getRequestDispatcher("/supportoInterface/richiestaSupportoView.jsp").forward(request, response);
     }
 }

@@ -31,10 +31,10 @@ public class HomeControl extends HttpServlet {
             products = productDAO.getAllProducts();
         } catch (SQLException e) {
             request.setAttribute("message", "Errore nel recupero dei prodotti.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("error/MessaggioErrore.jsp").forward(request, response);
             return;
         }  
-        request.setAttribute("events", products);
-        request.getRequestDispatcher("/home.jsp").forward(request, response);
+        request.setAttribute("products", products);
+        request.getRequestDispatcher("home/home.jsp").forward(request, response);
     }
 }

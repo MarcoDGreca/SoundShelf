@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Calendar;
 
-@WebServlet("/checkout")
+@WebServlet("/acquistoControl")
 public class AcquistoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private OrderDAO orderDAO;
@@ -32,20 +32,19 @@ public class AcquistoControl extends HttpServlet {
 
         if (cart == null || cart.isEmpty()) {
             request.setAttribute("errorMessage", "Il carrello è vuoto.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("error/MessaggioErrore.jsp").forward(request, response);
             return;
         }
 
         double totalPrice = cart.getTotalPrice();
         request.setAttribute("totalPrice", totalPrice);
 
-        // Mostra anche l'indirizzo di spedizione salvato nell'utente
         Utente user = (Utente) session.getAttribute("user");
         if (user != null) {
-            request.setAttribute("savedAddress", user.getIndirizzo()); // Aggiungiamo l'indirizzo salvato
+            request.setAttribute("savedAddress", user.getIndirizzo());
         }
 
-        request.getRequestDispatcher("/checkout.jsp").forward(request, response);
+        request.getRequestDispatcher("ordiniInterface/checkout.jsp").forward(request, response);
     }
 
     @Override
@@ -84,15 +83,15 @@ public class AcquistoControl extends HttpServlet {
                 cart.clear();
                 session.setAttribute("cart", cart);
 
-                response.sendRedirect(request.getContextPath() + "/orderConfirmation.jsp");
+                response.sendRedirect(request.getContextPath() + "ordiniInterface/orderConfirmation.jsp");
 
             } catch (SQLException e) {
                 request.setAttribute("errorMessage", "Errore nella creazione dell'ordine.");
-                request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+                request.getRequestDispatcher("error//MessaggioErrore.jsp").forward(request, response);
             }
         } else {
             request.setAttribute("errorMessage", "Il carrello è vuoto o l'utente non è autenticato.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("error//MessaggioErrore.jsp").forward(request, response);
         }
     }
 }

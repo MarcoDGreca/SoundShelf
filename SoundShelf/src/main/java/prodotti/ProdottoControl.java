@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/prodotto")
+@WebServlet("/prodottoControl")
 public class ProdottoControl extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -43,6 +43,6 @@ public class ProdottoControl extends HttpServlet {
 		}
         request.setAttribute("product", product);
         request.setAttribute("reviews", reviews);
-        request.getRequestDispatcher("/ProductView.jsp").forward(request, response);
+        request.getRequestDispatcher("prodottiInterface/productView.jsp").forward(request, response);
     }
 }

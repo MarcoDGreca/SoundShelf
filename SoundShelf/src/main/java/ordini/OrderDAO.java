@@ -254,5 +254,16 @@ public class OrderDAO {
 
         return products;
     }
+    
+    public boolean updateOrderStatus(int numeroOrdine, String nuovoStato) throws SQLException {
+        String query = "UPDATE ordini SET stato = ? WHERE numero_ordine = ?";
+        try (Connection connection = dataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, nuovoStato);
+            statement.setInt(2, numeroOrdine);
+            return statement.executeUpdate() > 0;
+        }
+    }
+
 
 }

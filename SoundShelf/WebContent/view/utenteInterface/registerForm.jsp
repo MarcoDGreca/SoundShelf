@@ -14,7 +14,7 @@
 <div class="container">
     <h1>Registrati su Soundshelf</h1>
     
-    <form action="<c:url value='/register'/>" method="POST">
+    <form action="<c:url value='/utente/register'/>" method="POST">
         <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required placeholder="Inserisci la tua email">
@@ -71,7 +71,7 @@
     </form>
     
     <div class="login-link">
-        <p>Hai già un account? <a href="login.jsp">Accedi</a></p>
+        <p>Hai già un account? <a href="/loginForm.jsp">Accedi</a></p>
     </div>
 </div>
 

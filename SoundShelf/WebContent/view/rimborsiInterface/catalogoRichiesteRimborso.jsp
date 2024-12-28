@@ -7,7 +7,7 @@
     <title>Gestione Richieste di Rimborso</title>
 </head>
 <body>
-	<jsp:include page="../pagePieces/header.jsp" />
+    <jsp:include page="../pagePieces/header.jsp" />
     <h1>Gestione Richieste di Rimborso</h1>
 
     <%
@@ -16,51 +16,54 @@
 
         if (success != null) {
     %>
-        <div style="color: green;">Operazione <%= success %> completata con successo.</div>
+        <div style="color: green;">Operazione completata con successo: <%= success %>.</div>
     <%
         }
         if (error != null) {
     %>
-        <div style="color: red;">Errore: <%= error %></div>
+        <div style="color: red;">Errore: <%= error %>.</div>
     <%
         }
     %>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Codice Prodotto</th>
-                <th>Motivo</th>
-                <th>IBAN</th>
-                <th>Stato</th>
-                <th>Azioni</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%
-                List<RefoundRequest> richieste = (List<RefoundRequest>) request.getAttribute("richieste");
-                if (richieste != null) {
-                    for (RefoundRequest richiesta : richieste) {
-            %>
-                        <tr>
-                            <td><%= richiesta.getProductCode() %></td>
-                            <td><%= richiesta.getReason() %></td>
-                            <td><%= richiesta.getIban() %></td>
-                            <td><%= richiesta.getStato() %></td>
-                            <td>
-                                <form action="manageRefund" method="post">
-                                    <input type="hidden" name="productCode" value="<%= richiesta.getProductCode() %>">
-                                    <button type="submit" name="action" value="accept">Accetta</button>
-                                    <button type="submit" name="action" value="reject">Rifiuta</button>
-                                </form>
-                            </td>
-                        </tr>
-            <%
+    <form action="rimborso/gestisciRichiesteRimborsoControl" method="post">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Codice Prodotto</th>
+                    <th>Motivo</th>
+                    <th>IBAN</th>
+                    <th>Stato</th>
+                    <th>Nuovo Stato</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    List<RefoundRequest> richieste = (List<RefoundRequest>) request.getAttribute("richieste");
+                    if (richieste != null) {
+                        for (RefoundRequest richiesta : richieste) {
+                %>
+                            <tr>
+                                <td><%= richiesta.getProductCode() %></td>
+                                <td><%= richiesta.getReason() %></td>
+                                <td><%= richiesta.getIban() %></td>
+                                <td><%= richiesta.getStato() %></td>
+                                <td>
+                                    <select name="newState_<%= richiesta.getProductCode() %>">
+                                        <option value="IN_LAVORAZIONE" <%= richiesta.getStato().equals(StatoRimborso.IN_LAVORAZIONE) ? "selected" : "" %>>In lavorazione</option>
+                                        <option value="ACCETTATO" <%= richiesta.getStato().equals(StatoRimborso.ACCETTATO) ? "selected" : "" %>>Accettato</option>
+                                        <option value="RIFIUTATO" <%= richiesta.getStato().equals(StatoRimborso.RIFIUTATO) ? "selected" : "" %>>Rifiutato</option>
+                                    </select>
+                                </td>
+                            </tr>
+                <%
+                        }
                     }
-                }
-            %>
-        </tbody>
-    </table>
+                %>
+            </tbody>
+        </table>
+        <button type="submit">Salva Modifiche</button>
+    </form>
     <jsp:include page="../pagePieces/footer.jsp" />
 </body>
 </html>

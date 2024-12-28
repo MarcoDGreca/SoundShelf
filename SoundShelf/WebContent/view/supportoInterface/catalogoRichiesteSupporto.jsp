@@ -39,21 +39,19 @@
         <p><strong>Stato:</strong> <%= richiesta.getStato() %></p>
         <p><strong>Informazioni Aggiuntive:</strong> <%= richiesta.getInformazioniAggiuntive() %></p>
 
-        <form action="informazioniControl" method="post">
+        <form action="supporto/informazioniControl" method="post">
             <input type="hidden" name="name" value="<%= richiesta.getName() %>">
-            <label for="informazioniAggiuntive">Nuove informazioni aggiuntive:</label>
+            <label for="informazioniAggiuntive">Richiedi informazioni aggiuntive:</label>
             <textarea name="informazioniAggiuntive" required></textarea>
             <button type="submit">Invia informazioni aggiuntive</button>
         </form>
 
-        <form action="gestisciRichiestaSupporto" method="post">
+        <form action="supporto/gestisciRichiestaSupporto" method="post">
             <input type="hidden" name="name" value="<%= richiesta.getName() %>">
             <label for="nuovoStato">Nuovo Stato:</label>
             <select name="nuovoStato">
-                <option value="PENDING">In Attesa</option>
-                <option value="IN_PROGRESS">In Corso</option>
-                <option value="COMPLETED">Completato</option>
-                <option value="REJECTED">Rifiutato</option>
+                <option value="IN_LAVORAZIONE">In Lavorazione</option>
+                <option value="CHIUSA">Chiusa</option>
             </select>
             <button type="submit" name="action" value="aggiornaStato">Aggiorna Stato</button>
         </form>

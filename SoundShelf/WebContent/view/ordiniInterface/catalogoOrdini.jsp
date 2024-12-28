@@ -17,6 +17,14 @@
         <%
             List<Order> ordini = (List<Order>) request.getAttribute("ordini");
             Map<Integer, List<OrderDetail>> ordineDetailsMap = (Map<Integer, List<OrderDetail>>) request.getAttribute("ordineDetailsMap");
+            String messaggio = (String) request.getAttribute("messaggio"); // Messaggio di conferma
+            if (messaggio != null) {
+        %>
+            <div class="messaggio">
+                <%= messaggio %>
+            </div>
+        <%
+            }
 
             if (ordini != null && !ordini.isEmpty()) {
         %>
@@ -39,7 +47,7 @@
                     <table border="1">
                         <thead>
                             <tr>
-                                <th>Biglietto</th>
+                                <th>Prodotto</th>
                                 <th>Quantità</th>
                             </tr>
                         </thead>
@@ -48,7 +56,7 @@
                                 for (OrderDetail dettaglio : dettagliOrdine) { 
                             %>
                                 <tr>
-                                    <td><%= dettaglio.getCodiceBiglietto() %></td>
+                                    <td><%= dettaglio.getCodiceProdotto() %></td>
                                     <td><%= dettaglio.getQuantita() %></td>
                                 </tr>
                             <% 
@@ -57,13 +65,20 @@
                         </tbody>
                     </table>
 
-                    <form action="${pageContext.request.contextPath}/gestisciOrdineControl" method="post" style="display:inline;">
+                    <form action="${pageContext.request.contextPath}/ordini/aggiornaStatoOrdineControl" method="post" style="display:inline;">
                         <input type="hidden" name="numeroOrdine" value="<%= ordine.getNumeroOrdine() %>" />
-                        <button type="submit" class="btn-gestisci">Gestisci Ordine</button>
+                        <label for="nuovoStato">Cambia Stato:</label>
+                        <select name="nuovoStato">
+                            <% for (StatoOrdine stato : StatoOrdine.values()) { %>
+                                <option value="<%= stato.name() %>" <%= stato.name().equals(ordine.getStato()) ? "selected" : "" %>><%= stato.getStato() %></option>
+                            <% } %>
+                        </select>
+                        <button type="submit" class="btn-cambia-stato">Aggiorna Stato</button>
                     </form>
-                    <form action="${pageContext.request.contextPath}/PagamentoNonRicevutoControl" method="post" style="display:inline;">
+
+                    <form action="${pageContext.request.contextPath}/ordini/PagamentoNonRicevutoControl" method="post" style="display:inline;">
                         <input type="hidden" name="ordineId" value="<%= ordine.getNumeroOrdine() %>" />
-                        <button type="submit" class="btn-annulla">Annulla Ordine per Pagamento Non Ricevuto</button>
+                        <button type="submit" class="btn-annulla-pagamento">Annulla per pagamento non ricevuto</button>
                     </form>
                 </div>
             <% 

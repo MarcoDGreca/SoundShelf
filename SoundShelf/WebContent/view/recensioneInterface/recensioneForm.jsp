@@ -17,7 +17,7 @@
         if (purchasedProducts != null && !purchasedProducts.isEmpty()) {
     %>
         <h2>Aggiungi una Recensione</h2>
-        <form action="addReview" method="post">
+        <form action="recensione/addReview" method="post">
             <label for="productId">Seleziona un prodotto:</label>
             <select name="productId" required>
                 <option value="">-- Seleziona --</option>

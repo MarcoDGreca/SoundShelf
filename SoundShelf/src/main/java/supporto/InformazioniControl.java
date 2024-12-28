@@ -49,6 +49,6 @@ public class InformazioniControl extends HttpServlet {
             request.setAttribute("message", "Errore nell'aggiornamento della richiesta.");
         }
 
-        request.getRequestDispatcher("/paginaConferma.jsp").forward(request, response);
+        request.getRequestDispatcher("/supportoInterface/richiestaSupportoView.jsp").forward(request, response);
     }
 }

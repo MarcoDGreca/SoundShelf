@@ -1,8 +1,4 @@
-package utente;
-
-import ordini.Order;
-import ordini.OrderDAO;
-import ordini.StatoOrdine;
+package ordini;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -35,6 +31,6 @@ public class PagamentoNonRicevutoControl extends HttpServlet {
 		    request.setAttribute("messaggio", "Ordine non trovato.");
 		}
 
-        request.getRequestDispatcher("risultatoPagamento.jsp").forward(request, response);
+        response.sendRedirect("ordini/gestisciCatalogoOrdiniControl");
     }
 }

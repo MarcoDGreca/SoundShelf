@@ -34,13 +34,13 @@ public class RecensioniControl extends HttpServlet {
         Utente user = (Utente) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("utenteInterface/loginForm.jsp");
             return;
         }
 
         List<Product> purchasedProduct = orderDAO.getPurchasedProductsByEmail(user.getEmail());
         request.setAttribute("purchasedProducts", purchasedProduct);
-        request.getRequestDispatcher("/addReview.jsp").forward(request, response);
+        request.getRequestDispatcher("/recensioneInterface/recensioneForm.jsp").forward(request, response);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RecensioniControl extends HttpServlet {
         Utente user = (Utente) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("utenteInterface/loginForm.jsp");
             return;
         }
 
@@ -69,6 +69,6 @@ public class RecensioniControl extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        response.sendRedirect("home");
+        response.sendRedirect("control/home");
     }
 }

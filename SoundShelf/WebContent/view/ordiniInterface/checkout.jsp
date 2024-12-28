@@ -22,7 +22,7 @@
         
         <section class="checkout-section">
             <h1>Checkout</h1>
-            <form action="checkout" method="post">
+            <form action="ordini/checkout" method="post">
                 <div>
                     <h3>Indirizzo di Spedizione</h3>
                     <% if (savedAddress != null) { %>

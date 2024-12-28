@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/orderDetails")
+@WebServlet("/listaOrdiniUtente")
 public class ListaOrdiniControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private OrderDAO orderDAO;
@@ -35,7 +35,7 @@ public class ListaOrdiniControl extends HttpServlet {
         Utente user = (Utente) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.sendRedirect(request.getContextPath() + "utenteInterface/login.jsp");
             return;
         }
 
@@ -48,16 +48,16 @@ public class ListaOrdiniControl extends HttpServlet {
             for (OrderDetail detail : orderDetails) {
                 Product product = null;
 				try {
-					product = productDAO.getProductById(detail.getCodiceBiglietto());
+					product = productDAO.getProductById(detail.getCodiceProdotto());
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-                request.setAttribute("orderDetail_" + detail.getCodiceBiglietto(), detail);
-                request.setAttribute("product_" + detail.getCodiceBiglietto(), product);
+                request.setAttribute("orderDetail_" + detail.getCodiceProdotto(), detail);
+                request.setAttribute("product_" + detail.getCodiceProdotto(), product);
             }
         }
 
-        request.getRequestDispatcher("/orderDetails.jsp").forward(request, response);
+        request.getRequestDispatcher("ordiniIntereface/listaOrdiniView.jsp").forward(request, response);
     }
 }
 

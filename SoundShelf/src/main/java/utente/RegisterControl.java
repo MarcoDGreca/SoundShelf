@@ -43,7 +43,7 @@ public class RegisterControl extends HttpServlet {
 
         userDAO.addUser(newUser);
 
-        response.sendRedirect(request.getContextPath() + "/home");
+        response.sendRedirect(request.getContextPath() + "/control/home");
     }
     
     private String hashPassword(String password) {

@@ -21,68 +21,67 @@ public class InserisciNuovoProdottoControl extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int productCode = Integer.parseInt(request.getParameter("productCode"));
-        String name = InputSanitizer.sanitize(request.getParameter("name"));
-        String description = InputSanitizer.sanitize(request.getParameter("description"));
-        double salePrice = Double.parseDouble(request.getParameter("salePrice"));
-        double originalPrice = Double.parseDouble(request.getParameter("originalPrice"));
-        boolean availability = Boolean.parseBoolean(request.getParameter("availability"));
-        String releaseDate = InputSanitizer.sanitize(request.getParameter("releaseDate"));
-        String image = InputSanitizer.sanitize(request.getParameter("image"));
-
-        String[] artistNames = request.getParameterValues("artists");
-        String[] genreNames = request.getParameterValues("genres");
-
-        Product newProduct = new Product();
-        newProduct.setProductCode(productCode);
-        newProduct.setName(name);
-        newProduct.setDescription(description);
-        newProduct.setSalePrice(salePrice);
-        newProduct.setOriginalPrice(originalPrice);
-        newProduct.setAvailability(availability);
-        newProduct.setReleaseDate(releaseDate);
-        newProduct.setImage(image);
-
-        if (artistNames != null) {
-            for (String artistName : artistNames) {
-                Artist artist = null;
-				try {
-					artist = productDAO.findArtistByName(artistName);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-                if (artist != null) {
-                    newProduct.addArtist(artist);
-                } else {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Artista " + artistName + " non trovato.");
-                    return;
-                }
-            }
-        }
-
-        if (genreNames != null) {
-            for (String genreName : genreNames) {
-                Genre genre = null;
-				try {
-					genre = productDAO.findGenreByName(genreName);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-                if (genre != null) {
-                    newProduct.addGenre(genre);
-                } else {
-                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Genere " + genreName + " non trovato.");
-                    return;
-                }
-            }
-        }
-
         try {
-			productDAO.saveProduct(newProduct);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().write("Prodotto inserito con successo.");
+            int productCode = Integer.parseInt(request.getParameter("productCode"));
+            String name = InputSanitizer.sanitize(request.getParameter("name"));
+            String description = InputSanitizer.sanitize(request.getParameter("description"));
+            double salePrice = Double.parseDouble(request.getParameter("salePrice"));
+            double originalPrice = Double.parseDouble(request.getParameter("originalPrice"));
+            boolean availability = Boolean.parseBoolean(request.getParameter("availability"));
+            String releaseDate = InputSanitizer.sanitize(request.getParameter("releaseDate"));
+            String image = InputSanitizer.sanitize(request.getParameter("image"));
+
+            String[] artistNames = request.getParameterValues("artists");
+            String[] genreNames = request.getParameterValues("genres");
+
+            Product newProduct = new Product();
+            newProduct.setProductCode(productCode);
+            newProduct.setName(name);
+            newProduct.setDescription(description);
+            newProduct.setSalePrice(salePrice);
+            newProduct.setOriginalPrice(originalPrice);
+            newProduct.setAvailability(availability);
+            newProduct.setReleaseDate(releaseDate);
+            newProduct.setImage(image);
+
+            if (artistNames != null) {
+                for (String artistName : artistNames) {
+                    Artist artist = productDAO.findArtistByName(artistName);
+                    if (artist != null) {
+                        newProduct.addArtist(artist);
+                    } else {
+                        request.setAttribute("errorMessage", "Artista " + artistName + " non trovato.");
+                        request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
+                        return;
+                    }
+                }
+            }
+
+            if (genreNames != null) {
+                for (String genreName : genreNames) {
+                    Genre genre = productDAO.findGenreByName(genreName);
+                    if (genre != null) {
+                        newProduct.addGenre(genre);
+                    } else {
+                        request.setAttribute("errorMessage", "Genere " + genreName + " non trovato.");
+                        request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
+                        return;
+                    }
+                }
+            }
+
+            productDAO.saveProduct(newProduct);
+
+            response.sendRedirect("prodotti/gestisciCatalogoProdottiControl");
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "Formato non valido per uno dei campi numerici.");
+            request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
+        } catch (SQLException e) {
+            request.setAttribute("errorMessage", "Errore durante il salvataggio del prodotto nel database.");
+            request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Si è verificato un errore inaspettato.");
+            request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
         }
+    }
 }

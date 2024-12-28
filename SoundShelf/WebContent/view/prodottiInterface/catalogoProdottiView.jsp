@@ -15,7 +15,7 @@
         <h2>Catalogo Prodotti</h2>
 
         <div class="product-actions">
-            <a href="${pageContext.request.contextPath}/aggiungiProdotto.jsp" class="btn-add">Aggiungi Nuovo Prodotto</a>
+            <a href="${pageContext.request.contextPath}/prodottiInterface/inserisciProdottoForm.jsp" class="btn-add">Aggiungi Nuovo Prodotto</a>
         </div>
 
         <%
@@ -55,9 +55,9 @@
                         </p>
                     <% } %>
 
-                    <a href="${pageContext.request.contextPath}/dettagliProdotto?productCode=<%= product.getProductCode() %>" class="btn-details">Dettagli</a>
-                    <a href="${pageContext.request.contextPath}/ModificaProdottoControl?productCode=<%= product.getProductCode() %>" class="btn-edit">Modifica Prodotto</a>
-                    <form action="${pageContext.request.contextPath}/rimuoviProdottoControl" method="post" style="display:inline;">
+                    <a href="${pageContext.request.contextPath}/prodotti/prodottoControl?productCode=<%= product.getProductCode() %>" class="btn-details">Dettagli</a>
+                    <a href="${pageContext.request.contextPath}/prodotti/ModificaProdottoControl?productCode=<%= product.getProductCode() %>" class="btn-edit">Modifica Prodotto</a>
+                    <form action="${pageContext.request.contextPath}/prodotti/rimuoviProdottoControl" method="post" style="display:inline;">
                         <input type="hidden" name="productCode" value="<%= product.getProductCode() %>" />
                         <button type="submit" class="btn-delete" onclick="return confirm('Sei sicuro di voler rimuovere questo prodotto?')">Rimuovi Prodotto</button>
                     </form>

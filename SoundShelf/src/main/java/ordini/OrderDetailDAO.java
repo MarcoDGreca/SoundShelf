@@ -55,7 +55,7 @@ public class OrderDetailDAO {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, orderDetail.getQuantita());
             statement.setInt(2, orderDetail.getCodiceOrdine());
-            statement.setInt(3, orderDetail.getCodiceBiglietto());
+            statement.setInt(3, orderDetail.getCodiceProdotto());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,7 +85,7 @@ public class OrderDetailDAO {
             while (rs.next()) {
                 OrderDetail orderDetail = new OrderDetail();
                 orderDetail.setCodiceOrdine(rs.getInt("codiceOrdine"));
-                orderDetail.setCodiceBiglietto(rs.getInt("codiceBiglietto"));
+                orderDetail.setCodiceProdotto(rs.getInt("codiceBiglietto"));
                 orderDetail.setQuantita(rs.getInt("quantita"));
                 orderDetails.add(orderDetail);
             }
@@ -111,7 +111,7 @@ public class OrderDetailDAO {
                 while (rs.next()) {
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setCodiceOrdine(rs.getInt("codiceOrdine"));
-                    orderDetail.setCodiceBiglietto(rs.getInt("codiceBiglietto"));
+                    orderDetail.setCodiceProdotto(rs.getInt("codiceBiglietto"));
                     orderDetail.setQuantita(rs.getInt("quantita"));
                     orderDetails.add(orderDetail);
                 }

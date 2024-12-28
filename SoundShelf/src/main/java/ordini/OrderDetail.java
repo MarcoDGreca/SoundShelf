@@ -2,14 +2,14 @@ package ordini;
 
 public class OrderDetail {
     private int codiceOrdine;
-    private int codiceBiglietto;
+    private int codiceProdotto;
     private int quantita;
 
     public OrderDetail() {}
 
-    public OrderDetail(int codiceOrdine, int codiceBiglietto, int quantita) {
+    public OrderDetail(int codiceOrdine, int codiceProdotto, int quantita) {
         this.codiceOrdine = codiceOrdine;
-        this.codiceBiglietto = codiceBiglietto;
+        this.codiceProdotto = codiceProdotto;
         this.quantita = quantita;
     }
 
@@ -21,12 +21,12 @@ public class OrderDetail {
         this.codiceOrdine = codiceOrdine;
     }
 
-    public int getCodiceBiglietto() {
-        return codiceBiglietto;
+    public int getCodiceProdotto() {
+        return codiceProdotto;
     }
 
-    public void setCodiceBiglietto(int codiceBiglietto) {
-        this.codiceBiglietto = codiceBiglietto;
+    public void setCodiceProdotto(int codiceProdotto) {
+        this.codiceProdotto = codiceProdotto;
     }
 
     public int getQuantita() {

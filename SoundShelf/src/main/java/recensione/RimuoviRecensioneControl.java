@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/deleteReview")
+@WebServlet("/rimuoviRecensioneControl")
 public class RimuoviRecensioneControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ReviewDAO reviewDAO;
@@ -28,7 +28,7 @@ public class RimuoviRecensioneControl extends HttpServlet {
         Utente user = (Utente) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("utenteInterface/loginForm.jsp");
             return;
         }
 
@@ -48,6 +48,6 @@ public class RimuoviRecensioneControl extends HttpServlet {
 			}
         }
 
-        response.sendRedirect("home");
+        response.sendRedirect("/recensione/gestisciRecensioniControl");
     }
 }

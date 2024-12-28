@@ -38,7 +38,7 @@
         </table>
 
         <h3>Modifica Dati Personali</h3>
-        <form action="${pageContext.request.contextPath}/profile" method="post">
+        <form action="${pageContext.request.contextPath}/profileControl" method="post">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome" value="<%= user.getNome() %>" required><br><br>
 

@@ -12,7 +12,7 @@
     <jsp:include page="../pagePieces/header.jsp" />
 
     <div id="main" class="clear">
-        <form id="supportRequestForm" action="${pageContext.request.contextPath}/richiestaSupporto" method="post">
+        <form id="supportRequestForm" action="${pageContext.request.contextPath}/supporto/richiestaSupportoControl" method="post">
             <label for="name">Nome:</label>
             <input type="text" id="name" name="name" required><br><br>
 

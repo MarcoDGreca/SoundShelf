@@ -46,7 +46,7 @@
                     <% 
                     if (richiesta.getInformazioniAggiuntive() != null && richiesta.getInformazioniAggiuntive().length() > 0) {
                     %>
-                    <form action="rispostaControl" method="post">
+                    <form action="supporto/informazioniControl" method="post">
                         <input type="hidden" name="name" value="<%= richiesta.getName() %>">
                         <label for="risposta">La tua risposta:</label>
                         <textarea name="risposta" required></textarea>

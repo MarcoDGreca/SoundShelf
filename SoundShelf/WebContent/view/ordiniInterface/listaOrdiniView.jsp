@@ -56,7 +56,7 @@
                                 <tbody>
                                     <% 
                                         for (OrderDetail orderDetail : orderDetails) {
-                                            Product product = (Product) request.getAttribute("product_" + orderDetail.getCodiceBiglietto());
+                                            Product product = (Product) request.getAttribute("product_" + orderDetail.getCodiceProdotto());
                                     %>
                                     <tr>
                                         <td><%= product != null ? product.getName() : "N/A" %></td>
@@ -72,7 +72,7 @@
                         </td>
                         <td>
                             <% if (order.getStato() != StatoOrdine.COMPLETATO) { %>
-                                <form action="OrdineRicevutoControl" method="post">
+                                <form action="ordini/OrdineRicevutoControl" method="post">
                                     <input type="hidden" name="ordineId" value="<%= order.getNumeroOrdine() %>" />
                                     <input type="hidden" name="confermaRicezione" value="si" />
                                     <button type="submit">Conferma Ricezione</button>

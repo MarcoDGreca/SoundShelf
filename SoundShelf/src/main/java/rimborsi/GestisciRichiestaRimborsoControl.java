@@ -7,8 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
-@WebServlet("/manageRefund")
+@WebServlet("/gestisciRichiesteRimborsoControl")
 public class GestisciRichiestaRimborsoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private RefoundRequestDAO refoundRequestDAO;
@@ -19,31 +20,44 @@ public class GestisciRichiestaRimborsoControl extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int productCode = Integer.parseInt(request.getParameter("productCode"));
-        String action = request.getParameter("action");
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            RefoundRequest refoundRequest = refoundRequestDAO.getRefoundRequest(productCode);
-
-            if (refoundRequest != null) {
-                if ("accept".equalsIgnoreCase(action)) {
-                    refoundRequest.setStato(StatoRimborso.ACCETTATO);
-                } else if ("reject".equalsIgnoreCase(action)) {
-                    refoundRequest.setStato(StatoRimborso.RIFIUTATO);
-                } else {
-                    response.sendRedirect("refundManagement.jsp?error=invalidaction");
-                    return;
-                }
-
-                refoundRequestDAO.updateRefoundRequest(refoundRequest);
-                response.sendRedirect("refundManagement.jsp?success=" + action);
-            } else {
-                response.sendRedirect("refundManagement.jsp?error=notfound");
-            }
+            List<RefoundRequest> richieste = refoundRequestDAO.getAllRefoundRequests();
+            request.setAttribute("richieste", richieste);
+            request.getRequestDispatcher("/rimborsoInterface/catalogoRichiesteRimborso.jsp").forward(request, response);
         } catch (SQLException e) {
-            request.setAttribute("message", "Errore nella gestione del rimborso.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.setAttribute("message", "Errore nel recupero delle richieste di rimborso.");
+            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            List<RefoundRequest> richieste = refoundRequestDAO.getAllRefoundRequests();
+
+            for (RefoundRequest richiesta : richieste) {
+                String newState = request.getParameter("newState_" + richiesta.getProductCode());
+                if (newState != null) {
+                    try {
+                        StatoRimborso stato = StatoRimborso.fromString(newState);
+                        richiesta.setStato(stato);
+                        refoundRequestDAO.updateRefoundRequest(richiesta);
+                    } catch (IllegalArgumentException e) {
+                        request.setAttribute("message", "Stato non valido: " + newState);
+                        request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+                        return;
+                    }
+                }
+            }
+
+            response.sendRedirect("rimborso/gestisciRichiesteRimborsoControl?success=modifiche salvate");
+        } catch (SQLException e) {
+            request.setAttribute("message", "Errore durante il salvataggio delle modifiche.");
+            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("message", "Errore inaspettato.");
+            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 }

@@ -8,33 +8,35 @@
 <header>
     <nav>
         <div class="nav-container">
-            <a href="home.jsp" class="logo">SoundShelf</a>
+            <a href="home" class="logo">SoundShelf</a>
             <ul class="nav-links">
-                <li><a href="home.jsp">Home</a></li>
-                <li><a href="cart.jsp">Carrello</a></li>
-                <li><a href="support.jsp">Supporto</a></li>
-                <li><a href="refund.jsp">Rimborso</a></li>
-                <li><a href="orders.jsp">Ordini</a></li>
+                <li><a href="control/home">Home</a></li>
+                <li><a href="ordini/carrelloControl">Carrello</a></li>
+                <li><a href="/prodottiInterface/ricercaProdottiView.jsp">Cerca</a></li>
+                <li><a href="supporto/richiestaSupportoControl">Supporto</a></li>
+                <li><a href="rimborso/richiestaRimborsoControl">Rimborso</a></li>
+                <li><a href="ordini/listaOrdiniUtente">Ordini</a></li>
                 <% if (isAuthenticated && "admin".equals(userType)) { %>
                     <li class="admin-section">
                         <span>Amministrazione</span>
                         <ul>
-                            <li><a href="manageRefunds.jsp">Gestisci Rimborsi</a></li>
-                            <li><a href="manageOrders.jsp">Gestisci Ordini</a></li>
-                            <li><a href="manageUsers.jsp">Gestisci Utenti</a></li>
-                            <li><a href="manageSupport.jsp">Gestisci Supporto</a></li>
-                            <li><a href="manageProducts.jsp">Gestisci Prodotti</a></li>
+                            <li><a href="rimborso/gestisciRichiesteRimborsoControl">Gestisci Catalogo Richieste Rimborsi</a></li>
+                            <li><a href="ordini/gestisciCatalogoOrdiniControl">Gestisci Catalogo Ordini</a></li>
+                            <li><a href="utenti/gestisciCatalogoUtentiControl">Gestisci Catalogo Utenti</a></li>
+                            <li><a href="supporto/gestisciRichiestaSupportoControl">Gestisci Catalogo Richieste Supporto</a></li>
+                            <li><a href="prodotti/gestisciCatalogoProdottiControl">Gestisci Catalogo Prodotti</a></li>
+                            <li><a href="recensione/gestisciCatalogoRecensioniControl">Gestisci Catalogo Recensioni</a></li>
                         </ul>
                     </li>
                 <% } %>
             </ul>
             <div class="auth-buttons">
                 <% if (isAuthenticated) { %>
-                    <a href="profile.jsp" class="button">Profilo</a>
-                    <a href="logout.jsp" class="button">LogOut</a>
+                    <a href="utente/profileControl" class="button">Profilo</a>
+                    <a href="utente/logout" class="button">LogOut</a>
                 <% } else { %>
-                    <a href="login.jsp" class="button">Login</a>
-                    <a href="register.jsp" class="button">Registrati</a>
+                    <a href="utenteInterface/loginForm.jsp" class="button">Login</a>
+                    <a href="utenteInterface/registerForm.jsp" class="button">Registrati</a>
                 <% } %>
             </div>
         </div>

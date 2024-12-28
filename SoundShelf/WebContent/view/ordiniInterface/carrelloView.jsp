@@ -58,7 +58,7 @@
 
         <div class="cart-checkout">
             <a <% if(request.getSession().getAttribute("user") != null) { %>
-                    href="checkout.jsp" <% } else { %> href="login.jsp" <% } %> >
+                    href="ordini/acquistoControl" <% } else { %> href="utente/login" <% } %> >
                 <button>Acquista</button>
             </a>
         </div>

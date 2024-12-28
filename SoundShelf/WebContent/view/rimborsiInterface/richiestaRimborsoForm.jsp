@@ -51,7 +51,7 @@
         %>
 
         <h3>Nuova Richiesta di Rimborso</h3>
-        <form action="${pageContext.request.contextPath}/richiestaRimborso" method="post">
+        <form action="${pageContext.request.contextPath}/rimborso/richiestaRimborsoControl" method="post">
             <label for="productCode">Codice Prodotto:</label>
             <input type="number" id="productCode" name="productCode" required><br><br>
 

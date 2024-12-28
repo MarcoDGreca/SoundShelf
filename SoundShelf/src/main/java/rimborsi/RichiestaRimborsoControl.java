@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet("/richiestaRimborso")
+@WebServlet("/richiestaRimborsoControl")
 public class RichiestaRimborsoControl extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private RefoundRequestDAO refoundRequestDAO;
@@ -27,7 +27,7 @@ public class RichiestaRimborsoControl extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("error", "Si è verificato un errore durante il recupero delle richieste di rimborso.");
         }
-        request.getRequestDispatcher("/richiestaRimborsoForm.jsp").forward(request, response);
+        request.getRequestDispatcher("/rimborsoInterface/richiestaRimborsoForm.jsp").forward(request, response);
     }
 
     @Override

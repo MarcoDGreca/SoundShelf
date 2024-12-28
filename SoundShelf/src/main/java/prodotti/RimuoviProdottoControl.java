@@ -29,7 +29,7 @@ public class RimuoviProdottoControl extends HttpServlet {
                 Product productExists = productDAO.getProductById(productCode);
                 if (productExists != null) {
                     productDAO.deleteProduct(productCode);
-                    response.sendRedirect("productList");
+                    response.sendRedirect("prodotti/gestisciCatalogoProdottiControl");
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
                 }

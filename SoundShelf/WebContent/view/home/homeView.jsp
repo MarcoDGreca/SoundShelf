@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="prodotti.Product, recensione.Review" %>
+<%@ page import="prodotti.Product" %>
 <%@ page import="java.util.List" %>
 <%
     List<Product> products = (List<Product>) request.getAttribute("products");
-    List<Review> reviews = (List<Review>) request.getAttribute("reviews");
 %>
 <!DOCTYPE html>
 <html>

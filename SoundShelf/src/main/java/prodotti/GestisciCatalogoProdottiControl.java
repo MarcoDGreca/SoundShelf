@@ -1,12 +1,14 @@
 package prodotti;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import java.io.*;
 import java.sql.*;
 import java.util.List;
 
+@WebServlet("/gestisciCatalogoProdottiControl")
 public class GestisciCatalogoProdottiControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ProductDAO productDAO;
@@ -21,11 +23,11 @@ public class GestisciCatalogoProdottiControl extends HttpServlet {
         try {
             List<Product> products = productDAO.getAllProducts();
             request.setAttribute("products", products);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/catalogoProdotti.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/prodottiInterface/catalogoProdottiView.jsp");
             dispatcher.forward(request, response);
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Errore durante il recupero dei prodotti.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 
