@@ -3,19 +3,19 @@ package rimborsi;
 public class RefoundRequest {
 
     private int id;
-    private String reason;
+    private String motivo;
     private String iban;
     private StatoRimborso stato;
-    private int orderCode;
-    private int productCode;
+    private int idOrdine;
+    private int idProdotto;
 
-    public RefoundRequest(int id, String reason, String iban, StatoRimborso stato, int orderCode, int productCode) {
+    public RefoundRequest(int id, String motivo, String iban, StatoRimborso stato, int idOrdine, int idProdotto) {
         this.id = id;
-        this.reason = reason;
+        this.motivo = motivo;
         this.iban = iban;
         this.stato = stato;
-        this.orderCode = orderCode;
-        this.productCode = productCode;
+        this.idOrdine = idOrdine;
+        this.idProdotto = idProdotto;
     }
 
     public int getId() {
@@ -26,12 +26,12 @@ public class RefoundRequest {
         this.id = id;
     }
 
-    public String getReason() {
-        return reason;
+    public String getMotivo() {
+        return motivo;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
     }
 
     public String getIban() {
@@ -50,19 +50,19 @@ public class RefoundRequest {
         this.stato = stato;
     }
 
-    public int getOrderCode() {
-        return orderCode;
+    public int getIdOrdine() {
+        return idOrdine;
     }
 
-    public void setOrderCode(int orderCode) {
-        this.orderCode = orderCode;
+    public void setIdOrdine(int idOrdine) {
+        this.idOrdine = idOrdine;
     }
 
-    public int getProductCode() {
-        return productCode;
+    public int getIdProdotto() {
+        return idProdotto;
     }
 
-    public void setProductCode(int productCode) {
-        this.productCode = productCode;
+    public void setIdProdotto(int idProdotto) {
+        this.idProdotto = idProdotto;
     }
 }

@@ -21,6 +21,7 @@
             <table class="refound-table">
                 <thead>
                     <tr>
+                        <th>Codice Ordine</th>
                         <th>Codice Prodotto</th>
                         <th>Motivo</th>
                         <th>IBAN</th>
@@ -32,8 +33,9 @@
                         for (RefoundRequest refoundRequest : refoundRequests) {
                     %>
                     <tr>
-                        <td><%= refoundRequest.getProductCode() %></td>
-                        <td><%= refoundRequest.getReason() %></td>
+                        <td><%= refoundRequest.getIdOrdine() %></td>
+                        <td><%= refoundRequest.getIdProdotto() %></td>
+                        <td><%= refoundRequest.getMotivo() %></td>
                         <td><%= refoundRequest.getIban() %></td>
                         <td><%= refoundRequest.getStato().getStato() %></td>
                     </tr>
@@ -52,6 +54,9 @@
 
         <h3>Nuova Richiesta di Rimborso</h3>
         <form action="${pageContext.request.contextPath}/rimborso/richiestaRimborsoControl" method="post">
+            <label for="orderCode">Codice Ordine:</label>
+            <input type="number" id="orderCode" name="orderCode" required><br><br>
+
             <label for="productCode">Codice Prodotto:</label>
             <input type="number" id="productCode" name="productCode" required><br><br>
 

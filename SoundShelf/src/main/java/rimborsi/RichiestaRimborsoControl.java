@@ -21,7 +21,7 @@ public class RichiestaRimborsoControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<RefoundRequest> refoundRequests = refoundRequestDAO.getAllRefoundRequests();
+            List<RefoundRequest> refoundRequests = refoundRequestDAO.getAllRichiesteRimborso();
             request.setAttribute("refoundRequests", refoundRequests);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,8 +38,8 @@ public class RichiestaRimborsoControl extends HttpServlet {
             String reason = request.getParameter("reason");
             String iban = request.getParameter("iban");
 
-            RefoundRequest refoundRequest = new RefoundRequest(productCode, reason, iban, StatoRimborso.IN_LAVORAZIONE, orderCode, productCode);
-            refoundRequestDAO.saveRefoundRequest(refoundRequest);
+            RefoundRequest refoundRequest = new RefoundRequest(0, reason, iban, StatoRimborso.IN_LAVORAZIONE, orderCode, productCode);
+            refoundRequestDAO.saveRichiestaRimborso(refoundRequest);
             request.setAttribute("message", "Richiesta di rimborso inviata con successo.");
         } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();

@@ -33,7 +33,7 @@
                     <th>Codice Prodotto</th>
                     <th>Motivo</th>
                     <th>IBAN</th>
-                    <th>Stato</th>
+                    <th>Stato Attuale</th>
                     <th>Nuovo Stato</th>
                 </tr>
             </thead>
@@ -44,16 +44,19 @@
                         for (RefoundRequest richiesta : richieste) {
                 %>
                             <tr>
-                                <td><%= richiesta.getProductCode() %></td>
-                                <td><%= richiesta.getReason() %></td>
+                                <td><%= richiesta.getIdProdotto() %></td>
+                                <td><%= richiesta.getMotivo() %></td>
                                 <td><%= richiesta.getIban() %></td>
                                 <td><%= richiesta.getStato() %></td>
                                 <td>
-                                    <select name="newState_<%= richiesta.getProductCode() %>">
+                                    <select name="newState_<%= richiesta.getIdProdotto() %>">
                                         <option value="IN_LAVORAZIONE" <%= richiesta.getStato().equals(StatoRimborso.IN_LAVORAZIONE) ? "selected" : "" %>>In lavorazione</option>
                                         <option value="ACCETTATO" <%= richiesta.getStato().equals(StatoRimborso.ACCETTATO) ? "selected" : "" %>>Accettato</option>
                                         <option value="RIFIUTATO" <%= richiesta.getStato().equals(StatoRimborso.RIFIUTATO) ? "selected" : "" %>>Rifiutato</option>
                                     </select>
+                                </td>
+                                <td>
+                                    <input type="hidden" name="productCode_<%= richiesta.getIdProdotto() %>" value="<%= richiesta.getIdProdotto() %>">
                                 </td>
                             </tr>
                 <%
