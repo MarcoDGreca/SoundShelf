@@ -26,13 +26,15 @@ public class UtenteControl extends HttpServlet {
             UtenteRegistrato utente = utenteDAO.getUserByEmail(email);
             if (utente != null) {
                 request.setAttribute("utente", utente);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/visualizzaUtente.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/view/utenteInterface/profileView.jsp");
                 dispatcher.forward(request, response);
             } else {
-                response.sendRedirect("errore.jsp");
+            	request.setAttribute("message", "Errore nel recupero dell'utente.");
+                response.sendRedirect("view/error/messaggioErrore.jsp");
             }
         } else {
-            response.sendRedirect("errore.jsp");
+        	request.setAttribute("message", "Errore nel recupero dell'utente.");
+            response.sendRedirect("view/error/messaggioErrore.jsp");
         }
     }
 }

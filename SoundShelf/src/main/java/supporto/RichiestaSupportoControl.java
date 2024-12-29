@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/richiestaSupporto")
+@WebServlet("/richiestaSupportoControl")
 public class RichiestaSupportoControl extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -42,6 +42,11 @@ public class RichiestaSupportoControl extends HttpServlet {
             request.setAttribute("message", "Si è verificato un errore nell'invio della richiesta. Riprova.");
             e.printStackTrace();
         }
-        request.getRequestDispatcher("/supportoInterface/richiestaSupportoView.jsp").forward(request, response);
+        request.getRequestDispatcher("view/supportoInterface/richiestaSupportoView.jsp").forward(request, response);
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	doPost(request, response);
     }
 }

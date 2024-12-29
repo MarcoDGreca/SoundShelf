@@ -51,7 +51,7 @@ public class InserisciNuovoProdottoControl extends HttpServlet {
                         newProduct.addArtist(artist);
                     } else {
                         request.setAttribute("errorMessage", "Artista " + artistName + " non trovato.");
-                        request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
+                        request.getRequestDispatcher("view/error/messageError.jsp").forward(request, response);
                         return;
                     }
                 }
@@ -64,7 +64,7 @@ public class InserisciNuovoProdottoControl extends HttpServlet {
                         newProduct.addGenre(genre);
                     } else {
                         request.setAttribute("errorMessage", "Genere " + genreName + " non trovato.");
-                        request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
+                        request.getRequestDispatcher("view/error/messageError.jsp").forward(request, response);
                         return;
                     }
                 }
@@ -72,16 +72,16 @@ public class InserisciNuovoProdottoControl extends HttpServlet {
 
             productDAO.insertProduct(newProduct);
 
-            response.sendRedirect("prodotti/gestisciCatalogoProdottiControl");
+            response.sendRedirect("/gestisciCatalogoProdottiControl");
         } catch (NumberFormatException e) {
             request.setAttribute("errorMessage", "Formato non valido per uno dei campi numerici.");
-            request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messageError.jsp").forward(request, response);
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Errore durante il salvataggio del prodotto nel database.");
-            request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messageError.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Si è verificato un errore inaspettato.");
-            request.getRequestDispatcher("/error/MessageError.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messageError.jsp").forward(request, response);
         }
     }
 }

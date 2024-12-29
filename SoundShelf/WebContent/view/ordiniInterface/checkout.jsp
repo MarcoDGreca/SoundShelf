@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ page import="utente.Utente" %>
+<%@ page import="utente.UtenteRegistrato" %>
 <%@ page import="ordini.Cart" %>
 <%@ page import="java.util.List" %>
 <%
     Cart cart = (Cart) session.getAttribute("cart");
-    Utente user = (Utente) session.getAttribute("user");
+    UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
     String savedAddress = (String) request.getAttribute("savedAddress");
     double totalPrice = (cart != null) ? cart.getTotalPrice() : 0;
 %>

@@ -27,7 +27,7 @@ public class RichiestaRimborsoControl extends HttpServlet {
             e.printStackTrace();
             request.setAttribute("error", "Si è verificato un errore durante il recupero delle richieste di rimborso.");
         }
-        request.getRequestDispatcher("/rimborsoInterface/richiestaRimborsoForm.jsp").forward(request, response);
+        request.getRequestDispatcher("view/rimborsiInterface/richiestaRimborsoForm.jsp").forward(request, response);
     }
 
     @Override

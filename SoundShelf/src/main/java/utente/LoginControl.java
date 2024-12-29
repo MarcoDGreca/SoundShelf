@@ -29,7 +29,7 @@ public class LoginControl extends HttpServlet {
 
         if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
             request.setAttribute("errorMessage", "Email e password sono obbligatori.");
-            request.getRequestDispatcher("/utenteInterface/loginForm.jsp").forward(request, response);
+            request.getRequestDispatcher("view/utenteInterface/loginForm.jsp").forward(request, response);
             return;
         }
 
@@ -39,10 +39,10 @@ public class LoginControl extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect(request.getContextPath() + "/control/home");
+            response.sendRedirect(request.getContextPath() + "/home");
         } else {
             request.setAttribute("errorMessage", "Email o password non validi.");
-            request.getRequestDispatcher("/utenteInterface/loginForm.jsp").forward(request, response);
+            request.getRequestDispatcher("view/utenteInterface/loginForm.jsp").forward(request, response);
         }
     }
 

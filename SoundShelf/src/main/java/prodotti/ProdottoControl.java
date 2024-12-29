@@ -43,6 +43,6 @@ public class ProdottoControl extends HttpServlet {
 		}
         request.setAttribute("product", product);
         request.setAttribute("reviews", reviews);
-        request.getRequestDispatcher("prodottiInterface/productView.jsp").forward(request, response);
+        request.getRequestDispatcher("view/prodottiInterface/productView.jsp").forward(request, response);
     }
 }

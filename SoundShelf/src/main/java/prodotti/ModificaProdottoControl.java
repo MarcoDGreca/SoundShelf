@@ -28,7 +28,7 @@ public class ModificaProdottoControl extends HttpServlet {
                 Product product = productDAO.getProductById(productCode);
                 if (product != null) {
                     request.setAttribute("product", product);
-                    request.getRequestDispatcher("/editProductForm.jsp").forward(request, response);
+                    request.getRequestDispatcher("view/prodottiInterface/modificaProdottoForm.jsp").forward(request, response);
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
                 }
@@ -68,7 +68,7 @@ public class ModificaProdottoControl extends HttpServlet {
                 
                 productDAO.updateProduct(product);
 
-                response.sendRedirect("productList");
+                response.sendRedirect("/gestisciCatalogoProdottiControl");
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
             }

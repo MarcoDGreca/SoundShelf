@@ -16,7 +16,7 @@
 
         <%
             List<Order> ordini = (List<Order>) request.getAttribute("ordini");
-            Map<Integer, List<OrderDetail>> ordineDetailsMap = (Map<Integer, List<OrderDetail>>) request.getAttribute("ordineDetailsMap");
+            Map<Integer, List<ElementoOrdine>> ordineDetailsMap = (Map<Integer, List<ElementoOrdine>>) request.getAttribute("ordineDetailsMap");
             String messaggio = (String) request.getAttribute("messaggio"); // Messaggio di conferma
             if (messaggio != null) {
         %>
@@ -32,7 +32,7 @@
         <div class="order-list">
             <% 
                 for (Order ordine : ordini) { 
-                    List<OrderDetail> dettagliOrdine = ordineDetailsMap.get(ordine.getNumeroOrdine());
+                    List<ElementoOrdine> dettagliOrdine = ordineDetailsMap.get(ordine.getNumeroOrdine());
             %>
                 <div class="order-card">
                     <h3>Ordine Numero: <%= ordine.getNumeroOrdine() %></h3>
@@ -53,10 +53,10 @@
                         </thead>
                         <tbody>
                             <% 
-                                for (OrderDetail dettaglio : dettagliOrdine) { 
+                                for (ElementoOrdine dettaglio : dettagliOrdine) { 
                             %>
                                 <tr>
-                                    <td><%= dettaglio.getCodiceProdotto() %></td>
+                                    <td><%= dettaglio.getIdProdotto() %></td>
                                     <td><%= dettaglio.getQuantita() %></td>
                                 </tr>
                             <% 

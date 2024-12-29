@@ -31,6 +31,6 @@ public class PagamentoNonRicevutoControl extends HttpServlet {
 		    request.setAttribute("messaggio", "Ordine non trovato.");
 		}
 
-        response.sendRedirect("ordini/gestisciCatalogoOrdiniControl");
+        response.sendRedirect("/gestisciCatalogoOrdiniControl");
     }
 }

@@ -14,7 +14,7 @@
 <div class="container">
     <h1>Registrati su Soundshelf</h1>
     
-    <form action="<c:url value='/utente/register'/>" method="POST">
+    <form action="${pageContext.request.contextPath}/register" method="post" class="register-form">
         <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required placeholder="Inserisci la tua email">

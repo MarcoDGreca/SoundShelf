@@ -33,7 +33,7 @@
             <tr>
                 <td><%= product.getName() %></td>
                 <td> 
-                    <form action="cart" method="get">
+                    <form action="${pageContext.request.contextPath}/carrelloControl" method="get">
                         <input type="hidden" name="action" value="update">
                         <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
                         <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1">
@@ -42,35 +42,39 @@
                 </td>
                 <td>&euro;<%= String.format("%.2f", item.getTotalPrice()) %></td>
                 <td>
-                    <form action="cart" method="get">
+                    <form action="${pageContext.request.contextPath}/carrelloControl" method="get">
                         <input type="hidden" name="action" value="remove">
                         <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
                         <button type="submit" class="remove-button">Rimuovi</button>
                     </form>
                 </td>
             </tr>
-            <% } %>
         </table>
-        
+<% } %>
         <div class="cart-total">
             Totale provvisorio: &euro;<%= String.format("%.2f", cart.getTotalPrice()) %>
         </div>
 
         <div class="cart-checkout">
             <a <% if(request.getSession().getAttribute("user") != null) { %>
-                    href="ordini/acquistoControl" <% } else { %> href="utente/login" <% } %> >
+                    href="${pageContext.request.contextPath}/acquistoControl" <% } else { %> href="${pageContext.request.contextPath}/login" <% } %> >
                 <button>Acquista</button>
             </a>
         </div>
 
+		 <% 
+                for(CartItem item : cart.getItems()) {
+                    Product product = item.getProduct();
+            %>
         <div class="cart-clear">
-            <form action="cart" method="get">
+            <form action="${pageContext.request.contextPath}/carrelloControl" method="get">
                 <input type="hidden" name="action" value="clear">
+                <input type="hidden" name="productId" value=<%= product.getProductCode() %>>
                 <button type="submit" class="clear-button">Svuota Carrello</button>
             </form>
         </div>
     </section>
-
+<% } %>
     <% } else { %> 
         <h2>Il tuo carrello è vuoto</h2>
     <% } %>

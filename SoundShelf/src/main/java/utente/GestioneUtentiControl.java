@@ -26,10 +26,10 @@ public class GestioneUtentiControl extends HttpServlet {
         try {
             List<UtenteRegistrato> users = userDAO.getAllUsers();
             request.setAttribute("users", users);
-            request.getRequestDispatcher("/utenteInterface/catalogoUtenti.jsp").forward(request, response);
+            request.getRequestDispatcher("view/utenteInterface/catalogoUtenti.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Errore durante il recupero degli utenti.");
-            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 
@@ -44,10 +44,10 @@ public class GestioneUtentiControl extends HttpServlet {
             } else if ("promote".equals(action)) {
                 userDAO.promoteToAdmin(email);
             }
-            response.sendRedirect("utente/gestisciCatalogoUtentiControl");
+            response.sendRedirect("/gestisciCatalogoUtentiControl");
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Errore durante l'operazione sugli utenti.");
-            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 }

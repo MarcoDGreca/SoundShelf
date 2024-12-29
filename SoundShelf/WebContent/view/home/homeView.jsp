@@ -45,9 +45,9 @@
                                 <p><strong>Prezzo Scontato:</strong> €<%= product.getSalePrice() %></p>
                                 <p><strong>Prezzo Originale:</strong> €<%= product.getOriginalPrice() %></p>
                                 <p><strong>Disponibilità:</strong> <%= product.isAvailability() ? "Disponibile" : "Non Disponibile" %></p>
-                                <form action="cart" method="post">
+                                <form action="${pageContext.request.contextPath}/carrelloControl" method="post">
                                     <input type="hidden" name="action" value="add">
-                                    <input type="hidden" name="productCode" value="<%= product.getProductCode() %>">
+                                    <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
                                     <button type="submit" class="button">Aggiungi al Carrello</button>
                                 </form>
                             </div>

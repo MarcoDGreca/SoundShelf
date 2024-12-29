@@ -34,7 +34,7 @@ public class ListaOrdiniControl extends HttpServlet {
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/utenteInterface/login.jsp");
+            response.sendRedirect(request.getContextPath() + "/view/utenteInterface/loginForm.jsp");
             return;
         }
 
@@ -56,6 +56,6 @@ public class ListaOrdiniControl extends HttpServlet {
             }
         }
 
-        request.getRequestDispatcher("ordiniInterface/listaOrdiniView.jsp").forward(request, response);
+        request.getRequestDispatcher("view/ordiniInterface/listaOrdiniView.jsp").forward(request, response);
     }
 }

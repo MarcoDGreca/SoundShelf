@@ -27,7 +27,7 @@ public class InformazioniControl extends HttpServlet {
 
         if (nomeRichiesta == null || nomeRichiesta.isEmpty()) {
             request.setAttribute("message", "Nome della richiesta non valido.");
-            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             return;
         }
 
@@ -57,6 +57,6 @@ public class InformazioniControl extends HttpServlet {
             request.setAttribute("message", "ID richiesta non valido.");
         }
 
-        request.getRequestDispatcher("/supportoInterface/richiestaSupportoView.jsp").forward(request, response);
+        request.getRequestDispatcher("view/supportoInterface/richiestaSupportoView.jsp").forward(request, response);
     }
 }

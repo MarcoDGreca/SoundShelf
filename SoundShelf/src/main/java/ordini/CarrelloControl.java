@@ -39,7 +39,7 @@ public class CarrelloControl extends HttpServlet {
                 product = productDAO.getProductById(productId);
             } catch (SQLException e) {
                 request.setAttribute("errorMessage", "Errore nel recupero del prodotto.");
-                request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                 return;
             }
 
@@ -60,7 +60,7 @@ public class CarrelloControl extends HttpServlet {
             }
         }
 
-        response.sendRedirect("ordini/carrelloView.jsp");
+        response.sendRedirect("view/ordiniInterface/carrelloView.jsp");
     }
 
     @Override

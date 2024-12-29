@@ -27,12 +27,12 @@ public class ModificaDatiUtenteControl extends HttpServlet {
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/utenteInterface/loginForm.jsp");
+            response.sendRedirect(request.getContextPath() + "view/utenteInterface/loginForm.jsp");
             return;
         }
 
         request.setAttribute("user", user);
-        request.getRequestDispatcher("/utenteInterface/profileView.jsp").forward(request, response);
+        request.getRequestDispatcher("view/utenteInterface/profileView.jsp").forward(request, response);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ModificaDatiUtenteControl extends HttpServlet {
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/utenteInterface/loginForm.jsp");
+            response.sendRedirect(request.getContextPath() + "view/utenteInterface/loginForm.jsp");
             return;
         }
 
@@ -57,6 +57,6 @@ public class ModificaDatiUtenteControl extends HttpServlet {
 
         userDAO.updateUser(user);
         session.setAttribute("user", user);
-        response.sendRedirect(request.getContextPath() + "/utente/profileControl");
+        response.sendRedirect(request.getContextPath() + "/profileControl");
     }
 }

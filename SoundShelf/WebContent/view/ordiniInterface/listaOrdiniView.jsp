@@ -34,7 +34,7 @@
                 <tbody>
                     <% 
                         for (Order order : orders) { 
-                            List<OrderDetail> orderDetails = (List<OrderDetail>) request.getAttribute("orderDetail_" + order.getNumeroOrdine());
+                            List<ElementoOrdine> orderDetails = (List<ElementoOrdine>) request.getAttribute("orderDetail_" + order.getNumeroOrdine());
                     %>
                     <tr>
                         <td><%= order.getNumeroOrdine() %></td>
@@ -55,8 +55,8 @@
                                 </thead>
                                 <tbody>
                                     <% 
-                                        for (OrderDetail orderDetail : orderDetails) {
-                                            Product product = (Product) request.getAttribute("product_" + orderDetail.getCodiceProdotto());
+                                        for (ElementoOrdine orderDetail : orderDetails) {
+                                            Product product = (Product) request.getAttribute("product_" + orderDetail.getIdProdotto());
                                     %>
                                     <tr>
                                         <td><%= product != null ? product.getName() : "N/A" %></td>

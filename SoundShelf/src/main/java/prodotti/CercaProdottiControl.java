@@ -43,13 +43,13 @@ public class CercaProdottiControl extends HttpServlet {
             products = productDAO.searchProducts(name, genres, artists);
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Errore nella ricerca dei prodotti.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
             return;
         }
 
         if (products == null || products.isEmpty()) {
             request.setAttribute("errorMessage", "Nessun prodotto trovato.");
-            request.getRequestDispatcher("/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
             return;
         }
 

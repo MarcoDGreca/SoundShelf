@@ -25,12 +25,12 @@ public class GestisciRecensioniControl extends HttpServlet {
         try {
             List<Review> recensioni = reviewDAO.getAllReviews();
             request.setAttribute("recensioni", recensioni);
-            request.getRequestDispatcher("/recensioneInterface/catalogoRecensioni.jsp").forward(request, response);
+            request.getRequestDispatcher("view/recensioneInterface/catalogoRecensioni.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
            
             request.setAttribute("message", "Errore nel recupero delle recensioni.");
-            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 }

@@ -34,13 +34,13 @@ public class RecensioniControl extends HttpServlet {
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect("utenteInterface/loginForm.jsp");
+            response.sendRedirect("view/utenteInterface/loginForm.jsp");
             return;
         }
 
         List<Product> purchasedProduct = orderDAO.getPurchasedProductsByEmail(user.getEmail());
         request.setAttribute("purchasedProducts", purchasedProduct);
-        request.getRequestDispatcher("/recensioneInterface/recensioneForm.jsp").forward(request, response);
+        request.getRequestDispatcher("view/recensioneInterface/recensioneForm.jsp").forward(request, response);
     }
 
     @Override

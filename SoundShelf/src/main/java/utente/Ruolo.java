@@ -1,8 +1,8 @@
 package utente;
 
 public enum Ruolo {
-    GESTORESITO("Gestore Sito"),
-    UTENTE("User");
+    GESTORESITO("GestoreSito"),
+    UTENTE("Cliente");
 
     private final String ruolo;
 

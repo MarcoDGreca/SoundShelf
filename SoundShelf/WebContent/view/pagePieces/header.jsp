@@ -10,12 +10,12 @@
         <div class="nav-container">
             <a href="home" class="logo">SoundShelf</a>
             <ul class="nav-links">
-                <li><a href="control/home">Home</a></li>
-                <li><a href="ordini/carrelloControl">Carrello</a></li>
-                <li><a href="/prodottiInterface/ricercaProdottiView.jsp">Cerca</a></li>
-                <li><a href="supporto/richiestaSupportoControl">Supporto</a></li>
-                <li><a href="rimborso/richiestaRimborsoControl">Rimborso</a></li>
-                <li><a href="ordini/listaOrdiniUtente">Ordini</a></li>
+                <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/carrelloControl">Carrello</a></li>
+                <li><a href="${pageContext.request.contextPath}/view/prodottiInterface/ricercaProdottiView.jsp">Cerca</a></li>
+                <li><a href="${pageContext.request.contextPath}/richiestaSupportoControl">Supporto</a></li>
+                <li><a href="${pageContext.request.contextPath}/richiestaRimborsoControl">Rimborso</a></li>
+                <li><a href="${pageContext.request.contextPath}/listaOrdiniUtente">Ordini</a></li>
                 <% if (isAuthenticated && "admin".equals(userType)) { %>
                     <li class="admin-section">
                         <span>Amministrazione</span>
@@ -32,11 +32,11 @@
             </ul>
             <div class="auth-buttons">
                 <% if (isAuthenticated) { %>
-                    <a href="utente/profileControl" class="button">Profilo</a>
-                    <a href="utente/logout" class="button">LogOut</a>
+                    <a href="${pageContext.request.contextPath}/profileControl" class="button">Profilo</a>
+                    <a href="${pageContext.request.contextPath}/logout" class="button">LogOut</a>
                 <% } else { %>
-                    <a href="utenteInterface/loginForm.jsp" class="button">Login</a>
-                    <a href="utenteInterface/registerForm.jsp" class="button">Registrati</a>
+                    <a href="${pageContext.request.contextPath}/view/utenteInterface/loginForm.jsp" class="button">Login</a>
+                    <a href="${pageContext.request.contextPath}/view/utenteInterface/registerForm.jsp" class="button">Registrati</a>
                 <% } %>
             </div>
         </div>

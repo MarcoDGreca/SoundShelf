@@ -17,7 +17,7 @@ public class UtenteRegistratoDAO {
     }
 
     public synchronized UtenteRegistrato getUserByEmail(String email) {
-        String query = "SELECT * FROM Utente WHERE email = ?";
+        String query = "SELECT * FROM UtenteRegistrato WHERE email = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
@@ -25,7 +25,7 @@ public class UtenteRegistratoDAO {
                 if (resultSet.next()) {
                     return new UtenteRegistrato(
                         resultSet.getString("email"),
-                        resultSet.getString("passwordUser"),
+                        resultSet.getString("password"),
                         resultSet.getString("nome"),
                         resultSet.getString("cognome"),
                         resultSet.getString("indirizzo"),
@@ -41,7 +41,7 @@ public class UtenteRegistratoDAO {
     }
 
     public synchronized void addUser(UtenteRegistrato utente) {
-        String query = "INSERT INTO Utente (email, passwordUser, nome, cognome, indirizzo, telefono, ruolo) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO UtenteRegistrato (email, password, nome, cognome, indirizzo, telefono, ruolo) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, utente.getEmail());
@@ -50,7 +50,7 @@ public class UtenteRegistratoDAO {
             statement.setString(4, utente.getCognome());
             statement.setString(5, utente.getIndirizzo());
             statement.setString(6, utente.getTelefono());
-            statement.setString(8, utente.getRuolo().getRuolo());
+            statement.setString(7, "Cliente");
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class UtenteRegistratoDAO {
     }
 
     public synchronized void updateUser(UtenteRegistrato utente) {
-        String query = "UPDATE Utente SET passwordUser = ?, nome = ?, cognome = ?, indirizzo = ?, telefono = ?, ruolo = ? WHERE email = ?";
+        String query = "UPDATE UtenteRegistrato SET password = ?, nome = ?, cognome = ?, indirizzo = ?, telefono = ?, ruolo = ? WHERE email = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, utente.getPasswordUser());
@@ -66,8 +66,8 @@ public class UtenteRegistratoDAO {
             statement.setString(3, utente.getCognome());
             statement.setString(4, utente.getIndirizzo());
             statement.setString(5, utente.getTelefono());
-            statement.setString(7, utente.getRuolo().getRuolo());
-            statement.setString(8, utente.getEmail());
+            statement.setString(6, utente.getRuolo().getRuolo());
+            statement.setString(7, utente.getEmail());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,7 +75,7 @@ public class UtenteRegistratoDAO {
     }
 
     public synchronized void deleteUser(String email) {
-        String query = "DELETE FROM Utente WHERE email = ?";
+        String query = "DELETE FROM UtenteRegistrato WHERE email = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
@@ -87,7 +87,7 @@ public class UtenteRegistratoDAO {
 
     public synchronized List<UtenteRegistrato> getAllUsers() {
         List<UtenteRegistrato> users = new ArrayList<>();
-        String query = "SELECT * FROM Utente";
+        String query = "SELECT * FROM UtenteRegistrato";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
@@ -110,7 +110,7 @@ public class UtenteRegistratoDAO {
     }
     
     public synchronized UtenteRegistrato authenticate(String email, String password) {
-        String query = "SELECT * FROM Utente WHERE email = ? AND passwordUser = ?";
+        String query = "SELECT * FROM UtenteRegistrato WHERE email = ? AND password = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
@@ -119,7 +119,7 @@ public class UtenteRegistratoDAO {
                 if (resultSet.next()) {
                     UtenteRegistrato user = new UtenteRegistrato();
                     user.setEmail(resultSet.getString("email"));
-                    user.setPasswordUser(resultSet.getString("passwordUser"));
+                    user.setPasswordUser(resultSet.getString("password"));
                     user.setNome(resultSet.getString("nome"));
                     user.setCognome(resultSet.getString("cognome"));
                     user.setIndirizzo(resultSet.getString("indirizzo"));
@@ -135,7 +135,7 @@ public class UtenteRegistratoDAO {
     }
     
     public void promoteToAdmin(String email) {
-        String sql = "UPDATE Utente SET ruolo = 'Admin' WHERE email = ?";
+        String sql = "UPDATE UtenteRegistrato SET ruolo = 'GestoreSito' WHERE email = ?";
         try (Connection conn = DataSource.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, email);
@@ -146,7 +146,7 @@ public class UtenteRegistratoDAO {
     }
     
     public synchronized int getUserIdByEmail(String email) {
-        String query = "SELECT id FROM Utente WHERE email = ?";
+        String query = "SELECT id FROM UtenteRegistrato WHERE email = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);

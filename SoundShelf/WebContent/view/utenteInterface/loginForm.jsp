@@ -3,7 +3,7 @@
 <main>
     <div class="login-container">
         <h2>Login</h2>
-        <form action="${pageContext.request.contextPath}/utente/login" method="post" class="login-form">
+        <form action="${pageContext.request.contextPath}/login" method="post" class="login-form">
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="Inserisci la tua email" required>

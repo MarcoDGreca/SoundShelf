@@ -23,11 +23,11 @@ public class GestisciCatalogoProdottiControl extends HttpServlet {
         try {
             List<Product> products = productDAO.getAllProducts();
             request.setAttribute("products", products);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/prodottiInterface/catalogoProdottiView.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("view/prodottiInterface/catalogoProdottiView.jsp");
             dispatcher.forward(request, response);
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Errore durante il recupero dei prodotti.");
-            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 

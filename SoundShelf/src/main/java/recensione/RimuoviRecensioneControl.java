@@ -28,7 +28,7 @@ public class RimuoviRecensioneControl extends HttpServlet {
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect("utenteInterface/loginForm.jsp");
+            response.sendRedirect("view/utenteInterface/loginForm.jsp");
             return;
         }
 
@@ -48,6 +48,6 @@ public class RimuoviRecensioneControl extends HttpServlet {
 			}
         }
 
-        response.sendRedirect("/recensione/gestisciRecensioniControl");
+        response.sendRedirect("/gestisciRecensioniControl");
     }
 }

@@ -34,7 +34,7 @@ public class AcquistoControl extends HttpServlet {
 
         if (cart == null || cart.isEmpty()) {
             request.setAttribute("errorMessage", "Il carrello è vuoto.");
-            request.getRequestDispatcher("error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
             return;
         }
 
@@ -46,7 +46,7 @@ public class AcquistoControl extends HttpServlet {
             request.setAttribute("savedAddress", user.getIndirizzo());
         }
 
-        request.getRequestDispatcher("ordiniInterface/checkout.jsp").forward(request, response);
+        request.getRequestDispatcher("view/ordiniInterface/checkout.jsp").forward(request, response);
     }
 
     @Override
@@ -90,15 +90,15 @@ public class AcquistoControl extends HttpServlet {
                 cart.clear();
                 session.setAttribute("cart", cart);
 
-                response.sendRedirect(request.getContextPath() + "/ordiniInterface/orderConfirmation.jsp");
+                response.sendRedirect(request.getContextPath() + "view/ordiniInterface/orderConfirmation.jsp");
 
             } catch (SQLException e) {
                 request.setAttribute("errorMessage", "Errore nella creazione dell'ordine.");
-                request.getRequestDispatcher("error/MessaggioErrore.jsp").forward(request, response);
+                request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
             }
         } else {
             request.setAttribute("errorMessage", "Il carrello è vuoto o l'utente non è autenticato.");
-            request.getRequestDispatcher("error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 }

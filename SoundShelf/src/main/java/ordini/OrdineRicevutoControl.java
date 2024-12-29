@@ -34,6 +34,6 @@ public class OrdineRicevutoControl extends HttpServlet {
         } else {
             request.setAttribute("messaggio", "Ordine non trovato.");
         }
-        request.getRequestDispatcher("ordiniIntereface/listaOrdiniView.jsp").forward(request, response);
+        request.getRequestDispatcher("view/ordiniIntereface/listaOrdiniView.jsp").forward(request, response);
     }
 }

@@ -10,7 +10,7 @@ public class ProductDAO {
     private DataSource dataSource;
 
     public ProductDAO() {
-    	this.dataSource = DataSource.getInstance();
+        this.dataSource = DataSource.getInstance();
     }
 
     public Product getProductById(int productId) throws SQLException {
@@ -20,18 +20,21 @@ public class ProductDAO {
             ps.setInt(1, productId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Product(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("descrizione"),
-                        rs.getInt("disponibilita") > 0,
-                        rs.getDouble("prezzoVendita"),
-                        rs.getDouble("prezzoOriginale"),
-                        rs.getString("formato"),
-                        rs.getString("immagine"),
-                        rs.getString("dataPubblicazione"),
-                        rs.getBoolean("isDeleted")
+                    Product product = new Product(
+                            rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("descrizione"),
+                            rs.getInt("disponibilita") > 0,
+                            rs.getDouble("prezzoVendita"),
+                            rs.getDouble("prezzoOriginale"),
+                            rs.getString("formato"),
+                            rs.getString("immagine"),
+                            rs.getString("dataPubblicazione"),
+                            rs.getBoolean("isDeleted")
                     );
+                    product.setArtists(getArtistsByProductId(productId));
+                    product.setGenres(getGenresByProductId(productId));
+                    return product;
                 }
                 return null;
             }
@@ -45,18 +48,21 @@ public class ProductDAO {
              Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
-                products.add(new Product(
-                    rs.getInt("id"),
-                    rs.getString("nome"),
-                    rs.getString("descrizione"),
-                    rs.getInt("disponibilita") > 0,
-                    rs.getDouble("prezzoVendita"),
-                    rs.getDouble("prezzoOriginale"),
-                    rs.getString("formato"),
-                    rs.getString("immagine"),
-                    rs.getString("dataPubblicazione"),
-                    rs.getBoolean("isDeleted")
-                ));
+                Product product = new Product(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("descrizione"),
+                        rs.getInt("disponibilita") > 0,
+                        rs.getDouble("prezzoVendita"),
+                        rs.getDouble("prezzoOriginale"),
+                        rs.getString("formato"),
+                        rs.getString("immagine"),
+                        rs.getString("dataPubblicazione"),
+                        rs.getBoolean("isDeleted")
+                );
+                product.setArtists(getArtistsByProductId(rs.getInt("id")));
+                product.setGenres(getGenresByProductId(rs.getInt("id")));
+                products.add(product);
             }
         }
         return products;
@@ -83,6 +89,18 @@ public class ProductDAO {
                     product.setProductCode(generatedKeys.getInt(1));
                 }
             }
+
+            if (product.getArtists() != null) {
+                for (Artist artist : product.getArtists()) {
+                    insertProductArtist(product.getProductCode(), artist);
+                }
+            }
+
+            if (product.getGenres() != null) {
+                for (Genre genre : product.getGenres()) {
+                    insertProductGenre(product.getProductCode(), genre);
+                }
+            }
         }
     }
 
@@ -101,6 +119,9 @@ public class ProductDAO {
             ps.setBoolean(9, product.isDeleted());
             ps.setInt(10, product.getProductCode());
             ps.executeUpdate();
+
+            updateProductArtists(product);
+            updateProductGenres(product);
         }
     }
 
@@ -112,6 +133,7 @@ public class ProductDAO {
             ps.executeUpdate();
         }
     }
+
     public List<Product> searchProducts(String name, List<String> genres, List<String> artists) throws SQLException {
         StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Prodotto WHERE 1=1");
         if (name != null && !name.isEmpty()) {
@@ -141,17 +163,19 @@ public class ProductDAO {
                 List<Product> products = new ArrayList<>();
                 while (rs.next()) {
                     Product product = new Product(
-                        rs.getInt("id"),
-                        rs.getString("nome"),
-                        rs.getString("descrizione"),
-                        rs.getInt("disponibilita") > 0,
-                        rs.getDouble("prezzoVendita"),
-                        rs.getDouble("prezzoOriginale"),
-                        rs.getString("formato"),
-                        rs.getString("immagine"),
-                        rs.getString("dataPubblicazione"),
-                        rs.getBoolean("isDeleted")
+                            rs.getInt("id"),
+                            rs.getString("nome"),
+                            rs.getString("descrizione"),
+                            rs.getInt("disponibilita") > 0,
+                            rs.getDouble("prezzoVendita"),
+                            rs.getDouble("prezzoOriginale"),
+                            rs.getString("formato"),
+                            rs.getString("immagine"),
+                            rs.getString("dataPubblicazione"),
+                            rs.getBoolean("isDeleted")
                     );
+                    product.setArtists(getArtistsByProductId(rs.getInt("id")));
+                    product.setGenres(getGenresByProductId(rs.getInt("id")));
                     products.add(product);
                 }
                 return products;
@@ -159,20 +183,118 @@ public class ProductDAO {
         }
     }
 
-    public Artist findArtistByName(String name) throws SQLException {
-        String query = "SELECT * FROM Artista WHERE nome = ?";
+    private List<Artist> getArtistsByProductId(int productId) throws SQLException {
+        String query = "SELECT a.nome, a.cognome, a.nomeArtistico FROM Artista a " +
+                       "JOIN ProdottoArtista pa ON a.id = pa.idArtista " +
+                       "WHERE pa.idProdotto = ?";
+        List<Artist> artists = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, name);
+            ps.setInt(1, productId);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new Artist(rs.getString("nome"), rs.getString("cognome"), rs.getString("nomeArtistico"));
+                while (rs.next()) {
+                    artists.add(new Artist(rs.getString("nome"), rs.getString("cognome"), rs.getString("nomeArtistico")));
                 }
-                return null;
+            }
+        }
+        return artists;
+    }
+
+    private List<Genre> getGenresByProductId(int productId) throws SQLException {
+        String query = "SELECT g.nome FROM Genere g " +
+                       "JOIN ProdottoGenere pg ON g.id = pg.idGenere " +
+                       "WHERE pg.idProdotto = ?";
+        List<Genre> genres = new ArrayList<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    genres.add(new Genre(rs.getString("nome")));
+                }
+            }
+        }
+        return genres;
+    }
+
+    private void insertProductArtist(int productId, Artist artist) throws SQLException {
+        String query = "INSERT INTO ProdottoArtista (idProdotto, idArtista) VALUES (?, ?)";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, productId);
+            ps.setInt(2, getArtistIdByName(artist.getFirstName(), artist.getLastName(), artist.getStageName()));
+            ps.executeUpdate();
+        }
+    }
+
+    private void insertProductGenre(int productId, Genre genre) throws SQLException {
+        String query = "INSERT INTO ProdottoGenere (idProdotto, idGenere) VALUES (?, ?)";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, productId);
+            ps.setInt(2, getGenreIdByName(genre.getName()));
+            ps.executeUpdate();
+        }
+    }
+
+    private void updateProductArtists(Product product) throws SQLException {
+        String query = "DELETE FROM ProdottoArtista WHERE idProdotto = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, product.getProductCode());
+            ps.executeUpdate();
+        }
+        if (product.getArtists() != null) {
+            for (Artist artist : product.getArtists()) {
+                insertProductArtist(product.getProductCode(), artist);
             }
         }
     }
 
+    private void updateProductGenres(Product product) throws SQLException {
+        String query = "DELETE FROM ProdottoGenere WHERE idProdotto = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, product.getProductCode());
+            ps.executeUpdate();
+        }
+        if (product.getGenres() != null) {
+            for (Genre genre : product.getGenres()) {
+                insertProductGenre(product.getProductCode(), genre);
+            }
+        }
+    }
+
+    private int getArtistIdByName(String firstName, String lastName, String stageName) throws SQLException {
+        String query = "SELECT id FROM Artista WHERE nome = ? AND cognome = ? AND nomeArtistico = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, firstName);
+            ps.setString(2, lastName);
+            ps.setString(3, stageName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                }
+            }
+        }
+        return -1;
+    }
+
+    private int getGenreIdByName(String genreName) throws SQLException {
+        String query = "SELECT id FROM Genere WHERE nome = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, genreName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                }
+            }
+        }
+        return -1;
+    }
+    
     public Genre findGenreByName(String name) throws SQLException {
         String query = "SELECT * FROM Genere WHERE nome = ?";
         try (Connection connection = dataSource.getConnection();
@@ -182,22 +304,38 @@ public class ProductDAO {
                 if (rs.next()) {
                     return new Genre(rs.getString("nome"));
                 }
-                return null;
             }
         }
+        return null;
     }
-    
-    public String getImageByProductId(int productId) throws SQLException {
+
+    public Artist findArtistByName(String stageName) throws SQLException {
+        String query = "SELECT * FROM Artista WHERE nomeArtistico = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, stageName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Artist(rs.getString("nome"), rs.getString("cognome"), rs.getString("nomeArtistico"));
+                }
+            }
+        }
+        return null;
+    }
+
+    public String getImageByProductId(int productCode) throws SQLException {
         String query = "SELECT immagine FROM Prodotto WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, productId);
+            ps.setInt(1, productCode);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString("immagine");
                 }
-                return null;
             }
         }
+        return null;
     }
+
+
 }

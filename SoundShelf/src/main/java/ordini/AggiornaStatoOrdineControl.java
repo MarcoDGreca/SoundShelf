@@ -36,6 +36,6 @@ public class AggiornaStatoOrdineControl extends HttpServlet {
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Errore: " + e.getMessage());
         }
-        response.sendRedirect(request.getContextPath() + "/ordini/gestisciCatalogoOrdiniControl");
+        response.sendRedirect(request.getContextPath() + "/gestisciCatalogoOrdiniControl");
     }
 }
