@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <title>SoundShelf - Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
+    <link rel="stylesheet" href="/SoundShelf/styles/style.css" type="text/css">
 </head>
 <body>
     <div>
@@ -44,7 +44,11 @@
                                 </p>
                                 <p><strong>Prezzo Scontato:</strong> €<%= product.getSalePrice() %></p>
                                 <p><strong>Prezzo Originale:</strong> €<%= product.getOriginalPrice() %></p>
-                                <p><strong>Disponibilità:</strong> <%= product.isAvailability() ? "Disponibile" : "Non Disponibile" %></p>
+                                <p><strong>Disponibilità:</strong> <%= product.getAvailability() %></p>
+                                <form action="${pageContext.request.contextPath}/prodottoControl" method="get">
+                                    <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
+                                    <button type="submit" class="button">Dettagli prodotto</button>
+                                </form>
                                 <form action="${pageContext.request.contextPath}/carrelloControl" method="post">
                                     <input type="hidden" name="action" value="add">
                                     <input type="hidden" name="productId" value="<%= product.getProductCode() %>">

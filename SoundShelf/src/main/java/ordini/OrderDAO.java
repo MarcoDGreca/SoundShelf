@@ -20,7 +20,7 @@ public class OrderDAO {
     }
 
     public int addOrder(Order order) throws SQLException {
-        String sql = "INSERT INTO Ordine (emailCliente, prezzoTotale, dataOrdine, dataConsegna, indirizzoSpedizione, stato) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Ordine (emailCliente, prezzoTotale, dataAcquisto, dataConsegna, indirizzoSpedizione, stato) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, order.getEmailCliente());
@@ -57,7 +57,7 @@ public class OrderDAO {
                         resultSet.getInt("numeroOrdine"),
                         resultSet.getString("emailCliente"),
                         resultSet.getDouble("prezzoTotale"),
-                        resultSet.getDate("dataOrdine"),
+                        resultSet.getDate("dataAcquisto"),
                         resultSet.getDate("dataConsegna"),
                         resultSet.getString("indirizzoSpedizione"),
                         StatoOrdine.fromString(resultSet.getString("stato"))
@@ -82,7 +82,7 @@ public class OrderDAO {
                     resultSet.getInt("numeroOrdine"),
                     resultSet.getString("emailCliente"),
                     resultSet.getDouble("prezzoTotale"),
-                    resultSet.getDate("dataOrdine"),
+                    resultSet.getDate("dataAcquisto"),
                     resultSet.getDate("dataConsegna"),
                     resultSet.getString("indirizzoSpedizione"),
                     StatoOrdine.fromString(resultSet.getString("stato"))
@@ -109,7 +109,7 @@ public class OrderDAO {
 
 
     public synchronized void updateOrder(Order order) {
-        String query = "UPDATE Ordine SET emailCliente = ?, prezzoTotale = ?, dataOrdine = ?, dataConsegna = ?, indirizzoSpedizione = ?, stato = ? WHERE numeroOrdine = ?";
+        String query = "UPDATE Ordine SET emailCliente = ?, prezzoTotale = ?, dataAcquisto = ?, dataConsegna = ?, indirizzoSpedizione = ?, stato = ? WHERE numeroOrdine = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, order.getEmailCliente());
@@ -152,7 +152,7 @@ public class OrderDAO {
                     order.setNumeroOrdine(resultSet.getInt("numeroOrdine"));
                     order.setEmailCliente(resultSet.getString("emailCliente"));
                     order.setPrezzoTotale(resultSet.getDouble("prezzoTotale"));
-                    order.setDataOrdine(resultSet.getDate("dataOrdine"));
+                    order.setDataOrdine(resultSet.getDate("dataAcquisto"));
                     order.setDataConsegna(resultSet.getDate("dataConsegna"));
                     order.setIndirizzoSpedizione(resultSet.getString("indirizzoSpedizione"));
                     order.setStato(StatoOrdine.valueOf(resultSet.getString("stato").toUpperCase().replace(" ", "_")));
@@ -249,7 +249,7 @@ public class OrderDAO {
                     product.setProductCode(resultSet.getInt("codiceProdotto"));
                     product.setName(resultSet.getString("nome"));
                     product.setDescription(resultSet.getString("descrizione"));
-                    product.setAvailability(resultSet.getBoolean("disponibilita"));
+                    product.setAvailability(resultSet.getInt("disponibilita"));
                     product.setSalePrice(resultSet.getDouble("prezzoVendita"));
                     product.setOriginalPrice(resultSet.getDouble("prezzoOriginale"));
                     product.setSupportedDevice(resultSet.getString("formato"));

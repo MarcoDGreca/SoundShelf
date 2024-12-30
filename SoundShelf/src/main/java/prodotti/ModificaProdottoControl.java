@@ -47,7 +47,7 @@ public class ModificaProdottoControl extends HttpServlet {
         String name = request.getParameter("name");
         String releaseDate = request.getParameter("releaseDate");
         String description = request.getParameter("description");
-        boolean availability = Boolean.parseBoolean(request.getParameter("availability"));
+        int availability = Integer.parseInt(request.getParameter("availability"));
         double salePrice = Double.parseDouble(request.getParameter("salePrice"));
         double originalPrice = Double.parseDouble(request.getParameter("originalPrice"));
         String supportedDevice = request.getParameter("supportedDevice");

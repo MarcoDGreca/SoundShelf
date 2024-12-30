@@ -10,7 +10,7 @@ public class Product {
     private List<Artist> artists = new ArrayList<>();
     private String releaseDate;
     private String description;
-    private boolean availability;
+    private int availability;
     private double salePrice;
     private double originalPrice;
     private String supportedDevice;
@@ -19,18 +19,18 @@ public class Product {
     private boolean isDeleted;
 
     public Product(int productCode, String name, List<Artist> artists, String releaseDate, String description,
-                   boolean availability, double salePrice, double originalPrice, String supportedDevice, 
+    		int availability, double salePrice, double originalPrice, String supportedDevice, 
                    List<Genre> genres, String image, boolean isDeleted) {
         this.productCode = productCode;
         this.name = name;
-        this.artists = artists != null ? artists : new ArrayList<>();  // Evita null per artists
+        this.artists = artists != null ? artists : new ArrayList<>();
         this.releaseDate = releaseDate;
         this.description = description;
         this.availability = availability;
         this.salePrice = salePrice;
         this.originalPrice = originalPrice;
         this.supportedDevice = supportedDevice;
-        this.genres = genres != null ? genres : new ArrayList<>();  // Evita null per genres
+        this.genres = genres != null ? genres : new ArrayList<>();
         this.image = image;
         this.isDeleted = isDeleted;
     }
@@ -38,7 +38,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productCode, String name, String description, boolean availability, double salePrice,
+    public Product(int productCode, String name, String description, int availability, double salePrice,
                    double originalPrice, String supportedDevice, String image, String releaseDate, boolean isDeleted) {
         this.productCode = productCode;
         this.name = name;
@@ -50,8 +50,8 @@ public class Product {
         this.image = image;
         this.releaseDate = releaseDate;
         this.isDeleted = isDeleted;
-        this.artists = new ArrayList<>();  // Inizializza artists
-        this.genres = new ArrayList<>();   // Inizializza genres
+        this.artists = new ArrayList<>();
+        this.genres = new ArrayList<>();
     }
 
     public int getProductCode() {
@@ -94,11 +94,11 @@ public class Product {
         this.description = description;
     }
 
-    public boolean isAvailability() {
+    public int getAvailability() {
         return availability;
     }
 
-    public void setAvailability(boolean availability) {
+    public void setAvailability(int availability) {
         this.availability = availability;
     }
 

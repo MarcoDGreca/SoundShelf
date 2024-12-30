@@ -24,12 +24,12 @@ public class ProductDAO {
                             rs.getInt("id"),
                             rs.getString("nome"),
                             rs.getString("descrizione"),
-                            rs.getInt("disponibilita") > 0,
+                            rs.getInt("disponibilita"),
                             rs.getDouble("prezzoVendita"),
                             rs.getDouble("prezzoOriginale"),
                             rs.getString("formato"),
                             rs.getString("immagine"),
-                            rs.getString("dataPubblicazione"),
+                            rs.getDate("dataPubblicazione").toString(), // Gestione della data
                             rs.getBoolean("isDeleted")
                     );
                     product.setArtists(getArtistsByProductId(productId));
@@ -52,12 +52,12 @@ public class ProductDAO {
                         rs.getInt("id"),
                         rs.getString("nome"),
                         rs.getString("descrizione"),
-                        rs.getInt("disponibilita") > 0,
+                        rs.getInt("disponibilita"),
                         rs.getDouble("prezzoVendita"),
                         rs.getDouble("prezzoOriginale"),
                         rs.getString("formato"),
                         rs.getString("immagine"),
-                        rs.getString("dataPubblicazione"),
+                        rs.getDate("dataPubblicazione").toString(),
                         rs.getBoolean("isDeleted")
                 );
                 product.setArtists(getArtistsByProductId(rs.getInt("id")));
@@ -75,12 +75,12 @@ public class ProductDAO {
              PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, product.getName());
             ps.setString(2, product.getDescription());
-            ps.setInt(3, product.isAvailability() ? 1 : 0);
+            ps.setInt(3, product.getAvailability());
             ps.setDouble(4, product.getSalePrice());
             ps.setDouble(5, product.getOriginalPrice());
             ps.setString(6, product.getSupportedDevice());
             ps.setString(7, product.getImage());
-            ps.setString(8, product.getReleaseDate());
+            ps.setDate(8, Date.valueOf(product.getReleaseDate()));
             ps.setBoolean(9, product.isDeleted());
             ps.executeUpdate();
 
@@ -110,12 +110,12 @@ public class ProductDAO {
              PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, product.getName());
             ps.setString(2, product.getDescription());
-            ps.setInt(3, product.isAvailability() ? 1 : 0);
+            ps.setInt(3, product.getAvailability());
             ps.setDouble(4, product.getSalePrice());
             ps.setDouble(5, product.getOriginalPrice());
             ps.setString(6, product.getSupportedDevice());
             ps.setString(7, product.getImage());
-            ps.setString(8, product.getReleaseDate());
+            ps.setDate(8, Date.valueOf(product.getReleaseDate()));
             ps.setBoolean(9, product.isDeleted());
             ps.setInt(10, product.getProductCode());
             ps.executeUpdate();
@@ -166,12 +166,12 @@ public class ProductDAO {
                             rs.getInt("id"),
                             rs.getString("nome"),
                             rs.getString("descrizione"),
-                            rs.getInt("disponibilita") > 0,
+                            rs.getInt("disponibilita"),
                             rs.getDouble("prezzoVendita"),
                             rs.getDouble("prezzoOriginale"),
                             rs.getString("formato"),
                             rs.getString("immagine"),
-                            rs.getString("dataPubblicazione"),
+                            rs.getDate("dataPubblicazione").toString(),
                             rs.getBoolean("isDeleted")
                     );
                     product.setArtists(getArtistsByProductId(rs.getInt("id")));
@@ -237,34 +237,6 @@ public class ProductDAO {
         }
     }
 
-    private void updateProductArtists(Product product) throws SQLException {
-        String query = "DELETE FROM ProdottoArtista WHERE idProdotto = ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, product.getProductCode());
-            ps.executeUpdate();
-        }
-        if (product.getArtists() != null) {
-            for (Artist artist : product.getArtists()) {
-                insertProductArtist(product.getProductCode(), artist);
-            }
-        }
-    }
-
-    private void updateProductGenres(Product product) throws SQLException {
-        String query = "DELETE FROM ProdottoGenere WHERE idProdotto = ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, product.getProductCode());
-            ps.executeUpdate();
-        }
-        if (product.getGenres() != null) {
-            for (Genre genre : product.getGenres()) {
-                insertProductGenre(product.getProductCode(), genre);
-            }
-        }
-    }
-
     private int getArtistIdByName(String firstName, String lastName, String stageName) throws SQLException {
         String query = "SELECT id FROM Artista WHERE nome = ? AND cognome = ? AND nomeArtistico = ?";
         try (Connection connection = dataSource.getConnection();
@@ -276,23 +248,51 @@ public class ProductDAO {
                 if (rs.next()) {
                     return rs.getInt("id");
                 }
+                return -1;
             }
         }
-        return -1;
     }
 
-    private int getGenreIdByName(String genreName) throws SQLException {
+    private int getGenreIdByName(String name) throws SQLException {
         String query = "SELECT id FROM Genere WHERE nome = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, genreName);
+            ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("id");
                 }
+                return -1;
             }
         }
-        return -1;
+    }
+    
+    private void updateProductArtists(Product product) throws SQLException {
+        String deleteQuery = "DELETE FROM ProdottoArtista WHERE idProdotto = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(deleteQuery)) {
+            ps.setInt(1, product.getProductCode());
+            ps.executeUpdate();
+        }
+        if (product.getArtists() != null) {
+            for (Artist artist : product.getArtists()) {
+                insertProductArtist(product.getProductCode(), artist);
+            }
+        }
+    }
+
+    private void updateProductGenres(Product product) throws SQLException {
+        String deleteQuery = "DELETE FROM ProdottoGenere WHERE idProdotto = ?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(deleteQuery)) {
+            ps.setInt(1, product.getProductCode());
+            ps.executeUpdate();
+        }
+        if (product.getGenres() != null) {
+            for (Genre genre : product.getGenres()) {
+                insertProductGenre(product.getProductCode(), genre);
+            }
+        }
     }
     
     public Genre findGenreByName(String name) throws SQLException {

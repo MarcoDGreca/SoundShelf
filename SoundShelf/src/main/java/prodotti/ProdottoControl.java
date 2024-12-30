@@ -27,7 +27,7 @@ public class ProdottoControl extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int productCode = Integer.parseInt(request.getParameter("productCode"));
+        int productCode = Integer.parseInt(request.getParameter("productId"));
         
         Product product = null;
 		try {

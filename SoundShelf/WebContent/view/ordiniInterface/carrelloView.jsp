@@ -6,6 +6,24 @@
     <title>Carrello</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        function confirmRemove() {
+            return confirm("Sei sicuro di voler rimuovere questo prodotto dal carrello?");
+        }
+
+        function confirmClear() {
+            return confirm("Sei sicuro di voler svuotare l'intero carrello?");
+        }
+
+        function validateQuantity(form) {
+            var quantity = form.quantity.value;
+            if (quantity < 1) {
+                alert("La quantità non può essere inferiore a 1.");
+                return false; // Impedisce l'invio del modulo
+            }
+            return true; // Permette l'invio del modulo
+        }
+    </script>
 </head>
 <body>
 
@@ -33,7 +51,7 @@
             <tr>
                 <td><%= product.getName() %></td>
                 <td> 
-                    <form action="${pageContext.request.contextPath}/carrelloControl" method="get">
+                    <form action="${pageContext.request.contextPath}/carrelloControl" method="get" onsubmit="return validateQuantity(this)">
                         <input type="hidden" name="action" value="update">
                         <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
                         <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1">
@@ -42,7 +60,7 @@
                 </td>
                 <td>&euro;<%= String.format("%.2f", item.getTotalPrice()) %></td>
                 <td>
-                    <form action="${pageContext.request.contextPath}/carrelloControl" method="get">
+                    <form action="${pageContext.request.contextPath}/carrelloControl" method="get" onsubmit="return confirmRemove()">
                         <input type="hidden" name="action" value="remove">
                         <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
                         <button type="submit" class="remove-button">Rimuovi</button>
@@ -56,8 +74,7 @@
         </div>
 
         <div class="cart-checkout">
-            <a <% if(request.getSession().getAttribute("user") != null) { %>
-                    href="${pageContext.request.contextPath}/acquistoControl" <% } else { %> href="${pageContext.request.contextPath}/login" <% } %> >
+            <a href="${pageContext.request.contextPath}/acquistoControl"> 
                 <button>Acquista</button>
             </a>
         </div>
@@ -67,9 +84,9 @@
                     Product product = item.getProduct();
             %>
         <div class="cart-clear">
-            <form action="${pageContext.request.contextPath}/carrelloControl" method="get">
+            <form action="${pageContext.request.contextPath}/carrelloControl" method="get" onsubmit="return confirmClear()">
                 <input type="hidden" name="action" value="clear">
-                <input type="hidden" name="productId" value=<%= product.getProductCode() %>>
+                <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
                 <button type="submit" class="clear-button">Svuota Carrello</button>
             </form>
         </div>

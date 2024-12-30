@@ -28,7 +28,6 @@ public class HomeControl extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Product> products = null;
         try {
-        	System.out.println("si");
             products = productDAO.getAllProducts();
         } catch (SQLException e) {
             request.setAttribute("message", "Errore nel recupero dei prodotti.");
@@ -37,5 +36,9 @@ public class HomeControl extends HttpServlet {
         }  
         request.setAttribute("products", products);
         request.getRequestDispatcher("view/home/homeView.jsp").forward(request, response);
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	doGet(request, response);
     }
 }

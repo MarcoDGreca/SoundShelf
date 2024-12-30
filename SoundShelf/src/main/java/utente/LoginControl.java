@@ -42,7 +42,7 @@ public class LoginControl extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
             request.setAttribute("errorMessage", "Email o password non validi.");
-            request.getRequestDispatcher("view/utenteInterface/loginForm.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 

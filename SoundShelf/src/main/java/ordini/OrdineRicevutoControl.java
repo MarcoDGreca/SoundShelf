@@ -21,19 +21,26 @@ public class OrdineRicevutoControl extends HttpServlet {
         String ordineId = request.getParameter("ordineId");
         String conferma = request.getParameter("confermaRicezione");
 
-        Order ordine = ordineDAO.getOrderById(Integer.parseInt(ordineId));
+        if (ordineId != null && !ordineId.isEmpty()) {
+            Order ordine = ordineDAO.getOrderById(Integer.parseInt(ordineId));
 
-        if (ordine != null) {
-            if ("si".equals(conferma)) {
-                ordine.setStato(StatoOrdine.COMPLETATO);
-                ordineDAO.updateOrder(ordine);
-                request.setAttribute("messaggio", "Ordine confermato come ricevuto.");
+            if (ordine != null) {
+                if ("si".equals(conferma)) {
+                    ordine.setStato(StatoOrdine.COMPLETATO);
+                    ordineDAO.updateOrder(ordine);
+                } else {
+                    request.setAttribute("errorMessage", "Conferma della ricezione annullata.");
+                    request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+                }
             } else {
-                request.setAttribute("messaggio", "Conferma della ricezione annullata.");
+            	request.setAttribute("errorMessage", "Ordine non trovato.");
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             }
         } else {
-            request.setAttribute("messaggio", "Ordine non trovato.");
+        	request.setAttribute("errorMessage", "Id Ordine mancante.");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("view/ordiniIntereface/listaOrdiniView.jsp").forward(request, response);
+
+        request.getRequestDispatcher("listaOrdiniUtente").forward(request, response);
     }
 }

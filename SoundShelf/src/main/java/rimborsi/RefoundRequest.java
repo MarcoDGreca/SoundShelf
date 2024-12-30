@@ -8,14 +8,19 @@ public class RefoundRequest {
     private StatoRimborso stato;
     private int idOrdine;
     private int idProdotto;
+    private String emailCliente;
 
-    public RefoundRequest(int id, String motivo, String iban, StatoRimborso stato, int idOrdine, int idProdotto) {
+    public RefoundRequest(int id, String motivo, String iban, StatoRimborso stato, int idOrdine, int idProdotto, String emailCliente) {
         this.id = id;
         this.motivo = motivo;
         this.iban = iban;
         this.stato = stato;
         this.idOrdine = idOrdine;
         this.idProdotto = idProdotto;
+        this.emailCliente = emailCliente;
+    }
+
+    public RefoundRequest() {
     }
 
     public int getId() {
@@ -64,5 +69,13 @@ public class RefoundRequest {
 
     public void setIdProdotto(int idProdotto) {
         this.idProdotto = idProdotto;
+    }
+
+    public String getEmailCliente() {
+        return emailCliente;
+    }
+
+    public void setEmailCliente(String emailCliente) {
+        this.emailCliente = emailCliente;
     }
 }

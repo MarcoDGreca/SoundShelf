@@ -6,6 +6,11 @@
     <title>Profilo Utente</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        function confirmChanges() {
+            return confirm("Sei sicuro di voler modificare i tuoi dati?");
+        }
+    </script>
 </head>
 <body>
 
@@ -38,7 +43,7 @@
         </table>
 
         <h3>Modifica Dati Personali</h3>
-        <form action="${pageContext.request.contextPath}/profileControl" method="post">
+        <form action="${pageContext.request.contextPath}/profileControl" method="post" onsubmit="return confirmChanges()">
             <label for="nome">Nome:</label>
             <input type="text" id="nome" name="nome" value="<%= user.getNome() %>" required><br><br>
 

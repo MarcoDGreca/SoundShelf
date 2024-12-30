@@ -51,11 +51,14 @@ public class ListaOrdiniControl extends HttpServlet {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                request.setAttribute("dettaglioOrdine_" + dettaglio.getId(), dettaglio);
                 request.setAttribute("prodotto_" + dettaglio.getIdProdotto(), prodotto);
             }
         }
 
         request.getRequestDispatcher("view/ordiniInterface/listaOrdiniView.jsp").forward(request, response);
+    }
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	doGet(request, response);
     }
 }

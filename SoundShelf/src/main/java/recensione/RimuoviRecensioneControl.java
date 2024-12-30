@@ -1,6 +1,7 @@
 package recensione;
 
 import utente.UtenteRegistrato;
+import utente.UtenteRegistratoDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,7 +41,7 @@ public class RimuoviRecensioneControl extends HttpServlet {
 			e.printStackTrace();
 		}
 
-        if (review != null && user.getEmail().equals(review.getEmailCliente())) {
+        if (review != null && user.getEmail().equals(review.getEmailCliente())){
             try {
 				reviewDAO.deleteReview(reviewId);
 			} catch (SQLException e) {

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
     <title>Gestione Richieste di Supporto</title>
 </head>
 <body>
@@ -31,23 +32,22 @@
         if (richieste != null) {
             for (SupportRequest richiesta : richieste) {
     %>
-        <h3>Richiesta: <%= richiesta.getName() %></h3>
-        <p><strong>Email:</strong> <%= richiesta.getEmail() %></p>
+        <h3>Richiesta: <%= richiesta.getId() %></h3>
         <p><strong>Descrizione:</strong> <%= richiesta.getDescription() %></p>
         <p><strong>Data Invio:</strong> <%= richiesta.getDataInvio() %></p>
         <p><strong>Orario Invio:</strong> <%= richiesta.getOrarioInvio() %></p>
         <p><strong>Stato:</strong> <%= richiesta.getStato() %></p>
         <p><strong>Informazioni Aggiuntive:</strong> <%= richiesta.getInformazioniAggiuntive() %></p>
 
-        <form action="supporto/informazioniControl" method="post">
-            <input type="hidden" name="name" value="<%= richiesta.getName() %>">
+        <form action="${pageContext.request.contextPath}/supporto/informazioniControl" method="post">
+            <input type="hidden" name="idRichiesta" value="<%= richiesta.getId() %>">
             <label for="informazioniAggiuntive">Richiedi informazioni aggiuntive:</label>
             <textarea name="informazioniAggiuntive" required></textarea>
             <button type="submit">Invia informazioni aggiuntive</button>
         </form>
 
-        <form action="supporto/gestisciRichiestaSupporto" method="post">
-            <input type="hidden" name="name" value="<%= richiesta.getName() %>">
+        <form action="${pageContext.request.contextPath}/supporto/gestisciRichiestaSupporto" method="post">
+            <input type="hidden" name="idRichiesta" value="<%= richiesta.getId() %>">
             <label for="nuovoStato">Nuovo Stato:</label>
             <select name="nuovoStato">
                 <option value="IN_LAVORAZIONE">In Lavorazione</option>

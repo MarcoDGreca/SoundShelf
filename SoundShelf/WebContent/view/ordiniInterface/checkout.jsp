@@ -22,7 +22,7 @@
         
         <section class="checkout-section">
             <h1>Checkout</h1>
-            <form action="ordini/checkout" method="post">
+            <form action="${pageContext.request.contextPath}/acquistoControl" method="post">
                 <div>
                     <h3>Indirizzo di Spedizione</h3>
                     <% if (savedAddress != null) { %>
@@ -32,7 +32,7 @@
                         <p>Inserisci il tuo indirizzo di spedizione.</p>
                     <% } %>
 
-                    <textarea name="shippingAddress" rows="4" cols="50"><%= (savedAddress != null ? "" : "") %></textarea>
+                    <textarea name="shippingAddress" rows="4" cols="50"><%= (savedAddress != null ? savedAddress : "") %></textarea>
                 </div>
 
                 <div>
@@ -41,6 +41,11 @@
                     <button type="submit" class="button">Procedi con l'Acquisto</button>
                 </div>
             </form>
+            <div>
+                <a href="${pageContext.request.contextPath}/carrelloControl">
+                    <button type="button" class="button">Annulla e Torna al Carrello</button>
+                </a>
+            </div>
         </section>
 
         <jsp:include page="../pagePieces/footer.jsp" />

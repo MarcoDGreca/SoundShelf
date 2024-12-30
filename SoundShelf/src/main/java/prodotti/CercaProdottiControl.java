@@ -66,7 +66,7 @@ public class CercaProdottiControl extends HttpServlet {
                         .toArray());
                 jsonObject.put("releaseDate", product.getReleaseDate());
                 jsonObject.put("description", product.getDescription());
-                jsonObject.put("availability", product.isAvailability());
+                jsonObject.put("availability", product.getAvailability());
                 jsonObject.put("salePrice", product.getSalePrice());
                 jsonObject.put("originalPrice", product.getOriginalPrice());
                 jsonObject.put("genres", product.getGenres().stream()

@@ -1,102 +1,108 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="java.util.*, ordini.*, prodotti.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="ordini.*, prodotti.*"%>
+<%@ page import="java.util.List"%>
+<%
+    List<Order> orders = (List<Order>) request.getAttribute("ordini");
+    ElementoOrdineDAO orderDetailDAO = new ElementoOrdineDAO();
+%>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Storico Ordini</title>
+    <meta charset="UTF-8">
+    <title>Le tue richieste di rimborso</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
+    <script>
+        function confirmRefund() {
+            return confirm("Sei sicuro di voler richiedere un rimborso per questo prodotto?");
+        }
+    </script>
 </head>
 <body>
-
-    <jsp:include page="../pagePieces/header.jsp" />
-
-    <div id="main" class="clear">
-        <h2>Il Tuo Storico Ordini</h2>
-
-        <% 
-            List<Order> orders = (List<Order>) request.getAttribute("orders");
-            if (orders != null && !orders.isEmpty()) {
+    <div>
+        <jsp:include page="../pagePieces/header.jsp" />
+        <%
+        if (orders != null && !orders.isEmpty()) {
         %>
-            <table class="order-table">
-                <thead>
-                    <tr>
-                        <th>Numero Ordine</th>
-                        <th>Data Ordine</th>
-                        <th>Data Consegna</th>
-                        <th>Indirizzo Spedizione</th>
-                        <th>Prezzo Totale</th>
-                        <th>Stato Ordine</th>
-                        <th>Dettagli Ordine</th>
-                        <th>Conferma Ricezione</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% 
-                        for (Order order : orders) { 
-                            List<ElementoOrdine> orderDetails = (List<ElementoOrdine>) request.getAttribute("orderDetail_" + order.getNumeroOrdine());
-                    %>
-                    <tr>
-                        <td><%= order.getNumeroOrdine() %></td>
-                        <td><%= order.getDataOrdine() %></td>
-                        <td><%= order.getDataConsegna() != null ? order.getDataConsegna() : "In attesa" %></td>
-                        <td><%= order.getIndirizzoSpedizione() %></td>
-                        <td>€ <%= order.getPrezzoTotale() %></td>
-                        <td><%= order.getStato() != null ? order.getStato().toString() : "In elaborazione" %></td>
-                        <td>
-                            <table class="order-detail-table">
-                                <thead>
-                                    <tr>
-                                        <th>Prodotto</th>
-                                        <th>Quantità</th>
-                                        <th>Prezzo Unitario</th>
-                                        <th>Totale</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% 
-                                        for (ElementoOrdine orderDetail : orderDetails) {
-                                            Product product = (Product) request.getAttribute("product_" + orderDetail.getIdProdotto());
-                                    %>
-                                    <tr>
-                                        <td><%= product != null ? product.getName() : "N/A" %></td>
-                                        <td><%= orderDetail.getQuantita() %></td>
-                                        <td>€ <%= product != null ? product.getSalePrice() : "N/A" %></td>
-                                        <td>€ <%= orderDetail.getQuantita() * (product != null ? product.getSalePrice() : 0) %></td>
-                                    </tr>
-                                    <% 
-                                        }
-                                    %>
-                                </tbody>
-                            </table>
-                        </td>
-                        <td>
-                            <% if (order.getStato() != StatoOrdine.COMPLETATO) { %>
-                                <form action="ordini/OrdineRicevutoControl" method="post">
-                                    <input type="hidden" name="ordineId" value="<%= order.getNumeroOrdine() %>" />
-                                    <input type="hidden" name="confermaRicezione" value="si" />
-                                    <button type="submit">Conferma Ricezione</button>
+        <section class="orders-section">
+            <h2>I Tuoi Ordini</h2>
+            <div class="main-content">
+                <%
+                for (Order order : orders) {
+                %>
+                <div class="order">
+                    <h3>Ordine <%= order.getNumeroOrdine() %></h3>
+                    <table class="order-table">
+                        <tr>
+                            <th>Codice Ordine</th>
+                            <td><%= order.getNumeroOrdine() %></td>
+                        </tr>
+                        <tr>
+                            <th>Data</th>
+                            <td><%= order.getDataOrdine() %></td>
+                        </tr>
+                        <tr>
+                            <th>Totale</th>
+                            <td>&euro;<%= order.getPrezzoTotale() %></td>
+                        </tr>
+                        <tr>
+                            <th>Stato</th>
+                            <td><%= order.getStato().getStato() %></td>
+                        </tr>
+                    </table>
+                    <h4>Dettagli Ordine</h4>
+                    <table class="order-table">
+                        <tr>
+                            <th>Prodotto</th>
+                            <th>Quantità</th>
+                            <th>Prezzo</th>
+                            <th>Azioni</th>
+                        </tr>
+                        <%
+                        List<ElementoOrdine> orderDetails = orderDetailDAO.getOrderDetailsByOrderId(order.getNumeroOrdine());
+                        for (ElementoOrdine detail : orderDetails) {
+                            Product product = (Product) request.getAttribute("prodotto_" + detail.getIdProdotto());
+                        %>
+                        <tr>
+                            <td><%= product != null ? product.getName() : "Prodotto non disponibile" %></td>
+                            <td><%= detail.getQuantita() %></td>
+                            <td>&euro;<%= product != null ? product.getSalePrice() * detail.getQuantita() : 0 %></td>
+                            <td>
+                                <form action="${pageContext.request.contextPath}/inviaRichiestaRimborsoControl" method="get" onsubmit="return confirmRefund();">
+                                    <input type="hidden" name="detailCode" value="<%= detail.getId() %>">
+                                    <button type="submit" class="refund-button">Richiedi Rimborso</button>
                                 </form>
-                            <% } else { %>
-                                <span>Ricevuto</span>
-                            <% } %>
-                        </td>
-                    </tr>
-                    <% 
+                            </td>
+                        </tr>
+                        <%
                         }
+                        %>
+                    </table>
+                    <%
+                    if (!"COMPLETATO".equals(order.getStato().getStato())) {
                     %>
-                </tbody>
-            </table>
-        <% 
-            } else {
+                    <form action="${pageContext.request.contextPath}/OrdineRicevutoControl" method="post" onsubmit="return confirm('Sei sicuro di aver ricevuto questo ordine?');">
+                        <input type="hidden" name="ordineId" value="<%= order.getNumeroOrdine() %>">
+                        <input type="hidden" name="confermaRicezione" value="si">
+                        <button type="submit" class="confirm-receipt-button">Conferma Ricezione</button>
+                    </form>
+                    <%
+                    }
+                    %>
+                </div>
+                <%
+                }
+                %>
+            </div>
+        </section>
+        <%
+        } else {
         %>
-            <h3>Non hai effettuato ordini finora.</h3>
-        <% 
-            }
+        <p>Non ci sono ordini disponibili.</p>
+        <%
+        }
         %>
+        <jsp:include page="../pagePieces/footer.jsp" />
     </div>
-
-    <jsp:include page="../pagePieces/footer.jsp" />
-
 </body>
 </html>

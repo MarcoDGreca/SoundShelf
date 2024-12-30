@@ -4,42 +4,42 @@ import java.sql.Date;
 
 public class Review {
 
-    private int codiceRecensione;
-    private int codiceProdotto;
+    private int id;
+    private int idProdotto;
     private String emailCliente;
-    private int votazione;
-    private String testo;
+    private int voto;
+    private String descrizione;
     private Date dataRecensione;
 
     public Review() {
     }
 
-    public Review(int codiceRecensione, int codiceProdotto, String emailCliente, int votazione, String testo, Date dataRecensione) {
-        this.codiceRecensione = codiceRecensione;
-        this.codiceProdotto = codiceProdotto;
+    public Review(int id, int voto, String descrizione, String emailCliente, int idProdotto, Date dataRecensione) {
+        this.id = id;
+        this.voto = voto;
+        this.descrizione = descrizione;
         this.emailCliente = emailCliente;
-        this.votazione = votazione;
-        this.testo = testo;
+        this.idProdotto = idProdotto;
         this.dataRecensione = dataRecensione;
     }
 
-    public int getCodiceRecensione() {
-        return codiceRecensione;
+    public int getId() {
+        return id;
     }
 
-    public void setCodiceRecensione(int codiceRecensione) {
-        this.codiceRecensione = codiceRecensione;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getCodiceProdotto() {
-        return codiceProdotto;
+    public int getIdProdotto() {
+        return idProdotto;
     }
 
-    public void setCodiceProdotto(int codiceProdotto) {
-        this.codiceProdotto = codiceProdotto;
+    public void setIdProdotto(int idProdotto) {
+        this.idProdotto = idProdotto;
     }
 
-    public String getEmailCliente() {
+    public String getEmailCliente() { 
         return emailCliente;
     }
 
@@ -47,21 +47,21 @@ public class Review {
         this.emailCliente = emailCliente;
     }
 
-    public int getVotazione() {
-        return votazione;
+    public int getVoto() {
+        return voto;
     }
 
-    public void setVotazione(int votazione) {
-        if(votazione >= 0 && votazione <= 10)
-            this.votazione = votazione;
+    public void setVoto(int voto) {
+        if(voto >= 1 && voto <= 5)
+            this.voto = voto;
     }
 
-    public String getTesto() {
-        return testo;
+    public String getDescrizione() {
+        return descrizione;
     }
 
-    public void setTesto(String testo) {
-        this.testo = testo;
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
     }
 
     public Date getDataRecensione() {

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrazione - Soundshelf</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/SoundShelf/styles/style.css" type="text/css">
     <%@ include file="../pagePieces/header.jsp" %>
 </head>
 <body>
@@ -71,7 +71,7 @@
     </form>
     
     <div class="login-link">
-        <p>Hai già un account? <a href="/loginForm.jsp">Accedi</a></p>
+        <p>Hai già un account? <a href="${pageContext.request.contextPath}/view/utenteInterface/loginForm.jsp">Accedi</a></p>
     </div>
 </div>
 

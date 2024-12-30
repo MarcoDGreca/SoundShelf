@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
     <title>Le tue Richieste di Supporto</title>
 </head>
 <body>
@@ -22,8 +23,6 @@
     <table border="1">
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Email</th>
                 <th>Descrizione</th>
                 <th>Data Invio</th>
                 <th>Stato</th>
@@ -36,8 +35,6 @@
                 for (SupportRequest richiesta : richieste) {
             %>
             <tr>
-                <td><%= richiesta.getName() %></td>
-                <td><%= richiesta.getEmail() %></td>
                 <td><%= richiesta.getDescription() %></td>
                 <td><%= richiesta.getDataInvio() %></td>
                 <td><%= richiesta.getStato() %></td>
@@ -46,8 +43,8 @@
                     <% 
                     if (richiesta.getInformazioniAggiuntive() != null && richiesta.getInformazioniAggiuntive().length() > 0) {
                     %>
-                    <form action="supporto/informazioniControl" method="post">
-                        <input type="hidden" name="name" value="<%= richiesta.getName() %>">
+                    <form action="${pageContext.request.contextPath}/informazioniControl" method="post">
+                        <input type="hidden" name="idRichiesta" value="<%= richiesta.getId() %>">
                         <label for="risposta">La tua risposta:</label>
                         <textarea name="risposta" required></textarea>
                         <button type="submit">Invia Risposta</button>
@@ -68,7 +65,7 @@
         }
     %>
 
-    <form action="HelpOnlineForm" method="get">
+    <form action="${pageContext.request.contextPath}/view/supportoInterface/helpOnlineForm.jsp" method="get">
         <button type="submit">Invia una Nuova Richiesta di Supporto</button>
     </form>
     <jsp:include page="../pagePieces/footer.jsp" />

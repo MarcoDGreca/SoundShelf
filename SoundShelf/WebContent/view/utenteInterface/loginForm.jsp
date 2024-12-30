@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <jsp:include page="../pagePieces/header.jsp" />
+<link rel="stylesheet" href="/SoundShelf/styles/style.css" type="text/css">
 <main>
     <div class="login-container">
         <h2>Login</h2>

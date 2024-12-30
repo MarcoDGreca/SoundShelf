@@ -8,7 +8,7 @@
 <header>
     <nav>
         <div class="nav-container">
-            <a href="home" class="logo">SoundShelf</a>
+            <a href="${pageContext.request.contextPath}/home" class="logo">SoundShelf</a>
             <ul class="nav-links">
                 <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
                 <li><a href="${pageContext.request.contextPath}/carrelloControl">Carrello</a></li>

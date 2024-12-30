@@ -35,7 +35,7 @@ public class CartItem {
         return product.getSalePrice() * quantity;
     }
     
-    public int getCodiceEventoBiglietto() {
+    public int getCodiceProdotto() {
         return product.getProductCode();
     }
     

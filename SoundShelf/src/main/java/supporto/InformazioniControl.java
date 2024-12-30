@@ -21,18 +21,18 @@ public class InformazioniControl extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nomeRichiesta = request.getParameter("name");
+        String idRichiesta = request.getParameter("id");
         String informazioniAggiuntive = request.getParameter("informazioniAggiuntive");
         String rispostaUtente = request.getParameter("rispostaUtente");
 
-        if (nomeRichiesta == null || nomeRichiesta.isEmpty()) {
-            request.setAttribute("message", "Nome della richiesta non valido.");
+        if (idRichiesta == null || idRichiesta.isEmpty()) {
+            request.setAttribute("message", "Id della richiesta non valido.");
             request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             return;
         }
 
         try {
-            SupportRequest supportRequest = supportRequestDAO.getSupportRequestById(Integer.parseInt(nomeRichiesta));
+            SupportRequest supportRequest = supportRequestDAO.getSupportRequestById(Integer.parseInt(idRichiesta));
 
             if (supportRequest != null) {
                 supportRequest.setInformazioniAggiuntive(informazioniAggiuntive);

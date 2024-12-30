@@ -27,7 +27,7 @@ public class InserisciNuovoProdottoControl extends HttpServlet {
             String description = InputSanitizer.sanitize(request.getParameter("description"));
             double salePrice = Double.parseDouble(request.getParameter("salePrice"));
             double originalPrice = Double.parseDouble(request.getParameter("originalPrice"));
-            boolean availability = Boolean.parseBoolean(request.getParameter("availability"));
+            int availability = Integer.parseInt(request.getParameter("availability"));
             String releaseDate = InputSanitizer.sanitize(request.getParameter("releaseDate"));
             String image = InputSanitizer.sanitize(request.getParameter("image"));
 

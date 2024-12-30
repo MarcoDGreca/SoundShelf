@@ -13,7 +13,7 @@
 
     <div id="main" class="clear">
         <h2>Errore</h2>
-        <p><%= request.getAttribute("message") %></p>
+        <p><%= request.getAttribute("errorMessage") %></p>
         <a href="${pageContext.request.contextPath}/home" class="btn-return">Torna alla home</a>
     </div>
 

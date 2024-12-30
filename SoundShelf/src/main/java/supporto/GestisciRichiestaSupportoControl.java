@@ -9,14 +9,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import utente.UtenteRegistratoDAO;
+
 @WebServlet("/gestisciRichiestaSupportoControl")
 public class GestisciRichiestaSupportoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private SupportRequestDAO supportRequestDAO;
+    private UtenteRegistratoDAO clienteDAO;
 
     @Override
     public void init() throws ServletException {
         supportRequestDAO = new SupportRequestDAO();
+        clienteDAO = new UtenteRegistratoDAO();
     }
 
     @Override
@@ -36,16 +40,16 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("richiediInformazioni".equals(action)) {
-            String nomeRichiesta = request.getParameter("name");
+        	String idRichiesta = request.getParameter("idRichiesta");
 
-            if (nomeRichiesta == null || nomeRichiesta.isEmpty()) {
+            if (idRichiesta == null || idRichiesta.isEmpty()) {
                 request.setAttribute("message", "Nome della richiesta non valido.");
                 request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                 return;
             }
 
             try {
-                SupportRequest supportRequest = supportRequestDAO.getSupportRequestById(Integer.parseInt(nomeRichiesta));
+                SupportRequest supportRequest = supportRequestDAO.getSupportRequestById(Integer.parseInt(idRichiesta));
 
                 if (supportRequest != null) {
                     request.setAttribute("richiesta", supportRequest);
@@ -103,9 +107,10 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                 request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                 return;
             }
-
-            SupportRequest newRequest = new SupportRequest(name, email, description, new java.sql.Date(System.currentTimeMillis()), 
-                                                          "12:00", StatoSupporto.fromString(stato));
+            
+            int idCliente = clienteDAO.getUserIdByEmail(email);
+            SupportRequest newRequest = new SupportRequest(description, new java.sql.Date(System.currentTimeMillis()), 
+                                                          "12:00", StatoSupporto.fromString(stato), idCliente);
 
             try {
                 supportRequestDAO.saveSupportRequest(newRequest);

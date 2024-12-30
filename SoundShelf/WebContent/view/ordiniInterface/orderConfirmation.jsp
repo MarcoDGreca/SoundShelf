@@ -29,7 +29,7 @@
             <p>Per qualsiasi domanda, non esitare a contattare il nostro servizio clienti.</p>
             
             <div class="cta-container">
-                <a href="<%= request.getContextPath() %>control/home" class="button">Torna alla Home</a>
+                <a href="<%= request.getContextPath() %>/listaOrdiniUtente" class="button">Torna alla Home</a>
             </div>
         </section>
 

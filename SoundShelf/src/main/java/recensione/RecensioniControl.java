@@ -3,6 +3,7 @@ package recensione;
 import ordini.OrderDAO;
 import prodotti.Product;
 import utente.UtenteRegistrato;
+import utente.UtenteRegistratoDAO;
 import util.InputSanitizer;
 
 import javax.servlet.ServletException;
@@ -58,10 +59,10 @@ public class RecensioniControl extends HttpServlet {
         String comment = InputSanitizer.sanitize(request.getParameter("comment"));
 
         Review review = new Review();
-        review.setCodiceProdotto(productId);
+        review.setIdProdotto(productId);
         review.setEmailCliente(user.getEmail());
-        review.setVotazione(rating);
-        review.setTesto(comment);
+        review.setVoto(rating);
+        review.setDescrizione(comment);
         review.setDataRecensione(new Date(System.currentTimeMillis()));
 
         try {
