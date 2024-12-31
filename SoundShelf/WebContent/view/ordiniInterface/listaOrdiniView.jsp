@@ -21,16 +21,14 @@
 <body>
     <div>
         <jsp:include page="../pagePieces/header.jsp" />
-        <%
-        if (orders != null && !orders.isEmpty()) {
-        %>
         <section class="orders-section">
             <h2>I Tuoi Ordini</h2>
-            <div class="main-content">
+            <div class="order-list">
                 <%
-                for (Order order : orders) {
+                if (orders != null && !orders.isEmpty()) {
+                    for (Order order : orders) {
                 %>
-                <div class="order">
+                <div class="order-card">
                     <h3>Ordine <%= order.getNumeroOrdine() %></h3>
                     <table class="order-table">
                         <tr>
@@ -91,17 +89,18 @@
                     %>
                 </div>
                 <%
+                    }
+                } else {
+                %>
+                <div class="order-card empty-order">
+                    <h3>Non hai ancora effettuato ordini.</h3>
+                    <p>Quando effettuerai il primo ordine, sarà visibile qui. Approfitta delle nostre offerte!</p>
+                </div>
+                <%
                 }
                 %>
             </div>
         </section>
-        <%
-        } else {
-        %>
-        <p>Non ci sono ordini disponibili.</p>
-        <%
-        }
-        %>
         <jsp:include page="../pagePieces/footer.jsp" />
     </div>
 </body>

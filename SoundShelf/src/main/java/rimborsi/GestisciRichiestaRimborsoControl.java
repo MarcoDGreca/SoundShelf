@@ -33,10 +33,10 @@ public class GestisciRichiestaRimborsoControl extends HttpServlet {
         try {
             List<RefoundRequest> richieste = richiestaRimborsoDAO.getAllRichiesteRimborso();
             request.setAttribute("richieste", richieste);
-            request.getRequestDispatcher("/rimborsoInterface/catalogoRichiesteRimborso.jsp").forward(request, response);
+            request.getRequestDispatcher("view/rimborsiInterface/catalogoRichiesteRimborso.jsp").forward(request, response);
         } catch (SQLException e) {
-            request.setAttribute("message", "Errore nel recupero delle richieste di rimborso.");
-            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Errore nel recupero delle richieste di rimborso.");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 
@@ -59,20 +59,20 @@ public class GestisciRichiestaRimborsoControl extends HttpServlet {
                             rimborsoDAO.creaRimborso(rimborso);
                         }
                     } catch (IllegalArgumentException e) {
-                        request.setAttribute("message", "Stato non valido: " + newState);
-                        request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+                        request.setAttribute("errorMessage", "Stato non valido: " + newState);
+                        request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                         return;
                     }
                 }
             }
 
-            response.sendRedirect("rimborso/gestisciRichiesteRimborsoControl?success=modifiche salvate");
+            response.sendRedirect("gestisciRichiesteRimborsoControl");
         } catch (SQLException e) {
-            request.setAttribute("message", "Errore durante il salvataggio delle modifiche.");
-            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Errore durante il salvataggio delle modifiche.");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         } catch (Exception e) {
-            request.setAttribute("message", "Errore inaspettato.");
-            request.getRequestDispatcher("/error/MessaggioErrore.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Errore inaspettato.");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 

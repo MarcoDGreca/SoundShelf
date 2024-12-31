@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.*, supporto.*"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.*, supporto.*" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -8,57 +8,125 @@
     <title>Gestione Richieste di Supporto</title>
 </head>
 <body>
-	<jsp:include page="../pagePieces/header.jsp" />
+    <jsp:include page="../pagePieces/header.jsp" />
     <h1>Gestione Richieste di Supporto</h1>
 
     <%
-        String success = request.getParameter("success");
-        String error = request.getParameter("error");
-
-        if (success != null) {
-    %>
-        <div style="color: green;">Operazione <%= success %> completata con successo.</div>
-    <%
-        }
-        if (error != null) {
-    %>
-        <div style="color: red;">Errore: <%= error %></div>
-    <%
-        }
-    %>
-
-    <%
         List<SupportRequest> richieste = (List<SupportRequest>) request.getAttribute("richieste");
-        if (richieste != null) {
-            for (SupportRequest richiesta : richieste) {
+        if (richieste == null || richieste.isEmpty()) {
     %>
-        <h3>Richiesta: <%= richiesta.getId() %></h3>
-        <p><strong>Descrizione:</strong> <%= richiesta.getDescription() %></p>
-        <p><strong>Data Invio:</strong> <%= richiesta.getDataInvio() %></p>
-        <p><strong>Orario Invio:</strong> <%= richiesta.getOrarioInvio() %></p>
-        <p><strong>Stato:</strong> <%= richiesta.getStato() %></p>
-        <p><strong>Informazioni Aggiuntive:</strong> <%= richiesta.getInformazioniAggiuntive() %></p>
-
-        <form action="${pageContext.request.contextPath}/supporto/informazioniControl" method="post">
-            <input type="hidden" name="idRichiesta" value="<%= richiesta.getId() %>">
-            <label for="informazioniAggiuntive">Richiedi informazioni aggiuntive:</label>
-            <textarea name="informazioniAggiuntive" required></textarea>
-            <button type="submit">Invia informazioni aggiuntive</button>
-        </form>
-
-        <form action="${pageContext.request.contextPath}/supporto/gestisciRichiestaSupporto" method="post">
-            <input type="hidden" name="idRichiesta" value="<%= richiesta.getId() %>">
-            <label for="nuovoStato">Nuovo Stato:</label>
-            <select name="nuovoStato">
-                <option value="IN_LAVORAZIONE">In Lavorazione</option>
-                <option value="CHIUSA">Chiusa</option>
-            </select>
-            <button type="submit" name="action" value="aggiornaStato">Aggiorna Stato</button>
-        </form>
+    <p>Non ci sono richieste di supporto disponibili.</p>
     <%
-            }
+        } else {
+    %>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descrizione</th>
+                <th>Data Invio</th>
+                <th>Orario Invio</th>
+                <th>Stato</th>
+                <th>Cliente</th>
+                <th>Informazioni Aggiuntive</th>
+                <th>Risposta Utente</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                for (SupportRequest richiesta : richieste) {
+                    String stato = richiesta.getStato() != null ? richiesta.getStato().getStato() : "Non disponibile";
+                    String descrizione = richiesta.getDescription() != null ? richiesta.getDescription() : "Non disponibile";
+                    String dataInvio = richiesta.getDataInvio() != null ? richiesta.getDataInvio().toString() : "Non disponibile";
+                    String orarioInvio = richiesta.getOrarioInvio() != null ? richiesta.getOrarioInvio() : "Non disponibile";
+                    int idCliente = richiesta.getIdCliente();
+                    String informazioniAggiuntive = richiesta.getInformazioniAggiuntive() != null ? richiesta.getInformazioniAggiuntive() : "Non disponibile";
+                    String rispostaUtente = richiesta.getRispostaUtente() != null ? richiesta.getRispostaUtente() : "Non disponibile";
+            %>
+            <tr>
+                <td><%= richiesta.getId() %></td>
+                <td><%= descrizione %></td>
+                <td><%= dataInvio %></td>
+                <td><%= orarioInvio %></td>
+                <td class="<%= stato.equals("Chiusa") ? "status-closed" : "" %>"><%= stato %></td>
+                <td><%= idCliente %></td>
+                <td><%= informazioniAggiuntive %></td>
+                <td><%= rispostaUtente %></td>
+            </tr>
+            <%
+                }
+            %>
+        </tbody>
+    </table>
+
+    <div class="form-container">
+        <h3>Seleziona una richiesta per l'azione:</h3>
+        <form action="${pageContext.request.contextPath}/gestisciRichiestaSupportoControl" method="post">
+            <label for="richiestaId">Seleziona Richiesta:</label>
+            <select name="richiestaId" id="richiestaId" required>
+                <option value="">-- Seleziona una richiesta --</option>
+                <%
+                    boolean hasInLavorazione = false;
+                    for (SupportRequest richiesta : richieste) {
+                        if ("In lavorazione".equals(richiesta.getStato().getStato())) {
+                            hasInLavorazione = true;
+                %>
+                <option value="<%= richiesta.getId() %>">ID <%= richiesta.getId() %> - <%= richiesta.getDescription() %></option>
+                <%
+                        }
+                    }
+                    if (!hasInLavorazione) {
+                %>
+                <option value="">Nessuna richiesta in lavorazione</option>
+                <%
+                    }
+                %>
+            </select>
+
+            <label for="azione">Seleziona Azione:</label>
+            <select name="azione" id="azione" required>
+                <option value="">-- Seleziona un'azione --</option>
+                <option value="richiediInformazioni">Richiedi informazioni aggiuntive</option>
+                <option value="aggiornaStato">Aggiorna stato</option>
+            </select>
+
+            <div id="informazioniAggiuntiveContainer" style="display:none;">
+                <label for="informazioniAggiuntive">Inserisci informazioni aggiuntive:</label>
+                <textarea name="informazioniAggiuntive" id="informazioniAggiuntive" rows="5" cols="25"></textarea>
+            </div>
+
+            <div id="aggiornaStatoContainer" style="display:none;">
+                <label for="nuovoStato">Seleziona il nuovo stato:</label>
+                <select name="nuovoStato" id="nuovoStato">
+                    <option value="In Lavorazione">In Lavorazione</option>
+                    <option value="Chiusa">Chiusa</option>
+                </select>
+            </div>
+
+            <button type="submit" class="button">Esegui Azione</button>
+        </form>
+    </div>
+
+    <%
         }
     %>
+
     <jsp:include page="../pagePieces/footer.jsp" />
+
+    <script>
+        const azioneSelect = document.getElementById('azione');
+        const informazioniAggiuntiveContainer = document.getElementById('informazioniAggiuntiveContainer');
+        const aggiornaStatoContainer = document.getElementById('aggiornaStatoContainer');
+
+        azioneSelect.addEventListener('change', function() {
+            if (azioneSelect.value === 'richiediInformazioni') {
+                informazioniAggiuntiveContainer.style.display = 'block';
+                aggiornaStatoContainer.style.display = 'none';
+            } else if (azioneSelect.value === 'aggiornaStato') {
+                informazioniAggiuntiveContainer.style.display = 'none';
+                aggiornaStatoContainer.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>

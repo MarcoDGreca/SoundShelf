@@ -2,6 +2,7 @@ package prodotti;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import util.DataSource;
 
@@ -135,28 +136,37 @@ public class ProductDAO {
     }
 
     public List<Product> searchProducts(String name, List<String> genres, List<String> artists) throws SQLException {
-        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Prodotto WHERE 1=1");
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM Prodotto WHERE isDeleted = false");
+
         if (name != null && !name.isEmpty()) {
             queryBuilder.append(" AND nome LIKE ?");
         }
         if (genres != null && !genres.isEmpty()) {
-            queryBuilder.append(" AND id IN (SELECT product_id FROM prodotto_genere WHERE genere_id IN (SELECT id FROM genere WHERE nome IN (?)))");
+            queryBuilder.append(" AND id IN (SELECT idProdotto FROM ProdottoGenere pg JOIN Genere g ON pg.idGenere = g.id WHERE g.nome IN (")
+                    .append(String.join(",", Collections.nCopies(genres.size(), "?"))).append("))");
         }
         if (artists != null && !artists.isEmpty()) {
-            queryBuilder.append(" AND id IN (SELECT product_id FROM prodotto_artista WHERE artista_id IN (SELECT id FROM artista WHERE nome IN (?)))");
+            queryBuilder.append(" AND id IN (SELECT idProdotto FROM ProdottoArtista pa JOIN Artista a ON pa.idArtista = a.id WHERE a.nomeArtistico IN (")
+                    .append(String.join(",", Collections.nCopies(artists.size(), "?"))).append("))");
         }
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(queryBuilder.toString())) {
+
             int paramIndex = 1;
+
             if (name != null && !name.isEmpty()) {
                 ps.setString(paramIndex++, "%" + name + "%");
             }
             if (genres != null && !genres.isEmpty()) {
-                ps.setString(paramIndex++, String.join(",", genres));
+                for (String genre : genres) {
+                    ps.setString(paramIndex++, genre);
+                }
             }
             if (artists != null && !artists.isEmpty()) {
-                ps.setString(paramIndex++, String.join(",", artists));
+                for (String artist : artists) {
+                    ps.setString(paramIndex++, artist);
+                }
             }
 
             try (ResultSet rs = ps.executeQuery()) {

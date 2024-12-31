@@ -44,7 +44,7 @@ public class GestioneUtentiControl extends HttpServlet {
             } else if ("promote".equals(action)) {
                 userDAO.promoteToAdmin(email);
             }
-            response.sendRedirect("/gestisciCatalogoUtentiControl");
+            response.sendRedirect("gestisciCatalogoUtentiControl");
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Errore durante l'operazione sugli utenti.");
             request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);

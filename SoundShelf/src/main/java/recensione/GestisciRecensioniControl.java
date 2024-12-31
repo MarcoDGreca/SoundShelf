@@ -29,8 +29,8 @@ public class GestisciRecensioniControl extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
            
-            request.setAttribute("message", "Errore nel recupero delle recensioni.");
-            request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
+            request.setAttribute("errorMessage", "Errore nel recupero delle recensioni.");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 }

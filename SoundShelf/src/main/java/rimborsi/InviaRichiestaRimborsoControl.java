@@ -53,6 +53,7 @@ public class InviaRichiestaRimborsoControl extends HttpServlet {
 
             if (detail != null) {
             	request.setAttribute("product", detail);
+            	request.setAttribute("quantita", detail.getQuantita());
                 request.getRequestDispatcher("/view/rimborsiInterface/richiestaRimborsoForm.jsp").forward(request, response);
             } else {
                 request.setAttribute("errorMessage", "Dettagli prodotto non trovati.");

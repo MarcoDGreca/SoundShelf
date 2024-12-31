@@ -21,7 +21,7 @@ public class ModificaProdottoControl extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String productCodeStr = request.getParameter("productCode");
+        String productCodeStr = request.getParameter("productId");
         if (productCodeStr != null) {
             try {
                 int productCode = Integer.parseInt(productCodeStr);

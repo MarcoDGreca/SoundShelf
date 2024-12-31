@@ -94,7 +94,7 @@ public class UtenteRegistratoDAO {
             while (resultSet.next()) {
                 UtenteRegistrato utente = new UtenteRegistrato(
                     resultSet.getString("email"),
-                    resultSet.getString("passwordUser"),
+                    resultSet.getString("password"),
                     resultSet.getString("nome"),
                     resultSet.getString("cognome"),
                     resultSet.getString("indirizzo"),

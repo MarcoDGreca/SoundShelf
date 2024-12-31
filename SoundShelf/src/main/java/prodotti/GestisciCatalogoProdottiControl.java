@@ -27,7 +27,7 @@ public class GestisciCatalogoProdottiControl extends HttpServlet {
             dispatcher.forward(request, response);
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Errore durante il recupero dei prodotti.");
-            request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 

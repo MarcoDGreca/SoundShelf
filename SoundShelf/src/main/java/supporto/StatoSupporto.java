@@ -2,7 +2,7 @@ package supporto;
 
 public enum StatoSupporto {
 	IN_LAVORAZIONE("In lavorazione"),
-    CHIUSA("Chiuso");
+    CHIUSA("Chiusa");
 
     private final String stato;
 

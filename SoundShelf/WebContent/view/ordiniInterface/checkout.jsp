@@ -9,7 +9,7 @@
     double totalPrice = (cart != null) ? cart.getTotalPrice() : 0;
 %>
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>SoundShelf - Checkout</title>
@@ -20,10 +20,10 @@
     <div>
         <jsp:include page="../pagePieces/header.jsp" />
         
-        <section class="checkout-section">
-            <h1>Checkout</h1>
-            <form action="${pageContext.request.contextPath}/acquistoControl" method="post">
-                <div>
+        <section class="checkout-container">
+            <h2>Checkout</h2>
+            <form action="${pageContext.request.contextPath}/acquistoControl" method="post" class="checkout-form">
+                <div class="form-group">
                     <h3>Indirizzo di Spedizione</h3>
                     <% if (savedAddress != null) { %>
                         <p><strong>Indirizzo salvato:</strong> <%= savedAddress %></p>
@@ -31,19 +31,21 @@
                     <% } else { %>
                         <p>Inserisci il tuo indirizzo di spedizione.</p>
                     <% } %>
-
                     <textarea name="shippingAddress" rows="4" cols="50"><%= (savedAddress != null ? savedAddress : "") %></textarea>
                 </div>
 
-                <div>
+                <div class="form-group">
                     <h3>Riepilogo Ordine</h3>
                     <p><strong>Totale:</strong> €<%= totalPrice %></p>
-                    <button type="submit" class="button">Procedi con l'Acquisto</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-checkout">Procedi con l'Acquisto</button>
+                    </div>
                 </div>
             </form>
-            <div>
+
+            <div class="form-actions">
                 <a href="${pageContext.request.contextPath}/carrelloControl">
-                    <button type="button" class="button">Annulla e Torna al Carrello</button>
+                    <button type="button" class="btn-return">Annulla e Torna al Carrello</button>
                 </a>
             </div>
         </section>

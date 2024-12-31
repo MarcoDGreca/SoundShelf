@@ -1,24 +1,24 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="java.util.*, rimborsi.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.*, rimborsi.*" %>
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Richiesta Rimborso</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
+    <title>Le Tue Richieste di Rimborso</title>
 </head>
 <body>
 
     <jsp:include page="../pagePieces/header.jsp" />
 
     <div id="main" class="clear">
-        <h2>Le Tue Richieste di Rimborso</h2>
+        <h2 class="page-title">Le Tue Richieste di Rimborso</h2>
 
         <%
             List<RefoundRequest> refoundRequests = (List<RefoundRequest>) request.getAttribute("refoundRequests");
             if (refoundRequests != null && !refoundRequests.isEmpty()) {
         %>
-            <table class="refound-table">
+            <table class="requests-table">
                 <thead>
                     <tr>
                         <th>Codice Ordine</th>
@@ -47,11 +47,15 @@
         <%
             } else {
         %>
-            <p>Non hai ancora inviato richieste di rimborso.</p>
+            <div class="empty-request-card">
+                <h3>Non hai ancora inviato richieste di rimborso.</h3>
+                <p>Quando invierai la tua prima richiesta di rimborso, sarà visibile qui.</p>
+            </div>
         <% 
             }
         %>
-	</div>>
+    </div>
+
     <jsp:include page="../pagePieces/footer.jsp" />
 
 </body>

@@ -15,12 +15,15 @@
 <body>
     <div>
         <jsp:include page="../pagePieces/header.jsp" />
-        <section>
+        <section class="welcome-section">
             <h1>Benvenuto su SoundShelf</h1>
             <p>Scopri i migliori vinili e dischi musicali selezionati per te!</p>
+            <div class="cta-buttons">
+                <a href="#prodotti" class="button cta-button">Esplora Prodotti</a>
+            </div>
         </section>
 
-        <section class="products-section">
+        <section id="prodotti" class="products-section">
             <h2>Prodotti Disponibili</h2>
             <div class="main-content grid">
                 <% if (products != null && !products.isEmpty()) { %>

@@ -15,7 +15,9 @@
         <h2>Catalogo Prodotti</h2>
 
         <div class="product-actions">
-            <a href="${pageContext.request.contextPath}/prodottiInterface/inserisciProdottoForm.jsp" class="btn-add">Aggiungi Nuovo Prodotto</a>
+            <form action="view/prodottiInterface/inserisciProdottoForm.jsp" method="get">
+                <button type="submit" class="btn-add">Aggiungi Nuovo Prodotto</button>
+            </form>
         </div>
 
         <%
@@ -23,47 +25,66 @@
             if (products != null && !products.isEmpty()) {
         %>
 
-        <div class="product-list">
-            <% for (Product product : products) { %>
-                <div class="product-card">
-                    <img src="<%= product.getImage() %>" alt="<%= product.getName() %>" class="product-image">
-                    <h3><%= product.getName() %></h3>
-                    <p><strong>Prezzo:</strong> €<%= product.getSalePrice() %></p>
-                    <p><strong>Disponibilità:</strong> <%= product.isAvailability() ? "Disponibile" : "Non disponibile" %></p>
-                    <p><strong>Data di rilascio:</strong> <%= product.getReleaseDate() %></p>
-                    <p><strong>Descrizione:</strong> <%= product.getDescription() %></p>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>Immagine</th>
+                    <th>Nome</th>
+                    <th>Prezzo</th>
+                    <th>Disponibilità</th>
+                    <th>Data di Rilascio</th>
+                    <th>Descrizione</th>
+                    <th>Artisti</th>
+                    <th>Generi</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (Product product : products) { %>
+                    <tr>
+                        <td><img src="<%= product.getImage() %>" alt="<%= product.getName() %>" class="product-image"></td>
+                        <td><%= product.getName() %></td>
+                        <td>€<%= product.getSalePrice() %></td>
+                        <td><%= product.getAvailability() %></td>
+                        <td><%= product.getReleaseDate() %></td>
+                        <td><%= product.getDescription() %></td>
 
-                    <% 
-                        List<Artist> artists = product.getArtists();
-                        if (artists != null && !artists.isEmpty()) { 
-                    %>
-                        <p><strong>Artisti:</strong>
-                            <% for (Artist artist : artists) { %>
-                                <%= artist.getFirstName() %><% if (artists.indexOf(artist) != artists.size() - 1) { %>, <% } %>
+                        <td>
+                            <% 
+                                List<Artist> artists = product.getArtists();
+                                if (artists != null && !artists.isEmpty()) { 
+                            %>
+                                <%= artists.get(0).getFirstName() %> <% if (artists.size() > 1) { %> e altri <% } %>
                             <% } %>
-                        </p>
-                    <% } %>
+                        </td>
 
-                    <% 
-                        List<Genre> genres = product.getGenres();
-                        if (genres != null && !genres.isEmpty()) { 
-                    %>
-                        <p><strong>Generi:</strong>
-                            <% for (Genre genre : genres) { %>
-                                <%= genre.getName() %><% if (genres.indexOf(genre) != genres.size() - 1) { %>, <% } %>
+                        <td>
+                            <% 
+                                List<Genre> genres = product.getGenres();
+                                if (genres != null && !genres.isEmpty()) { 
+                            %>
+                                <%= genres.get(0).getName() %> <% if (genres.size() > 1) { %> e altri <% } %>
                             <% } %>
-                        </p>
-                    <% } %>
+                        </td>
 
-                    <a href="${pageContext.request.contextPath}/prodotti/prodottoControl?productCode=<%= product.getProductCode() %>" class="btn-details">Dettagli</a>
-                    <a href="${pageContext.request.contextPath}/prodotti/ModificaProdottoControl?productCode=<%= product.getProductCode() %>" class="btn-edit">Modifica Prodotto</a>
-                    <form action="${pageContext.request.contextPath}/prodotti/rimuoviProdottoControl" method="post" style="display:inline;">
-                        <input type="hidden" name="productCode" value="<%= product.getProductCode() %>" />
-                        <button type="submit" class="btn-delete" onclick="return confirm('Sei sicuro di voler rimuovere questo prodotto?')">Rimuovi Prodotto</button>
-                    </form>
-                </div>
-            <% } %>
-        </div>
+                        <td>
+                            <form action="${pageContext.request.contextPath}/prodottoControl" method="get" style="display:inline;">
+                                <input type="hidden" name="productId" value="<%= product.getProductCode() %>" />
+                                <button type="submit" class="btn-details">Dettagli</button>
+                            </form>
+                            <form action="${pageContext.request.contextPath}/ModificaProdottoControl" method="get" style="display:inline;">
+                                <input type="hidden" name="productId" value="<%= product.getProductCode() %>" />
+                                <button type="submit" class="btn-edit">Modifica</button>
+                            </form>
+                            <form action="${pageContext.request.contextPath}/rimuoviProdottoControl" method="post" style="display:inline;">
+                                <input type="hidden" name="productId" value="<%= product.getProductCode() %>" />
+                                <button type="submit" class="btn-delete" onclick="return confirm('Sei sicuro di voler rimuovere questo prodotto?')">Rimuovi</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
 
         <% 
             } else {

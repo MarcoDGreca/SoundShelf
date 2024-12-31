@@ -13,7 +13,9 @@
 
     <div id="main" class="clear">
         <h2>Errore</h2>
-        <p><%= request.getAttribute("errorMessage") %></p>
+        <div class="messaggio">
+            <p><%= request.getAttribute("errorMessage") %></p>
+        </div>
         <a href="${pageContext.request.contextPath}/home" class="btn-return">Torna alla home</a>
     </div>
 

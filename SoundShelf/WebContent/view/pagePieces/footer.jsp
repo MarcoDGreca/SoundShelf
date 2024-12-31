@@ -7,10 +7,9 @@
         <div class="footer-section">
             <h4>Link Utili</h4>
             <ul>
-                <li><a href="home.jsp">Home</a></li>
-                <li><a href="support.jsp">Supporto</a></li>
-                <li><a href="refund.jsp">Politica di Rimborso</a></li>
-                <li><a href="terms.jsp">Termini e Condizioni</a></li>
+                <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
+                <li><a href="${pageContext.request.contextPath}/richiestaSupportoControl">Supporto</a></li>
+                <li><a href="${pageContext.request.contextPath}/richiestaRimborsoControl">Rimborso</a></li>
             </ul>
         </div>
         <div class="footer-section">

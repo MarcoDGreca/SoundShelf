@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
     <title>Gestione Richieste di Rimborso</title>
 </head>
 <body>
@@ -26,7 +27,7 @@
         }
     %>
 
-    <form action="rimborso/gestisciRichiesteRimborsoControl" method="post">
+    <form action="${pageContext.request.contextPath}/gestisciRichiesteRimborsoControl" method="post">
         <table border="1">
             <thead>
                 <tr>

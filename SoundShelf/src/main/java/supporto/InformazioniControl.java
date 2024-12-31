@@ -21,12 +21,12 @@ public class InformazioniControl extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String idRichiesta = request.getParameter("id");
+        String idRichiesta = request.getParameter("idRichiesta");
         String informazioniAggiuntive = request.getParameter("informazioniAggiuntive");
         String rispostaUtente = request.getParameter("rispostaUtente");
 
         if (idRichiesta == null || idRichiesta.isEmpty()) {
-            request.setAttribute("message", "Id della richiesta non valido.");
+            request.setAttribute("errorMessage", "Id della richiesta non valido.");
             request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             return;
         }
@@ -45,18 +45,18 @@ public class InformazioniControl extends HttpServlet {
 
                 supportRequest.setStato(StatoSupporto.IN_LAVORAZIONE);
                 supportRequestDAO.updateSupportRequest(supportRequest);
-
-                request.setAttribute("message", "Le informazioni sono state inviate con successo. La richiesta è ora in elaborazione.");
+                response.sendRedirect("home");
             } else {
-                request.setAttribute("message", "La richiesta di supporto non esiste.");
+            	request.setAttribute("errorMessage", "La richiesta non esiste.");
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            request.setAttribute("message", "Errore nell'aggiornamento della richiesta.");
+            request.setAttribute("errorMessage", "Errore nell'aggiornamento.");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         } catch (NumberFormatException e) {
-            request.setAttribute("message", "ID richiesta non valido.");
+        	request.setAttribute("errorMessage", "Id della richiesta non valido.");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
-
-        request.getRequestDispatcher("view/supportoInterface/richiestaSupportoView.jsp").forward(request, response);
     }
 }

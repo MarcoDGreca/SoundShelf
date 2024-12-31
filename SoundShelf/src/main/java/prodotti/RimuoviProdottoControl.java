@@ -21,7 +21,7 @@ public class RimuoviProdottoControl extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String productCodeStr = request.getParameter("productCode");
+        String productCodeStr = request.getParameter("productId");
 
         if (productCodeStr != null) {
             try {
@@ -29,7 +29,7 @@ public class RimuoviProdottoControl extends HttpServlet {
                 Product productExists = productDAO.getProductById(productCode);
                 if (productExists != null) {
                     productDAO.deleteProduct(productCode);
-                    response.sendRedirect("/gestisciCatalogoProdottiControl");
+                    response.sendRedirect("gestisciCatalogoProdottiControl");
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
                 }

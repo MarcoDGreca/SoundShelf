@@ -38,13 +38,13 @@
                         <td><%= user.getCognome() %></td>
                         <td><%= user.getRuolo() %></td>
                         <td>
-                            <form action="utente/gestisciCatalogoUtentiControl" method="post" style="display:inline;">
+                            <form action="${pageContext.request.contextPath}/gestisciCatalogoUtentiControl" method="post" style="display:inline;">
                                 <input type="hidden" name="email" value="<%= user.getEmail() %>" />
                                 <input type="hidden" name="action" value="delete" />
                                 <button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo utente?');">Elimina</button>
                             </form>
                             <% if (!"admin".equals(user.getRuolo())) { %>
-                            <form action="utente/gestisciCatalogoUtentiControl" method="post" style="display:inline;">
+                            <form action="${pageContext.request.contextPath}/gestisciCatalogoUtentiControl" method="post" style="display:inline;">
                                 <input type="hidden" name="email" value="<%= user.getEmail() %>" />
                                 <input type="hidden" name="action" value="promote" />
                                 <button type="submit">Promuovi a Admin</button>

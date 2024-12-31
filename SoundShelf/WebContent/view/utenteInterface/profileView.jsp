@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" import="java.util.*, utente.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.*, utente.*" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>Profilo Utente</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
@@ -16,52 +16,62 @@
 
     <jsp:include page="../pagePieces/header.jsp" />
 
-    <div id="main" class="clear">
-        <h2>Il Tuo Profilo</h2>
+    <div id="profile-container" class="clear">
+        <h2 class="profile-title">Il Tuo Profilo</h2>
 
         <%
         UtenteRegistrato user = (UtenteRegistrato) request.getAttribute("user");
                     if (user != null) {
         %>
-        <table class="profile-table">
-            <tr>
-                <th>Nome:</th>
-                <td><%= user.getNome() %></td>
-            </tr>
-            <tr>
-                <th>Cognome:</th>
-                <td><%= user.getCognome() %></td>
-            </tr>
-            <tr>
-                <th>Indirizzo:</th>
-                <td><%= user.getIndirizzo() %></td>
-            </tr>
-            <tr>
-                <th>Telefono:</th>
-                <td><%= user.getTelefono() %></td>
-            </tr>
-        </table>
+        <div class="profile-info">
+            <table class="profile-table">
+                <tr>
+                    <th>Nome:</th>
+                    <td><%= user.getNome() %></td>
+                </tr>
+                <tr>
+                    <th>Cognome:</th>
+                    <td><%= user.getCognome() %></td>
+                </tr>
+                <tr>
+                    <th>Indirizzo:</th>
+                    <td><%= user.getIndirizzo() %></td>
+                </tr>
+                <tr>
+                    <th>Telefono:</th>
+                    <td><%= user.getTelefono() %></td>
+                </tr>
+            </table>
+        </div>
 
-        <h3>Modifica Dati Personali</h3>
-        <form action="${pageContext.request.contextPath}/profileControl" method="post" onsubmit="return confirmChanges()">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" value="<%= user.getNome() %>" required><br><br>
+        <h3 class="edit-title">Modifica Dati Personali</h3>
+        <form action="${pageContext.request.contextPath}/profileControl" method="post" onsubmit="return confirmChanges()" class="profile-form">
+            <div class="form-group">
+                <label for="nome" class="form-label">Nome:</label>
+                <input type="text" id="nome" name="nome" value="<%= user.getNome() %>" required class="form-input">
+            </div>
 
-            <label for="cognome">Cognome:</label>
-            <input type="text" id="cognome" name="cognome" value="<%= user.getCognome() %>" required><br><br>
+            <div class="form-group">
+                <label for="cognome" class="form-label">Cognome:</label>
+                <input type="text" id="cognome" name="cognome" value="<%= user.getCognome() %>" required class="form-input">
+            </div>
 
-            <label for="indirizzo">Indirizzo:</label>
-            <input type="text" id="indirizzo" name="indirizzo" value="<%= user.getIndirizzo() %>" required><br><br>
+            <div class="form-group">
+                <label for="indirizzo" class="form-label">Indirizzo:</label>
+                <input type="text" id="indirizzo" name="indirizzo" value="<%= user.getIndirizzo() %>" required class="form-input">
+            </div>
 
-            <label for="telefono">Telefono:</label>
-            <input type="text" id="telefono" name="telefono" value="<%= user.getTelefono() %>" required><br><br>
+            <div class="form-group">
+                <label for="telefono" class="form-label">Telefono:</label>
+                <input type="text" id="telefono" name="telefono" value="<%= user.getTelefono() %>" required class="form-input">
+            </div>
 
-            <button type="submit">Salva Modifiche</button>
+            <button type="submit" class="submit-button">Salva Modifiche</button>
         </form>
         <% 
             } else {
         %>
-        <p>Per visualizzare o modificare il tuo profilo, devi essere loggato.</p>
+        <p class="login-warning">Per visualizzare o modificare il tuo profilo, devi essere loggato.</p>
         <% 
             }
         %>

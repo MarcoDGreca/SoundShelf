@@ -8,19 +8,19 @@
     <title>Le tue Richieste di Supporto</title>
 </head>
 <body>
-	<jsp:include page="../pagePieces/header.jsp" />
-    <h1>Le tue Richieste di Supporto</h1>
+    <jsp:include page="../pagePieces/header.jsp" />
+    <h1 class="page-title">Le tue Richieste di Supporto</h1>
 
     <%
         String message = (String) request.getAttribute("message");
         if (message != null) {
-            out.println("<p>" + message + "</p>");
+            out.println("<p class='notification-message'>" + message + "</p>");
         }
 
         List<SupportRequest> richieste = (List<SupportRequest>) request.getAttribute("richieste");
         if (richieste != null && !richieste.isEmpty()) {
     %>
-    <table border="1">
+    <table class="requests-table">
         <thead>
             <tr>
                 <th>Descrizione</th>
@@ -43,11 +43,11 @@
                     <% 
                     if (richiesta.getInformazioniAggiuntive() != null && richiesta.getInformazioniAggiuntive().length() > 0) {
                     %>
-                    <form action="${pageContext.request.contextPath}/informazioniControl" method="post">
+                    <form action="${pageContext.request.contextPath}/informazioniControl" method="post" class="response-form">
                         <input type="hidden" name="idRichiesta" value="<%= richiesta.getId() %>">
-                        <label for="risposta">La tua risposta:</label>
-                        <textarea name="risposta" required></textarea>
-                        <button type="submit">Invia Risposta</button>
+                        <label for="risposta" class="response-label">La tua risposta:</label>
+                        <textarea name="risposta" required class="response-textarea"></textarea>
+                        <button type="submit" class="response-button">Invia Risposta</button>
                     </form>
                     <% 
                     }
@@ -61,13 +61,19 @@
     </table>
     <%
         } else {
-            out.println("<p>Non hai inviato richieste di supporto.</p>");
+    %>
+    <div class="empty-request-card">
+        <h3>Non hai inviato richieste di supporto.</h3>
+        <p>Quando invierai la tua prima richiesta, sarà visibile qui. Approfitta del nostro servizio!</p>
+    </div>
+    <%
         }
     %>
 
-    <form action="${pageContext.request.contextPath}/view/supportoInterface/helpOnlineForm.jsp" method="get">
-        <button type="submit">Invia una Nuova Richiesta di Supporto</button>
+    <form action="${pageContext.request.contextPath}/view/supportoInterface/helpOnlineForm.jsp" method="get" class="new-request-form">
+        <button type="submit" class="new-request-button">Invia una Nuova Richiesta di Supporto</button>
     </form>
+
     <jsp:include page="../pagePieces/footer.jsp" />
 </body>
 </html>

@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>Invia Richiesta Supporto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
@@ -12,17 +12,19 @@
     <jsp:include page="../pagePieces/header.jsp" />
 
     <div id="main" class="clear">
-        <form id="supportRequestForm" action="${pageContext.request.contextPath}/richiestaSupportoControl" method="post" onsubmit="return validateForm()">
-            <label for="name">Nome:</label>
-            <input type="text" id="name" name="name" required><br><br>
+        <h2 class="page-title">Invia una Nuova Richiesta di Supporto</h2>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
+        <form id="supportRequestForm" action="${pageContext.request.contextPath}/richiestaSupportoControl" method="post" onsubmit="return validateForm()" class="support-form">
+            <label for="name" class="form-label">Nome:</label>
+            <input type="text" id="name" name="name" required class="form-input"><br><br>
 
-            <label for="description">Descrizione:</label>
-            <textarea id="description" name="description" required></textarea><br><br>
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" id="email" name="email" required class="form-input"><br><br>
 
-            <button type="submit">Invia Richiesta</button>
+            <label for="description" class="form-label">Descrizione:</label>
+            <textarea id="description" name="description" required class="form-textarea"></textarea><br><br>
+
+            <button type="submit" class="new-request-button">Invia Richiesta</button>
         </form>
     </div>
 
@@ -35,27 +37,24 @@
             var description = document.getElementById("description").value;
             var errorMessage = "";
 
-            // Validazione nome
             if (name.trim() === "") {
-                errorMessage += "Il campo nome è obbligatorio.\n";
+                errorMessage += "Il campo nome Ã¨ obbligatorio.\n";
             }
 
-            // Validazione email
             var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailPattern.test(email)) {
-                errorMessage += "L'email non è valida.\n";
+                errorMessage += "L'email non Ã¨ valida.\n";
             }
 
-            // Validazione descrizione
             if (description.trim() === "") {
-                errorMessage += "Il campo descrizione è obbligatorio.\n";
+                errorMessage += "Il campo descrizione Ã¨ obbligatorio.\n";
             }
 
             if (errorMessage) {
                 alert("Errore:\n" + errorMessage);
-                return false; // Impedisce l'invio del modulo
+                return false;
             }
-            return true; // Se la validazione passa, invia il modulo
+            return true;
         }
     </script>
 

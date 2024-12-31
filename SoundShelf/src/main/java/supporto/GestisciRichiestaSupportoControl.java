@@ -9,18 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import utente.UtenteRegistratoDAO;
-
 @WebServlet("/gestisciRichiestaSupportoControl")
 public class GestisciRichiestaSupportoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private SupportRequestDAO supportRequestDAO;
-    private UtenteRegistratoDAO clienteDAO;
 
     @Override
     public void init() throws ServletException {
         supportRequestDAO = new SupportRequestDAO();
-        clienteDAO = new UtenteRegistratoDAO();
     }
 
     @Override
@@ -30,46 +26,50 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
             request.setAttribute("richieste", richieste);
             request.getRequestDispatcher("view/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
         } catch (SQLException e) {
-            request.setAttribute("message", "Errore nel recupero delle richieste di supporto.");
+            request.setAttribute("errorMessage", "Errore nel recupero delle richieste di supporto.");
             request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+        String action = request.getParameter("azione");
 
         if ("richiediInformazioni".equals(action)) {
-        	String idRichiesta = request.getParameter("idRichiesta");
+            String idRichiesta = request.getParameter("richiestaId");
+            String informazioniAggiuntive = request.getParameter("informazioniAggiuntive");
 
-            if (idRichiesta == null || idRichiesta.isEmpty()) {
-                request.setAttribute("message", "Nome della richiesta non valido.");
-                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+            if (idRichiesta == null || idRichiesta.isEmpty() || informazioniAggiuntive == null || informazioniAggiuntive.isEmpty()) {
+                request.setAttribute("errorMessage", "ID della richiesta o informazioni aggiuntive non valide.");
+                request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
                 return;
             }
 
             try {
                 SupportRequest supportRequest = supportRequestDAO.getSupportRequestById(Integer.parseInt(idRichiesta));
-
                 if (supportRequest != null) {
-                    request.setAttribute("richiesta", supportRequest);
-                    request.getRequestDispatcher("view/supportoInterface/richiestaSupportoView.jsp").forward(request, response);
+                    supportRequest.setInformazioniAggiuntive(informazioniAggiuntive);
+                    supportRequestDAO.updateSupportRequest(supportRequest);
+
+                    request.setAttribute("message", "Informazioni aggiuntive aggiornate correttamente.");
                 } else {
-                    request.setAttribute("message", "La richiesta di supporto non esiste.");
-                    request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+                    request.setAttribute("errorMessage", "La richiesta di supporto non esiste.");
                 }
+
+                List<SupportRequest> richieste = supportRequestDAO.getAllSupportRequests();
+                request.setAttribute("richieste", richieste);
+                request.getRequestDispatcher("view/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
             } catch (SQLException e) {
-                request.setAttribute("message", "Errore nel recupero della richiesta.");
-                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+                request.setAttribute("errorMessage", "Errore durante l'aggiornamento delle informazioni.");
+                request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
             }
-        }
-        else if ("aggiornaStato".equals(action)) {
-            String idRichiesta = request.getParameter("id");
+        } else if ("aggiornaStato".equals(action)) {
+            String idRichiesta = request.getParameter("richiestaId");
             String nuovoStato = request.getParameter("nuovoStato");
 
             if (idRichiesta == null || idRichiesta.isEmpty() || nuovoStato == null || nuovoStato.isEmpty()) {
-                request.setAttribute("message", "ID richiesta o stato non valido.");
-                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+                request.setAttribute("errorMessage", "ID richiesta o stato non valido.");
+                request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
                 return;
             }
 
@@ -82,43 +82,20 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                     if (statoEnum != null) {
                         supportRequest.setStato(statoEnum);
                         supportRequestDAO.updateSupportRequest(supportRequest);
-                        request.setAttribute("message", "Lo stato della richiesta è stato aggiornato a: " + nuovoStato);
+                        request.setAttribute("message", "Stato aggiornato correttamente.");
                     } else {
-                        request.setAttribute("message", "Stato non valido.");
-                        request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
-                        return;
+                        request.setAttribute("errorMessage", "Stato non valido.");
                     }
                 } else {
-                    request.setAttribute("message", "La richiesta di supporto non esiste.");
+                    request.setAttribute("errorMessage", "La richiesta non esiste.");
                 }
-            } catch (SQLException e) {
-                request.setAttribute("message", "Errore nell'aggiornamento dello stato della richiesta.");
-            }
-            request.getRequestDispatcher("view/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
-        }
-        else if ("salvaRichiesta".equals(action)) {
-            String name = request.getParameter("name");
-            String email = request.getParameter("email");
-            String description = request.getParameter("description");
-            String stato = request.getParameter("stato");
 
-            if (name == null || email == null || description == null || stato == null) {
-                request.setAttribute("message", "Dati della richiesta incompleti.");
-                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
-                return;
-            }
-            
-            int idCliente = clienteDAO.getUserIdByEmail(email);
-            SupportRequest newRequest = new SupportRequest(description, new java.sql.Date(System.currentTimeMillis()), 
-                                                          "12:00", StatoSupporto.fromString(stato), idCliente);
-
-            try {
-                supportRequestDAO.saveSupportRequest(newRequest);
-                request.setAttribute("message", "Richiesta di supporto inviata con successo.");
+                List<SupportRequest> richieste = supportRequestDAO.getAllSupportRequests();
+                request.setAttribute("richieste", richieste);
                 request.getRequestDispatcher("view/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
             } catch (SQLException e) {
-                request.setAttribute("message", "Errore nel salvataggio della richiesta di supporto.");
-                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+                request.setAttribute("errorMessage", "Errore nell'aggiornamento dello stato della richiesta.");
+                request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
             }
         }
     }

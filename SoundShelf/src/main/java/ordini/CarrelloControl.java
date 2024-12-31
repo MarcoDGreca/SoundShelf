@@ -25,6 +25,7 @@ public class CarrelloControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        System.out.println("chiamato");
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null) {
             cart = new Cart();
@@ -32,8 +33,8 @@ public class CarrelloControl extends HttpServlet {
         }
 
         String action = request.getParameter("action");
-        if (action != null) {
-            int productId = Integer.parseInt(request.getParameter("productId"));
+        if (action != null && !action.equals("clear")) {
+        	int productId = Integer.parseInt(request.getParameter("productId"));
             Product product = null;
             try {
                 product = productDAO.getProductById(productId);
@@ -54,11 +55,10 @@ public class CarrelloControl extends HttpServlet {
                     int quantity = Integer.parseInt(request.getParameter("quantity"));
                     cart.updateQuantity(product, quantity);
                     break;
-                case "clear":
-                    cart.clear();
-                    break;
             }
         }
+        else if(action != null && action.equals("clear"))
+        	cart.clear();
 
         response.sendRedirect("view/ordiniInterface/carrelloView.jsp");
     }

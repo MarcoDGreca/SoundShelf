@@ -1,13 +1,30 @@
+document.addEventListener('DOMContentLoaded', function () {
+    const searchForm = document.getElementById('searchForm');
+    searchForm.addEventListener('submit', searchProducts);
+});
+
 function searchProducts(event) {
+    console.log('Funzione searchProducts chiamata');
     event.preventDefault();
-    const name = document.getElementById('productName').value;
-    const artist = document.getElementById('productArtist').value;
-    const genre = document.getElementById('productGenre').value;
-    
-    const url = `prodotti/searchProducts?name=${encodeURIComponent(name)}&artist=${encodeURIComponent(artist)}&genre=${encodeURIComponent(genre)}`;
+
+    const name = document.getElementById('productName').value.trim();
+    const artist = document.getElementById('productArtist').value.trim();
+    const genre = document.getElementById('productGenre').value.trim();
+
+    let url = '';
+
+    if (name) url += `name=${encodeURIComponent(name)}&`;
+    if (artist) url += `artist=${encodeURIComponent(artist)}&`;
+    if (genre) url += `genre=${encodeURIComponent(genre)}&`;
+
+    if (url.endsWith('&')) {
+        url = url.slice(0, -1);
+    }
+
+    console.log('URL richiesto:', url);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
+    xhr.open('GET', "/SoundShelf/searchProducts?" + url, true);
     xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
     xhr.onload = function () {
@@ -30,7 +47,7 @@ function searchProducts(event) {
 
 function displayResults(products) {
     const resultsContainer = document.getElementById('results');
-    resultsContainer.innerHTML = '';
+    resultsContainer.innerHTML = '';  // Pulisce il contenitore dei risultati prima di aggiungere i nuovi
 
     if (products.length === 0) {
         resultsContainer.innerHTML = '<p>Nessun prodotto trovato.</p>';
@@ -42,12 +59,18 @@ function displayResults(products) {
                 <img src="${product.image}" alt="${product.name}">
                 <div class="info">
                     <h3>${product.name}</h3>
-                    <p><strong>Artista:</strong> ${product.artists.join(', ')}</p>
-                    <p><strong>Genere:</strong> ${product.genres.join(', ')}</p>
+                    <p><strong>Artista:</strong> ${Array.isArray(product.artists) ? product.artists.map(artist => artist.stageName || artist).join(', ') : product.artists}</p>
+                    <p><strong>Genere:</strong> ${Array.isArray(product.genres) ? product.genres.map(genre => genre.name || genre).join(', ') : product.genres}</p>
                     <p><strong>Prezzo:</strong> €${product.salePrice}</p>
+                    <p><strong>Prezzo Originale:</strong> €${product.originalPrice}</p>
+                    <p><strong>Descrizione:</strong> ${product.description}</p>
+                    <p><strong>Data di Pubblicazione:</strong> ${product.releaseDate}</p>
+                    <p><strong>Disponibilità:</strong> ${product.availability}</p>
+                    <a href="/SoundShelf/prodottoControl?productId=${product.productCode}" class="button">Visualizza Prodotto</a>
                 </div>
             `;
             resultsContainer.appendChild(productElement);
         });
     }
 }
+

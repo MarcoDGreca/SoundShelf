@@ -19,9 +19,9 @@
             var quantity = form.quantity.value;
             if (quantity < 1) {
                 alert("La quantità non può essere inferiore a 1.");
-                return false; // Impedisce l'invio del modulo
+                return false;
             }
-            return true; // Permette l'invio del modulo
+            return true;
         }
     </script>
 </head>
@@ -30,73 +30,72 @@
     <jsp:include page="../pagePieces/header.jsp" />
 
     <div id="main" class="clear">
-    <% 
-        Cart cart = (Cart) request.getSession().getAttribute("cart");
-        if(cart != null && !cart.getItems().isEmpty()) { 
-    %>
+        <div class="cart-container">
+        <% 
+            Cart cart = (Cart) request.getSession().getAttribute("cart");
+            if(cart != null && !cart.getItems().isEmpty()) { 
+        %>
 
-    <section class="cart-section">
-        <h2>Il tuo Carrello</h2>
-        <table class="cart-table">
-            <tr>
-                <th>Descrizione</th>
-                <th>Quantità</th>
-                <th>Prezzo totale</th>
-                <th>Rimuovi</th>
-            </tr>
-            <% 
-                for(CartItem item : cart.getItems()) {
-                    Product product = item.getProduct();
-            %>
-            <tr>
-                <td><%= product.getName() %></td>
-                <td> 
-                    <form action="${pageContext.request.contextPath}/carrelloControl" method="get" onsubmit="return validateQuantity(this)">
-                        <input type="hidden" name="action" value="update">
-                        <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
-                        <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1">
-                        <button type="submit">Aggiorna</button>
-                    </form>
-                </td>
-                <td>&euro;<%= String.format("%.2f", item.getTotalPrice()) %></td>
-                <td>
-                    <form action="${pageContext.request.contextPath}/carrelloControl" method="get" onsubmit="return confirmRemove()">
-                        <input type="hidden" name="action" value="remove">
-                        <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
-                        <button type="submit" class="remove-button">Rimuovi</button>
-                    </form>
-                </td>
-            </tr>
-        </table>
-<% } %>
-        <div class="cart-total">
-            Totale provvisorio: &euro;<%= String.format("%.2f", cart.getTotalPrice()) %>
-        </div>
+        <section class="cart-section">
+            <h2>Il tuo Carrello</h2>
+            <table class="cart-table">
+                <tr>
+                    <th>Descrizione</th>
+                    <th>Quantità</th>
+                    <th>Prezzo totale</th>
+                    <th>Rimuovi</th>
+                </tr>
+                <% 
+                    for(CartItem item : cart.getItems()) {
+                        Product product = item.getProduct();
+                %>
+                <tr>
+                    <td><%= product.getName() %></td>
+                    <td>
+                        <form action="${pageContext.request.contextPath}/carrelloControl" method="get" onsubmit="return validateQuantity(this)">
+                            <input type="hidden" name="action" value="update">
+                            <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
+                            <input type="number" name="quantity" value="<%= item.getQuantity() %>" min="1" class="quantity-input">
+                            <button type="submit" class="button">Aggiorna</button>
+                        </form>
+                    </td>
+                    <td>&euro;<%= String.format("%.2f", item.getTotalPrice()) %></td>
+                    <td>
+                        <form action="${pageContext.request.contextPath}/carrelloControl" method="get" onsubmit="return confirmRemove()">
+                            <input type="hidden" name="action" value="remove">
+                            <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
+                            <button type="submit" class="remove-button button">Rimuovi</button>
+                        </form>
+                    </td>
+                </tr>
+                <% } %>
+            </table>
 
-        <div class="cart-checkout">
-            <a href="${pageContext.request.contextPath}/acquistoControl"> 
-                <button>Acquista</button>
-            </a>
-        </div>
+            <div class="cart-total">
+                Totale provvisorio: &euro;<%= String.format("%.2f", cart.getTotalPrice()) %>
+            </div>
 
-		 <% 
-                for(CartItem item : cart.getItems()) {
-                    Product product = item.getProduct();
-            %>
-        <div class="cart-clear">
-            <form action="${pageContext.request.contextPath}/carrelloControl" method="get" onsubmit="return confirmClear()">
-                <input type="hidden" name="action" value="clear">
-                <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
-                <button type="submit" class="clear-button">Svuota Carrello</button>
-            </form>
-        </div>
-    </section>
-<% } %>
-    <% } else { %> 
-        <h2>Il tuo carrello è vuoto</h2>
-    <% } %>
-    <br><br>
+            <div class="cart-checkout">
+                <a href="${pageContext.request.contextPath}/acquistoControl"> 
+                    <button class="button">Acquista</button>
+                </a>
+            </div>
 
+            <div class="cart-clear">
+                <form action="${pageContext.request.contextPath}/carrelloControl" method="get" onsubmit="return confirmClear()">
+                    <input type="hidden" name="action" value="clear">
+                    <button type="submit" class="clear-button button">Svuota Carrello</button>
+                </form>
+            </div>
+
+        </section>
+
+        <% } else { %>
+        <section class="cart-section">
+            <h2>Il tuo carrello è vuoto</h2>
+        </section>
+        <% } %>
+        </div> <!-- Fine .cart-container -->
     </div>
 
     <jsp:include page="../pagePieces/footer.jsp" />

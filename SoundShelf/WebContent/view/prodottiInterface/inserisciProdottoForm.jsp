@@ -19,7 +19,7 @@
     <div id="main" class="clear">
         <h2>Aggiungi Nuovo Prodotto</h2>
 
-        <form action="${pageContext.request.contextPath}/prodotti/InserisciNuovoProdottoControl" method="post" onsubmit="return confirmAddProduct()">
+        <form action="${pageContext.request.contextPath}/InserisciNuovoProdottoControl" method="post" onsubmit="return confirmAddProduct()">
             <label for="productCode">Codice Prodotto:</label>
             <input type="number" id="productCode" name="productCode" required><br>
 

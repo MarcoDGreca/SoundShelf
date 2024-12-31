@@ -19,20 +19,36 @@
             if (recensioni != null && !recensioni.isEmpty()) {
         %>
 
-        <div class="review-list">
-            <% for (Review recensione : recensioni) { %>
-                <div class="review-card">
-                    <h3>Prodotto: <%= recensione.getCodiceProdotto() %> - Votazione: <%= recensione.getVotazione() %>/10</h3>
-                    <p><strong>Email Cliente:</strong> <%= recensione.getEmailCliente() %></p>
-                    <p><strong>Data Recensione:</strong> <%= recensione.getDataRecensione() %></p>
-                    <p><strong>Testo:</strong> <%= recensione.getTesto() %></p>
-
-                    <form action="${pageContext.request.contextPath}/recensione/rimuoviRecensioneControl" method="post" style="display:inline;">
-                        <input type="hidden" name="reviewId" value="<%= recensione.getCodiceRecensione() %>" />
-                        <button type="submit" class="btn-delete" onclick="return confirm('Sei sicuro di voler eliminare questa recensione?')">Elimina Recensione</button>
-                    </form>
-                </div>
-            <% } %>
+        <div class="review-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Prodotto</th>
+                        <th>Votazione</th>
+                        <th>Email Cliente</th>
+                        <th>Data Recensione</th>
+                        <th>Testo</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (Review recensione : recensioni) { %>
+                        <tr>
+                            <td><%= recensione.getIdProdotto() %></td>
+                            <td><%= recensione.getVoto() %>/10</td>
+                            <td><%= recensione.getEmailCliente() %></td>
+                            <td><%= recensione.getDataRecensione() %></td>
+                            <td><%= recensione.getDescrizione() %></td>
+                            <td>
+                                <form action="${pageContext.request.contextPath}/rimuoviRecensioneControl" method="post" style="display:inline;">
+                                    <input type="hidden" name="reviewId" value="<%= recensione.getId() %>" />
+                                    <button type="submit" class="btn-delete" onclick="return confirm('Sei sicuro di voler eliminare questa recensione?')">Elimina</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
         </div>
 
         <% 

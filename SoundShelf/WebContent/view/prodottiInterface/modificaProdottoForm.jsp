@@ -40,8 +40,7 @@
 
             <label for="availability">Disponibilità:</label>
             <select id="availability" name="availability" required>
-                <option value="true" <%= product.isAvailability() ? "selected" : "" %>>Disponibile</option>
-                <option value="false" <%= !product.isAvailability() ? "selected" : "" %>>Non disponibile</option>
+                <option value="true" <%= product.getAvailability()%>></option>
             </select><br>
 
             <label for="releaseDate">Data di Rilascio:</label>

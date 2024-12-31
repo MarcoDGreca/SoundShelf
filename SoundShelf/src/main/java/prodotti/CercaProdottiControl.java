@@ -1,9 +1,7 @@
 package prodotti;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import util.InputSanitizer;
 
 import javax.servlet.ServletException;
@@ -17,7 +15,6 @@ import java.util.List;
 @WebServlet("/searchProducts")
 public class CercaProdottiControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     private ProductDAO productDAO;
 
     @Override
@@ -31,56 +28,44 @@ public class CercaProdottiControl extends HttpServlet {
         String genreParam = InputSanitizer.sanitize(request.getParameter("genre"));
         String artistParam = InputSanitizer.sanitize(request.getParameter("artist"));
 
-        List<String> genres = (genreParam != null && !genreParam.isEmpty()) 
-            ? List.of(genreParam.split(",")) 
-            : null;
-        List<String> artists = (artistParam != null && !artistParam.isEmpty()) 
-            ? List.of(artistParam.split(","))
-            : null;
+        System.out.println("Nome: " + name);
+        System.out.println("Genere: " + genreParam);
+        System.out.println("Artista: " + artistParam);
 
-        List<Product> products = null;
+        List<String> genres = (genreParam != null && !genreParam.isEmpty())
+                ? List.of(genreParam.split(","))
+                : null;
+        List<String> artists = (artistParam != null && !artistParam.isEmpty())
+                ? List.of(artistParam.split(","))
+                : null;
+        
         try {
-            products = productDAO.searchProducts(name, genres, artists);
-        } catch (Exception e) {
-            request.setAttribute("errorMessage", "Errore nella ricerca dei prodotti.");
-            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
-            return;
-        }
+            List<Product> products = productDAO.searchProducts(name, genres, artists);
+            System.out.println(products);
+            System.out.println("Prodotti trovati: " + products.size());
 
-        if (products == null || products.isEmpty()) {
-            request.setAttribute("errorMessage", "Nessun prodotto trovato.");
-            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
-            return;
-        }
-
-        JSONArray jsonArray = new JSONArray();
-        for (Product product : products) {
-            JSONObject jsonObject = new JSONObject();
-            try {
+            JSONArray jsonArray = new JSONArray();
+            for (Product product : products) {
+                JSONObject jsonObject = new JSONObject();
                 jsonObject.put("productCode", product.getProductCode());
                 jsonObject.put("name", product.getName());
-                jsonObject.put("artists", product.getArtists().stream()
-                        .map(artistObj -> artistObj.getStageName() != null 
-                                ? artistObj.getStageName() 
-                                : artistObj.getFirstName() + " " + artistObj.getLastName())
-                        .toArray());
-                jsonObject.put("releaseDate", product.getReleaseDate());
                 jsonObject.put("description", product.getDescription());
-                jsonObject.put("availability", product.getAvailability());
+                jsonObject.put("artists", product.getArtists());
+                jsonObject.put("genres", product.getGenres());
                 jsonObject.put("salePrice", product.getSalePrice());
                 jsonObject.put("originalPrice", product.getOriginalPrice());
-                jsonObject.put("genres", product.getGenres().stream()
-                        .map(Genre::getName)
-                        .toArray());
                 jsonObject.put("image", product.getImage());
+                jsonObject.put("availability", product.getAvailability());
+                jsonObject.put("releaseDate", product.getReleaseDate());
                 jsonArray.put(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-        }
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonArray.toString());
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(jsonArray.toString());
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\":\"Errore nella ricerca dei prodotti.\"}");
+        }
     }
 }

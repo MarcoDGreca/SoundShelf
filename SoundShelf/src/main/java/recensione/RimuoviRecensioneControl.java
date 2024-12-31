@@ -28,11 +28,6 @@ public class RimuoviRecensioneControl extends HttpServlet {
         HttpSession session = request.getSession();
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
-        if (user == null) {
-            response.sendRedirect("view/utenteInterface/loginForm.jsp");
-            return;
-        }
-
         int reviewId = Integer.parseInt(request.getParameter("reviewId"));
         Review review = null;
 		try {
@@ -41,7 +36,7 @@ public class RimuoviRecensioneControl extends HttpServlet {
 			e.printStackTrace();
 		}
 
-        if (review != null && user.getEmail().equals(review.getEmailCliente())){
+        if (review != null){
             try {
 				reviewDAO.deleteReview(reviewId);
 			} catch (SQLException e) {
@@ -49,6 +44,6 @@ public class RimuoviRecensioneControl extends HttpServlet {
 			}
         }
 
-        response.sendRedirect("/gestisciRecensioniControl");
+        response.sendRedirect(request.getContextPath() + "/gestisciRecensioniControl");
     }
 }
