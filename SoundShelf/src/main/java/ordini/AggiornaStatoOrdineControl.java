@@ -23,14 +23,14 @@ public class AggiornaStatoOrdineControl extends HttpServlet {
         try {
             int numeroOrdine = Integer.parseInt(request.getParameter("numeroOrdine"));
             String nuovoStato = request.getParameter("nuovoStato");
-
+            System.out.println(nuovoStato);
             StatoOrdine statoOrdine = StatoOrdine.fromString(nuovoStato);
+            System.out.println(statoOrdine);
             boolean success = orderDAO.updateOrderStatus(numeroOrdine, statoOrdine.name());
 
-            if (success) {
-                request.setAttribute("successMessage", "Stato dell'ordine aggiornato con successo.");
-            } else {
+            if (!success) {
                 request.setAttribute("errorMessage", "Errore durante l'aggiornamento dello stato ordine.");
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             }
 
         } catch (Exception e) {

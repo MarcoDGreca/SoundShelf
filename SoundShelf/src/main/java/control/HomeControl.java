@@ -28,7 +28,7 @@ public class HomeControl extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Product> products = null;
         try {
-            products = productDAO.getAllProducts();
+            products = productDAO.getAllProductsHome();
         } catch (SQLException e) {
             request.setAttribute("message", "Errore nel recupero dei prodotti.");
             request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);

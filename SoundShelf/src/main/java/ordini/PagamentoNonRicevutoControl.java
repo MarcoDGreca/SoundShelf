@@ -26,11 +26,11 @@ public class PagamentoNonRicevutoControl extends HttpServlet {
 		if (ordine != null) {
 		        ordine.setStato(StatoOrdine.ANNULLATO);
 		        ordineDAO.updateOrder(ordine);
-		        request.setAttribute("messaggio", "Ordine annullato per pagamento non ricevuto.");
 		} else {
-		    request.setAttribute("messaggio", "Ordine non trovato.");
+		    request.setAttribute("errorMessage", "Ordine non trovato.");
+		    request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
 		}
 
-        response.sendRedirect("/gestisciCatalogoOrdiniControl");
+        response.sendRedirect("gestisciCatalogoOrdiniControl");
     }
 }

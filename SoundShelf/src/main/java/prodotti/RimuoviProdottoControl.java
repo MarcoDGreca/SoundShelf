@@ -26,6 +26,7 @@ public class RimuoviProdottoControl extends HttpServlet {
         if (productCodeStr != null) {
             try {
                 int productCode = Integer.parseInt(productCodeStr);
+                System.out.println(productCode);
                 Product productExists = productDAO.getProductById(productCode);
                 if (productExists != null) {
                     productDAO.deleteProduct(productCode);

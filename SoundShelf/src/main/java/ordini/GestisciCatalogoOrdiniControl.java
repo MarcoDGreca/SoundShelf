@@ -38,7 +38,7 @@ public class GestisciCatalogoOrdiniControl extends HttpServlet {
             request.getRequestDispatcher("view/ordiniInterface/catalogoOrdini.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Errore durante il recupero degli ordini.");
-            request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 }

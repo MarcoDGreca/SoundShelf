@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/ModificaProdottoControl")
 public class ModificaProdottoControl extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-	private ProductDAO productDAO;
+    private static final long serialVersionUID = 1L;
+    private ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
@@ -28,12 +28,11 @@ public class ModificaProdottoControl extends HttpServlet {
                 Product product = productDAO.getProductById(productCode);
                 if (product != null) {
                     request.setAttribute("product", product);
-                    request.getRequestDispatcher("view/prodottiInterface/modificaProdottoForm.jsp").forward(request, response);
+                    request.getRequestDispatcher("/view/prodottiInterface/modificaProdottoForm.jsp").forward(request, response);
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
                 }
             } catch (SQLException | NumberFormatException e) {
-                e.printStackTrace();
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching product");
             }
         } else {
@@ -43,18 +42,17 @@ public class ModificaProdottoControl extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String productCodeStr = request.getParameter("productCode");
-        String name = request.getParameter("name");
-        String releaseDate = request.getParameter("releaseDate");
-        String description = request.getParameter("description");
-        int availability = Integer.parseInt(request.getParameter("availability"));
-        double salePrice = Double.parseDouble(request.getParameter("salePrice"));
-        double originalPrice = Double.parseDouble(request.getParameter("originalPrice"));
-        String supportedDevice = request.getParameter("supportedDevice");
-        String image = request.getParameter("image");
-
         try {
-            int productCode = Integer.parseInt(productCodeStr);
+            int productCode = Integer.parseInt(request.getParameter("productCode"));
+            String name = request.getParameter("name");
+            String releaseDate = request.getParameter("releaseDate");
+            String description = request.getParameter("description");
+            int availability = Integer.parseInt(request.getParameter("availability"));
+            double salePrice = Double.parseDouble(request.getParameter("salePrice"));
+            double originalPrice = Double.parseDouble(request.getParameter("originalPrice"));
+            String supportedDevice = request.getParameter("supportedDevice");
+            String image = request.getParameter("image");
+
             Product product = productDAO.getProductById(productCode);
             if (product != null) {
                 product.setName(name);
@@ -65,15 +63,13 @@ public class ModificaProdottoControl extends HttpServlet {
                 product.setOriginalPrice(originalPrice);
                 product.setSupportedDevice(supportedDevice);
                 product.setImage(image);
-                
-                productDAO.updateProduct(product);
 
-                response.sendRedirect("/gestisciCatalogoProdottiControl");
+                productDAO.updateProduct(product);
+                response.sendRedirect(request.getContextPath() + "/gestisciCatalogoProdottiControl");
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
             }
         } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error updating product");
         }
     }

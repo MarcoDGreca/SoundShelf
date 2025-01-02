@@ -31,7 +31,7 @@
                     <th>Immagine</th>
                     <th>Nome</th>
                     <th>Prezzo</th>
-                    <th>Disponibilità</th>
+                    <th>Disponibilit&aacute;</th>
                     <th>Data di Rilascio</th>
                     <th>Descrizione</th>
                     <th>Artisti</th>
@@ -44,7 +44,7 @@
                     <tr>
                         <td><img src="<%= product.getImage() %>" alt="<%= product.getName() %>" class="product-image"></td>
                         <td><%= product.getName() %></td>
-                        <td>€<%= product.getSalePrice() %></td>
+                        <td>&euro;<%= product.getSalePrice() %></td>
                         <td><%= product.getAvailability() %></td>
                         <td><%= product.getReleaseDate() %></td>
                         <td><%= product.getDescription() %></td>

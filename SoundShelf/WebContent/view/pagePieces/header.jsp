@@ -21,12 +21,12 @@
                 <li class="admin-section">
                     <a href="#" class="admin-toggle">Amministrazione</a>
                     <ul class="admin-dropdown">
-                        <li><a href="${pageContext.request.contextPath}/gestisciRichiesteRimborsoControl">Gestisci Catalogo Richieste Rimborsi</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoOrdiniControl">Gestisci Catalogo Ordini</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoUtentiControl">Gestisci Catalogo Utenti</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciRichiestaSupportoControl">Gestisci Catalogo Richieste Supporto</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoProdottiControl">Gestisci Catalogo Prodotti</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciRecensioniControl">Gestisci Catalogo Recensioni</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciRichiesteRimborsoControl">Rimborsi</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoOrdiniControl">Ordini</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoUtentiControl">Utenti</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciRichiestaSupportoControl">Supporto</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoProdottiControl">Prodotti</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciRecensioniControl">Recensioni</a></li>
                     </ul>
                 </li>
             <% } %>

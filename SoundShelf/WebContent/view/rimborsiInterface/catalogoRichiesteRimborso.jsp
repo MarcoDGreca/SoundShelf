@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.*, rimborsi.*"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.util.*, rimborsi.*" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -8,66 +8,69 @@
     <title>Gestione Richieste di Rimborso</title>
 </head>
 <body>
+
     <jsp:include page="../pagePieces/header.jsp" />
-    <h1>Gestione Richieste di Rimborso</h1>
 
-    <%
-        String success = request.getParameter("success");
-        String error = request.getParameter("error");
+    <div id="main" class="clear">
+        <h2 class="page-title">Gestione Richieste di Rimborso</h2>
 
-        if (success != null) {
-    %>
-        <div style="color: green;">Operazione completata con successo: <%= success %>.</div>
-    <%
-        }
-        if (error != null) {
-    %>
-        <div style="color: red;">Errore: <%= error %>.</div>
-    <%
-        }
-    %>
-
-    <form action="${pageContext.request.contextPath}/gestisciRichiesteRimborsoControl" method="post">
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Codice Prodotto</th>
-                    <th>Motivo</th>
-                    <th>IBAN</th>
-                    <th>Stato Attuale</th>
-                    <th>Nuovo Stato</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%
-                    List<RefoundRequest> richieste = (List<RefoundRequest>) request.getAttribute("richieste");
-                    if (richieste != null) {
+        <%
+            List<RefoundRequest> richieste = (List<RefoundRequest>) request.getAttribute("richieste");
+            if (richieste != null && !richieste.isEmpty()) {
+        %>
+            <table class="requests-table">
+                <thead>
+                    <tr>
+                        <th>Codice Prodotto</th>
+                        <th>Codice Ordine</th>
+                        <th>Motivo</th>
+                        <th>IBAN</th>
+                        <th>Stato Attuale</th>
+                        <th>Nuovo Stato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%
                         for (RefoundRequest richiesta : richieste) {
-                %>
-                            <tr>
-                                <td><%= richiesta.getIdProdotto() %></td>
-                                <td><%= richiesta.getMotivo() %></td>
-                                <td><%= richiesta.getIban() %></td>
-                                <td><%= richiesta.getStato() %></td>
-                                <td>
-                                    <select name="newState_<%= richiesta.getIdProdotto() %>">
-                                        <option value="IN_LAVORAZIONE" <%= richiesta.getStato().equals(StatoRimborso.IN_LAVORAZIONE) ? "selected" : "" %>>In lavorazione</option>
-                                        <option value="ACCETTATO" <%= richiesta.getStato().equals(StatoRimborso.ACCETTATO) ? "selected" : "" %>>Accettato</option>
-                                        <option value="RIFIUTATO" <%= richiesta.getStato().equals(StatoRimborso.RIFIUTATO) ? "selected" : "" %>>Rifiutato</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <input type="hidden" name="productCode_<%= richiesta.getIdProdotto() %>" value="<%= richiesta.getIdProdotto() %>">
-                                </td>
-                            </tr>
-                <%
+                    %>
+                    <tr>
+                        <td><%= richiesta.getIdProdotto() %></td>
+                        <td><%= richiesta.getIdOrdine() %></td>
+                        <td><%= richiesta.getMotivo() %></td>
+                        <td><%= richiesta.getIban() %></td>
+                        <td><%= richiesta.getStato().getStato() %></td>
+                        <td>
+                        	<form action="${pageContext.request.contextPath}/gestisciRichiesteRimborsoControl" method="post">
+                        	<input type="hidden" name="productId" value="<%= richiesta.getIdProdotto() %>" />
+                        	<input type="hidden" name="orderId" value="<%= richiesta.getIdOrdine() %>" />
+                				<button type="submit" class="refund-button">Salva Modifiche</button>
+                            	<select name="newState">
+                                	<option value="IN_LAVORAZIONE" <%= richiesta.getStato().equals(StatoRimborso.IN_LAVORAZIONE) ? "selected" : "" %>>In lavorazione</option>
+                                	<option value="ACCETTATO" <%= richiesta.getStato().equals(StatoRimborso.ACCETTATO) ? "selected" : "" %>>Accettato</option>
+                                	<option value="RIFIUTATO" <%= richiesta.getStato().equals(StatoRimborso.RIFIUTATO) ? "selected" : "" %>>Rifiutato</option>
+                            	</select>
+                            </form>
+                        </td>
+                    </tr>
+                    <%
                         }
-                    }
-                %>
-            </tbody>
-        </table>
-        <button type="submit">Salva Modifiche</button>
-    </form>
+                    %>
+                </tbody>
+            </table>
+
+        <%
+            } else {
+        %>
+            <div class="empty-request-card">
+                <h3>Non sono disponibili richieste di rimborso.</h3>
+                <p>Quando verranno inviate nuove richieste, saranno disponibili qui.</p>
+            </div>
+        <% 
+            }
+        %>
+    </div>
+
     <jsp:include page="../pagePieces/footer.jsp" />
+
 </body>
 </html>

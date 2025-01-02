@@ -17,7 +17,7 @@
         <%
             List<Order> ordini = (List<Order>) request.getAttribute("ordini");
             Map<Integer, List<ElementoOrdine>> ordineDetailsMap = (Map<Integer, List<ElementoOrdine>>) request.getAttribute("ordineDetailsMap");
-            String messaggio = (String) request.getAttribute("messaggio"); // Messaggio di conferma
+            String messaggio = (String) request.getAttribute("messaggio");
             if (messaggio != null) {
         %>
             <div class="messaggio">
@@ -38,17 +38,17 @@
                     <h3>Ordine Numero: <%= ordine.getNumeroOrdine() %></h3>
                     <p><strong>Data Ordine:</strong> <%= ordine.getDataOrdine() %></p>
                     <p><strong>Cliente:</strong> <%= ordine.getEmailCliente() %></p>
-                    <p><strong>Stato Ordine:</strong> <%= ordine.getStato() %></p>
+                    <p><strong>Stato Ordine:</strong> <%= ordine.getStato().getStato() %></p>
                     <p><strong>Indirizzo di Spedizione:</strong> <%= ordine.getIndirizzoSpedizione() %></p>
-                    <p><strong>Totale Ordine:</strong> <%= ordine.getPrezzoTotale() %> €</p>
+                    <p><strong>Totale Ordine:</strong> <%= ordine.getPrezzoTotale() %> &euro;</p>
                     <p><strong>Data Consegna:</strong> <%= ordine.getDataConsegna() %></p>
 
                     <h4>Dettagli Ordine:</h4>
-                    <table border="1">
+                    <table class="order-table">
                         <thead>
                             <tr>
-                                <th>Prodotto</th>
-                                <th>Quantità</th>
+                                <th>Prodotto Numero:</th>
+                                <th>Quantit&aacute;</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,7 +65,7 @@
                         </tbody>
                     </table>
 
-                    <form action="${pageContext.request.contextPath}/ordini/aggiornaStatoOrdineControl" method="post" style="display:inline;">
+                    <form action="${pageContext.request.contextPath}/aggiornaStatoOrdineControl" method="post" style="display:inline;">
                         <input type="hidden" name="numeroOrdine" value="<%= ordine.getNumeroOrdine() %>" />
                         <label for="nuovoStato">Cambia Stato:</label>
                         <select name="nuovoStato">
@@ -76,7 +76,7 @@
                         <button type="submit" class="btn-cambia-stato">Aggiorna Stato</button>
                     </form>
 
-                    <form action="${pageContext.request.contextPath}/ordini/PagamentoNonRicevutoControl" method="post" style="display:inline;">
+                    <form action="${pageContext.request.contextPath}/PagamentoNonRicevutoControl" method="post" style="display:inline;">
                         <input type="hidden" name="ordineId" value="<%= ordine.getNumeroOrdine() %>" />
                         <button type="submit" class="btn-annulla-pagamento">Annulla per pagamento non ricevuto</button>
                     </form>

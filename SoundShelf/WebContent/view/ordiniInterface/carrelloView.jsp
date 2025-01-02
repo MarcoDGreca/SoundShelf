@@ -41,7 +41,7 @@
             <table class="cart-table">
                 <tr>
                     <th>Descrizione</th>
-                    <th>Quantità</th>
+                    <th>Quantit&aacute;</th>
                     <th>Prezzo totale</th>
                     <th>Rimuovi</th>
                 </tr>

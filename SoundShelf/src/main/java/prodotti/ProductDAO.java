@@ -43,7 +43,7 @@ public class ProductDAO {
     }
 
     public List<Product> getAllProducts() throws SQLException {
-        String query = "SELECT * FROM Prodotto";
+        String query = "SELECT * FROM Prodotto WHERE isDeleted = 'true'";
         List<Product> products = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              Statement stmt = connection.createStatement();
@@ -346,6 +346,33 @@ public class ProductDAO {
         }
         return null;
     }
+
+	public List<Product> getAllProductsHome() throws SQLException {
+		 String query = "SELECT * FROM Prodotto WHERE isDeleted = 'false' AND disponibilita > 0";
+	        List<Product> products = new ArrayList<>();
+	        try (Connection connection = dataSource.getConnection();
+	             Statement stmt = connection.createStatement();
+	             ResultSet rs = stmt.executeQuery(query)) {
+	            while (rs.next()) {
+	                Product product = new Product(
+	                        rs.getInt("id"),
+	                        rs.getString("nome"),
+	                        rs.getString("descrizione"),
+	                        rs.getInt("disponibilita"),
+	                        rs.getDouble("prezzoVendita"),
+	                        rs.getDouble("prezzoOriginale"),
+	                        rs.getString("formato"),
+	                        rs.getString("immagine"),
+	                        rs.getDate("dataPubblicazione").toString(),
+	                        rs.getBoolean("isDeleted")
+	                );
+	                product.setArtists(getArtistsByProductId(rs.getInt("id")));
+	                product.setGenres(getGenresByProductId(rs.getInt("id")));
+	                products.add(product);
+	            }
+	        }
+	        return products;
+	}
 
 
 }

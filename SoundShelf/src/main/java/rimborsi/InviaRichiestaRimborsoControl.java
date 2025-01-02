@@ -52,8 +52,7 @@ public class InviaRichiestaRimborsoControl extends HttpServlet {
             ElementoOrdine detail = elementoOrdineDAO.getOrderDetailsById(detailId);
 
             if (detail != null) {
-            	request.setAttribute("product", detail);
-            	request.setAttribute("quantita", detail.getQuantita());
+            	request.setAttribute("orderDetail", detail);
                 request.getRequestDispatcher("/view/rimborsiInterface/richiestaRimborsoForm.jsp").forward(request, response);
             } else {
                 request.setAttribute("errorMessage", "Dettagli prodotto non trovati.");
@@ -76,19 +75,19 @@ public class InviaRichiestaRimborsoControl extends HttpServlet {
             return;
         }
 
-        String productCode = request.getParameter("productCode");
+        String orderDetailID = request.getParameter("orderDetailID");
         String reason = request.getParameter("reason");
         String iban = request.getParameter("iban");
 
-        if (productCode != null && reason != null && iban != null) {
-            int productId = Integer.parseInt(productCode);
+        if (orderDetailID != null && reason != null && iban != null) {
+            int orderDetailId = Integer.parseInt(orderDetailID);
 
-            ElementoOrdine product = elementoOrdineDAO.getOrderDetailsById(productId);
+            ElementoOrdine product = elementoOrdineDAO.getOrderDetailsById(orderDetailId);
 
             if (product != null) {
                 RefoundRequest refundRequest = new RefoundRequest();
                 refundRequest.setIdOrdine(product.getIdOrdine());
-                refundRequest.setIdProdotto(productId);
+                refundRequest.setIdProdotto(product.getIdProdotto());
                 refundRequest.setEmailCliente(user.getEmail());
                 refundRequest.setMotivo(reason);
                 refundRequest.setIban(iban);

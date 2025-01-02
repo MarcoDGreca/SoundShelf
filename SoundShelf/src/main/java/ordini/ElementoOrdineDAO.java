@@ -127,5 +127,32 @@ public class ElementoOrdineDAO {
 
         return orderDetail;
     }
+    
+    public ElementoOrdine getOrderDetailsByProductId(int detailId) {
+        ElementoOrdine orderDetail = null;
+        String query = "SELECT * FROM ElementoOrdine WHERE idProdotto = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, detailId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    orderDetail = new ElementoOrdine(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("idOrdine"),
+                        resultSet.getInt("idProdotto"),
+                        resultSet.getInt("quantità"),
+                        resultSet.getDouble("prezzoUnitario")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orderDetail;
+    }
 
 }

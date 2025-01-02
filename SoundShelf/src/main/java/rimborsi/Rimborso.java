@@ -15,7 +15,13 @@ public class Rimborso {
         this.idRichiesta = idRichiesta;
     }
     
-    public int getId() {
+    public Rimborso(double importoRimborso, Date dataEmissione, int idRichiesta) {
+    	this.importoRimborso = importoRimborso;
+        this.dataEmissione = dataEmissione;
+        this.idRichiesta = idRichiesta;
+	}
+
+	public int getId() {
         return id;
     }
 

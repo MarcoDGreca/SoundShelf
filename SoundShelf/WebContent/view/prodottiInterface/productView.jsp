@@ -26,9 +26,9 @@ List<Review> reviews = (List<Review>) request.getAttribute("reviews");
                 <p><strong>Artisti:</strong> <%=product.getArtists().stream().map(artist -> artist.getFirstName()).collect(java.util.stream.Collectors.joining(", "))%></p>
                 <p><strong>Data di Rilascio:</strong> <%=product.getReleaseDate()%></p>
                 <p><strong>Generi:</strong> <%=product.getGenres().stream().map(genre -> genre.getName()).collect(java.util.stream.Collectors.joining(", "))%></p>
-                <p><strong>Prezzo Scontato:</strong> €<%=product.getSalePrice()%></p>
-                <p><strong>Prezzo Originale:</strong> €<%=product.getOriginalPrice()%></p>
-                <p><strong>Disponibilità:</strong> <%=product.getAvailability()%></p>
+                <p><strong>Prezzo Scontato:</strong> &euro;<%=product.getSalePrice()%></p>
+                <p><strong>Prezzo Originale:</strong> &euro;<%=product.getOriginalPrice()%></p>
+                <p><strong>Disponibilit&aacute;:</strong> <%=product.getAvailability()%></p>
 
                 <form action="${pageContext.request.contextPath}/carrelloControl" method="post">
                     <input type="hidden" name="action" value="add">

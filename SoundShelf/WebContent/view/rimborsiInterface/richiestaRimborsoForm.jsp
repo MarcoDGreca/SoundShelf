@@ -15,18 +15,17 @@
         <h2 class="page-title">Dettaglio Rimborso</h2>
 
         <% 
-            ElementoOrdine product = (ElementoOrdine) request.getAttribute("product");
-            int quantita = (int) request.getAttribute("quantita");
-            double totale = quantita * product.getPrezzoUnitario();
-            if (product != null) {
+            ElementoOrdine elemento = (ElementoOrdine) request.getAttribute("orderDetail");
+            int quantita = elemento.getQuantita();
+            double totale = quantita * elemento.getPrezzoUnitario();
+            if (elemento != null) {
         %>
 
             <form action="${pageContext.request.contextPath}/inviaRichiestaRimborsoControl" method="post" onsubmit="return confirmRefund();" class="refund-form">
-                <label for="productCode" class="form-label">Codice dei prodotti:</label>
-                <input type="text" id="productCode" name="productCode" value="<%= product.getIdProdotto() %>" readonly class="form-input" /><br><br>
+                <input type="text" id="orderDetailID" name="orderDetailID" value="<%= elemento.getId() %>" readonly class="form-input"/><br><br>
 
                 <label for="productPrice" class="form-label">Prezzo totale dell'ordine:</label>
-                <input type="text" id="productPrice" name="productPrice" value="<%= totale %>€" readonly class="form-input" /><br><br>
+                <input type="text" id="productPrice" name="productPrice" value="<%= totale %>" readonly class="form-input" />&euro;<br><br>
 
                 <label for="reason" class="form-label">Inserisci il motivo del rimborso:</label>
                 <textarea id="reason" name="reason" required class="form-textarea"></textarea><br><br>
@@ -40,20 +39,12 @@
             }
         %>
         <br>
-        <% if (request.getAttribute("message") != null) { %>
-            <div class="success-message"><%= request.getAttribute("message") %></div>
-        <% } %>
-        <% if (request.getAttribute("error") != null) { %>
-            <div class="error-message"><%= request.getAttribute("error") %></div>
-        <% } %>
     </div>
-
     <script>
         function confirmRefund() {
             return confirm("Sei sicuro di voler richiedere il rimborso per questo prodotto?");
         }
     </script>
-
     <jsp:include page="../pagePieces/footer.jsp" />
 
 </body>

@@ -43,29 +43,28 @@ public class GestisciRichiestaRimborsoControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            List<RefoundRequest> richieste = richiestaRimborsoDAO.getAllRichiesteRimborso();
-
-            for (RefoundRequest richiesta : richieste) {
-                String newState = request.getParameter("newState_" + richiesta.getIdOrdine() + "_" + richiesta.getIdProdotto());
-                if (newState != null) {
+        	int productId = Integer.parseInt(request.getParameter("productId"));
+        	int orderID = Integer.parseInt(request.getParameter("orderId"));
+        	String nuovoStato = request.getParameter("newState");
+            RefoundRequest richiesta = richiestaRimborsoDAO.getRichiestaRimborso(orderID, productId);
+            
+                if (nuovoStato != null) {
                     try {
-                        StatoRimborso stato = StatoRimborso.fromString(newState);
+                        StatoRimborso stato = StatoRimborso.fromString(nuovoStato);
                         richiesta.setStato(stato);
                         richiestaRimborsoDAO.updateRichiestaRimborso(richiesta);
 
                         if (stato == StatoRimborso.ACCETTATO) {
                             double importoRimborso = calcolaImportoRimborso(richiesta);
-                            Rimborso rimborso = new Rimborso(0, importoRimborso, new Date(System.currentTimeMillis()), richiesta.getId());
+                            Rimborso rimborso = new Rimborso(importoRimborso, new Date(System.currentTimeMillis()), richiesta.getId());
                             rimborsoDAO.creaRimborso(rimborso);
                         }
                     } catch (IllegalArgumentException e) {
-                        request.setAttribute("errorMessage", "Stato non valido: " + newState);
+                        request.setAttribute("errorMessage", "Stato non valido: " + nuovoStato);
                         request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                         return;
                     }
                 }
-            }
-
             response.sendRedirect("gestisciRichiesteRimborsoControl");
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Errore durante il salvataggio delle modifiche.");

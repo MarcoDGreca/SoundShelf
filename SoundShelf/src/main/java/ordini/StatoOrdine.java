@@ -3,9 +3,7 @@ package ordini;
 public enum StatoOrdine {
     IN_LAVORAZIONE("In lavorazione"),
     COMPLETATO("Completato"),
-    RICHIESTO_RIMBORSO("Richiesto Rimborso"),
-    ANNULLATO("Annullato"),
-    NON_RICEVUTO("Non ricevuto");
+    ANNULLATO("Annullato");
 
     private final String stato;
 

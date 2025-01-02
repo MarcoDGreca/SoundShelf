@@ -45,9 +45,9 @@
                                         <%= genre.getName() %><%= product.getGenres().indexOf(genre) < product.getGenres().size() - 1 ? ", " : "" %>
                                     <% } %>
                                 </p>
-                                <p><strong>Prezzo Scontato:</strong> €<%= product.getSalePrice() %></p>
-                                <p><strong>Prezzo Originale:</strong> €<%= product.getOriginalPrice() %></p>
-                                <p><strong>Disponibilità:</strong> <%= product.getAvailability() %></p>
+                                <p><strong>Prezzo Scontato:</strong>&euro;<%= product.getSalePrice() %></p>
+                                <p><strong>Prezzo Originale:</strong>&euro;<%= product.getOriginalPrice() %></p>
+                                <p><strong>Disponibilit&aacute;:</strong> <%= product.getAvailability() %></p>
                                 <form action="${pageContext.request.contextPath}/prodottoControl" method="get">
                                     <input type="hidden" name="productId" value="<%= product.getProductCode() %>">
                                     <button type="submit" class="button">Dettagli prodotto</button>

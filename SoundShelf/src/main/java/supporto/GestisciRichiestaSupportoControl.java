@@ -27,7 +27,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
             request.getRequestDispatcher("view/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Errore nel recupero delle richieste di supporto.");
-            request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 
@@ -41,7 +41,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
 
             if (idRichiesta == null || idRichiesta.isEmpty() || informazioniAggiuntive == null || informazioniAggiuntive.isEmpty()) {
                 request.setAttribute("errorMessage", "ID della richiesta o informazioni aggiuntive non valide.");
-                request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                 return;
             }
 
@@ -61,7 +61,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                 request.getRequestDispatcher("view/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
             } catch (SQLException e) {
                 request.setAttribute("errorMessage", "Errore durante l'aggiornamento delle informazioni.");
-                request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             }
         } else if ("aggiornaStato".equals(action)) {
             String idRichiesta = request.getParameter("richiestaId");
@@ -69,7 +69,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
 
             if (idRichiesta == null || idRichiesta.isEmpty() || nuovoStato == null || nuovoStato.isEmpty()) {
                 request.setAttribute("errorMessage", "ID richiesta o stato non valido.");
-                request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                 return;
             }
 
@@ -95,7 +95,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                 request.getRequestDispatcher("view/supportoInterface/catalogoRichiesteSupporto.jsp").forward(request, response);
             } catch (SQLException e) {
                 request.setAttribute("errorMessage", "Errore nell'aggiornamento dello stato della richiesta.");
-                request.getRequestDispatcher("view/error/MessaggioErrore.jsp").forward(request, response);
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             }
         }
     }
