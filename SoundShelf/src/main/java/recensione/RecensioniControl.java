@@ -1,7 +1,9 @@
 package recensione;
 
+import ordini.ElementoOrdineDAO;
 import ordini.OrderDAO;
 import prodotti.Product;
+import prodotti.ProductDAO;
 import utente.UtenteRegistrato;
 import utente.UtenteRegistratoDAO;
 import util.InputSanitizer;
@@ -21,12 +23,12 @@ import java.util.List;
 public class RecensioniControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ReviewDAO reviewDAO;
-    private OrderDAO orderDAO;
+    private ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
         reviewDAO = new ReviewDAO();
-        orderDAO = new OrderDAO();
+        productDAO = new ProductDAO();
     }
 
     @Override
@@ -38,9 +40,16 @@ public class RecensioniControl extends HttpServlet {
             response.sendRedirect("view/utenteInterface/loginForm.jsp");
             return;
         }
+        
+        int productId = Integer.parseInt(request.getParameter("productCode"));
 
-        List<Product> purchasedProduct = orderDAO.getPurchasedProductsByEmail(user.getEmail());
-        request.setAttribute("purchasedProducts", purchasedProduct);
+        Product purchasedProduct = null;;
+		try {
+			purchasedProduct = productDAO.getProductById(productId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        request.setAttribute("purchasedProduct", purchasedProduct);
         request.getRequestDispatcher("view/recensioneInterface/recensioneForm.jsp").forward(request, response);
     }
 
@@ -50,7 +59,7 @@ public class RecensioniControl extends HttpServlet {
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect("utenteInterface/loginForm.jsp");
+            response.sendRedirect("view/utenteInterface/loginForm.jsp");
             return;
         }
 
@@ -70,6 +79,6 @@ public class RecensioniControl extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        response.sendRedirect("control/home");
+        response.sendRedirect("listaOrdiniUtente");
     }
 }

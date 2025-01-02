@@ -6,6 +6,7 @@
     <title>Aggiungi Nuovo Prodotto</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
+    <script src="${pageContext.request.contextPath}/scripts/validation.js"></script>
     <script type="text/javascript">
         function confirmAddProduct() {
             return confirm('Sei sicuro di voler aggiungere questo nuovo prodotto?');

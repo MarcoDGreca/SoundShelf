@@ -37,7 +37,7 @@
             <tr>
                 <td><%= richiesta.getDescription() %></td>
                 <td><%= richiesta.getDataInvio() %></td>
-                <td><%= richiesta.getStato() %></td>
+                <td><%= richiesta.getStato().getStato() %></td>
                 <td><%= richiesta.getInformazioniAggiuntive() != null ? richiesta.getInformazioniAggiuntive() : "Nessuna" %></td>
                 <td>
                     <% 

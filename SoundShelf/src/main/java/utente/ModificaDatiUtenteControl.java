@@ -27,7 +27,7 @@ public class ModificaDatiUtenteControl extends HttpServlet {
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "view/utenteInterface/loginForm.jsp");
+            response.sendRedirect(request.getContextPath() + "/view/utenteInterface/loginForm.jsp");
             return;
         }
 
@@ -47,11 +47,13 @@ public class ModificaDatiUtenteControl extends HttpServlet {
 
         String nome = InputSanitizer.sanitize(request.getParameter("nome"));
         String cognome = InputSanitizer.sanitize(request.getParameter("cognome"));
+        String email = InputSanitizer.sanitize(request.getParameter("email"));
         String indirizzo = InputSanitizer.sanitize(request.getParameter("indirizzo"));
         String telefono = InputSanitizer.sanitize(request.getParameter("telefono"));
 
         user.setNome(nome);
         user.setCognome(cognome);
+        user.setEmail(email);
         user.setIndirizzo(indirizzo);
         user.setTelefono(telefono);
 

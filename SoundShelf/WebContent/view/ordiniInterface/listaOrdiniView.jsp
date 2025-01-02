@@ -12,11 +12,6 @@
     <title>Le tue richieste di rimborso</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
-    <script>
-        function confirmRefund() {
-            return confirm("Sei sicuro di voler richiedere un rimborso per questo prodotto?");
-        }
-    </script>
 </head>
 <body>
     <div>
@@ -66,10 +61,20 @@
                             <td><%= detail.getQuantita() %></td>
                             <td>&euro;<%= product != null ? product.getSalePrice() * detail.getQuantita() : 0 %></td>
                             <td>
-                                <form action="${pageContext.request.contextPath}/inviaRichiestaRimborsoControl" method="get" onsubmit="return confirmRefund();">
+                                <form action="${pageContext.request.contextPath}/inviaRichiestaRimborsoControl" method="get">
                                     <input type="hidden" name="detailCode" value="<%= detail.getId() %>">
                                     <button type="submit" class="refund-button">Richiedi Rimborso</button>
                                 </form>
+                                <%
+                                if ("Completato".equals(order.getStato().getStato())) {
+                                %>
+                                <form action="${pageContext.request.contextPath}/addReview" method="get">
+                                    <input type="hidden" name="productCode" value="<%= detail.getIdProdotto() %>">
+                                    <button type="submit" class="refund-button">Lascia una recensione</button>
+                                </form>
+                                <%
+                                }
+                                %>
                             </td>
                         </tr>
                         <%
@@ -77,7 +82,7 @@
                         %>
                     </table>
                     <%
-                    if (!"COMPLETATO".equals(order.getStato().getStato())) {
+                    if (!"Completato".equals(order.getStato().getStato())) {
                     %>
                     <form action="${pageContext.request.contextPath}/OrdineRicevutoControl" method="post" onsubmit="return confirm('Sei sicuro di aver ricevuto questo ordine?');">
                         <input type="hidden" name="ordineId" value="<%= order.getNumeroOrdine() %>">

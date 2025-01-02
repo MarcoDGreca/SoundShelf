@@ -6,6 +6,11 @@
     <title>Richiesta Rimborso</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
+        <script>
+        function confirmRefund() {
+            return confirm("Sei sicuro di voler richiedere un rimborso per questo prodotto?");
+        }
+    </script>
 </head>
 <body>
 
@@ -33,7 +38,7 @@
                 <label for="iban" class="form-label">Inserisci il tuo IBAN:</label>
                 <input type="text" id="iban" name="iban" required class="form-input"><br><br>
 
-                <button type="submit" class="refund-button">Invia Richiesta</button>
+                <button type="submit" class="refund-button" onsubmit="return confirmRefund();">Invia Richiesta</button>
             </form>
         <% 
             }

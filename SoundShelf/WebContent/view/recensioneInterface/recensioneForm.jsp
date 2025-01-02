@@ -6,6 +6,11 @@
     <title>Aggiungi Recensione</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="${pageContext.request.contextPath}/styles/style.css" rel="stylesheet" type="text/css">
+    <script>
+        function confirmSubmission() {
+            return confirm("Sei sicuro di voler inviare questa recensione?");
+        }
+    </script>
 </head>
 <body>
 
@@ -13,37 +18,37 @@
 
     <div id="main" class="clear">
     <% 
-        List<Product> purchasedProducts = (List<Product>) request.getAttribute("purchasedProducts");
-        if (purchasedProducts != null && !purchasedProducts.isEmpty()) {
+        Product purchasedProduct = (Product) request.getAttribute("purchasedProduct");
+        if (purchasedProduct != null) {
     %>
         <h2>Aggiungi una Recensione</h2>
-        <form action="recensione/addReview" method="post">
-            <label for="productId">Seleziona un prodotto:</label>
-            <select name="productId" required>
-                <option value="">-- Seleziona --</option>
-                <% 
-                    for (Product product : purchasedProducts) { 
-                %>
-                    <option value="<%= product.getProductCode() %>"><%= product.getName() %></option>
-                <% 
-                    } 
-                %>
-            </select>
-
-            <label for="rating">Voto:</label>
-            <select name="rating" required>
-                <option value="">-- Seleziona --</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-
-            <label for="comment">Commento:</label>
-            <textarea name="comment" rows="4" required></textarea>
-
-            <button type="submit">Invia Recensione</button>
+        <form action="${pageContext.request.contextPath}/addReview" method="post" onsubmit="return confirmSubmission();">
+            <fieldset>
+                <legend>Recensione Prodotto</legend>
+                <div class="form-group">
+                    <label for="productName">Prodotto:</label>
+                    <span id="productName"><%= purchasedProduct.getName() %></span>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Voto:</label>
+                    <select name="rating" id="rating" required>
+                        <option value="">-- Seleziona --</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Commento:</label>
+                    <textarea name="comment" id="comment" rows="4" required></textarea>
+                </div>
+                <input type="hidden" name="productId" value="<%= purchasedProduct.getProductCode() %>" />
+                <div class="form-group">
+                    <button type="submit">Invia Recensione</button>
+                </div>
+            </fieldset>
         </form>
     <% 
         } else {

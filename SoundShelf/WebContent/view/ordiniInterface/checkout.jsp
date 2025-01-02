@@ -15,6 +15,7 @@
     <title>SoundShelf - Checkout</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
+    <script src="${pageContext.request.contextPath}/scripts/validation.js"></script>
 </head>
 <body>
     <div>

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrazione - Soundshelf</title>
     <link rel="stylesheet" href="/SoundShelf/styles/style.css" type="text/css">
+    <script src="${pageContext.request.contextPath}/scripts/validation.js"></script>
     <%@ include file="../pagePieces/header.jsp" %>
 </head>
 <body>

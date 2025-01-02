@@ -34,6 +34,10 @@
                     <td><%= user.getCognome() %></td>
                 </tr>
                 <tr>
+                    <th>Email:</th>
+                    <td><%= user.getEmail() %></td>
+                </tr>
+                <tr>
                     <th>Indirizzo:</th>
                     <td><%= user.getIndirizzo() %></td>
                 </tr>
@@ -54,6 +58,11 @@
             <div class="form-group">
                 <label for="cognome" class="form-label">Cognome:</label>
                 <input type="text" id="cognome" name="cognome" value="<%= user.getCognome() %>" required class="form-input">
+            </div>
+            
+            <div class="form-group">
+                <label for="cognome" class="form-label">Email:</label>
+                <input type="text" id="email" name="email" value="<%= user.getEmail() %>" required class="form-input">
             </div>
 
             <div class="form-group">
