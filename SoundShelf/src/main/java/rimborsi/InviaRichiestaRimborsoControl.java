@@ -22,10 +22,10 @@ import java.util.List;
 public class InviaRichiestaRimborsoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private ProductDAO productDAO;
-    private ElementoOrdineDAO elementoOrdineDAO;
-    private RefoundRequestDAO refoundRequestDAO;
-    private UtenteRegistratoDAO utenteDAO;
+    public ProductDAO productDAO;
+    public ElementoOrdineDAO elementoOrdineDAO;
+    public RefoundRequestDAO refoundRequestDAO;
+    public UtenteRegistratoDAO utenteDAO;
 
     @Override
     public void init() throws ServletException {
@@ -35,7 +35,7 @@ public class InviaRichiestaRimborsoControl extends HttpServlet {
         utenteDAO = new UtenteRegistratoDAO();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
@@ -65,7 +65,7 @@ public class InviaRichiestaRimborsoControl extends HttpServlet {
     }
 
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 

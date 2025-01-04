@@ -54,7 +54,7 @@ public class Product {
         this.genres = new ArrayList<>();
     }
 
-    public int getProductCode() {
+	public int getProductCode() {
         return productCode;
     }
 

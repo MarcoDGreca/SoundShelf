@@ -23,7 +23,7 @@ public class CercaProdottiControl extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = InputSanitizer.sanitize(request.getParameter("name"));
         String genreParam = InputSanitizer.sanitize(request.getParameter("genre"));
         String artistParam = InputSanitizer.sanitize(request.getParameter("artist"));

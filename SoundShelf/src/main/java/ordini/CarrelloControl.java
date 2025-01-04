@@ -15,7 +15,7 @@ import java.sql.SQLException;
 @WebServlet("/carrelloControl")
 public class CarrelloControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ProductDAO productDAO;
+    public ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
@@ -25,7 +25,6 @@ public class CarrelloControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        System.out.println("chiamato");
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null) {
             cart = new Cart();
@@ -34,7 +33,7 @@ public class CarrelloControl extends HttpServlet {
 
         String action = request.getParameter("action");
         if (action != null && !action.equals("clear")) {
-        	int productId = Integer.parseInt(request.getParameter("productId"));
+            int productId = Integer.parseInt(request.getParameter("productId"));
             Product product = null;
             try {
                 product = productDAO.getProductById(productId);
@@ -52,19 +51,29 @@ public class CarrelloControl extends HttpServlet {
                     cart.removeProduct(product);
                     break;
                 case "update":
-                    int quantity = Integer.parseInt(request.getParameter("quantity"));
+                    int quantity = -1;
+                    try {
+                        quantity = Integer.parseInt(request.getParameter("quantity"));
+                        if (quantity <= 0) {
+                            throw new NumberFormatException(); 
+                        }
+                    } catch (NumberFormatException e) {
+                        request.setAttribute("errorMessage", "Quantità non valida");
+                        request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+                        return;
+                    }
                     cart.updateQuantity(product, quantity);
                     break;
             }
+        } else if(action != null && action.equals("clear")) {
+            cart.clear();
         }
-        else if(action != null && action.equals("clear"))
-        	cart.clear();
 
         response.sendRedirect("view/ordiniInterface/carrelloView.jsp");
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
 }

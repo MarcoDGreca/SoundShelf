@@ -1,11 +1,8 @@
 package recensione;
 
-import ordini.ElementoOrdineDAO;
-import ordini.OrderDAO;
 import prodotti.Product;
 import prodotti.ProductDAO;
 import utente.UtenteRegistrato;
-import utente.UtenteRegistratoDAO;
 import util.InputSanitizer;
 
 import javax.servlet.ServletException;
@@ -17,13 +14,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.List;
 
 @WebServlet("/addReview")
 public class RecensioniControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private ReviewDAO reviewDAO;
-    private ProductDAO productDAO;
+    public ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
@@ -54,7 +50,7 @@ public class RecensioniControl extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
@@ -63,22 +59,47 @@ public class RecensioniControl extends HttpServlet {
             return;
         }
 
-        int productId = Integer.parseInt(request.getParameter("productId"));
-        int rating = Integer.parseInt(request.getParameter("rating"));
-        String comment = InputSanitizer.sanitize(request.getParameter("comment"));
-
-        Review review = new Review();
-        review.setIdProdotto(productId);
-        review.setEmailCliente(user.getEmail());
-        review.setVoto(rating);
-        review.setDescrizione(comment);
-        review.setDataRecensione(new Date(System.currentTimeMillis()));
-
         try {
-			reviewDAO.saveReview(review);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-        response.sendRedirect("listaOrdiniUtente");
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            String ratingStr = request.getParameter("rating");
+            String comment = InputSanitizer.sanitize(request.getParameter("comment"));
+
+            if (ratingStr == null || comment == null) {
+                request.setAttribute("errorMessage", "Compilare tutti i campi obbligatori");
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+                return;
+            }
+
+            int rating = Integer.parseInt(ratingStr);
+            if (rating < 0 || rating > 5) {
+                request.setAttribute("errorMessage", "Voto non valido. Inserire un valore tra 0 e 5");
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+                return;
+            }
+
+            if (comment.isEmpty() || comment.length() < 3) {
+                request.setAttribute("errorMessage", "Descrizione non valida. Inserire una descrizione adeguata");
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+                return;
+            }
+
+            Review review = new Review();
+            review.setIdProdotto(productId);
+            review.setEmailCliente(user.getEmail());
+            review.setVoto(rating);
+            review.setDescrizione(comment);
+            review.setDataRecensione(new Date(System.currentTimeMillis()));
+
+            reviewDAO.saveReview(review);
+            request.getRequestDispatcher("view/recensioneInterface/recensioneForm.jsp").forward(request, response);
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "Errore nei parametri inviati");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Errore nel salvataggio della recensione");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+        }
     }
+
 }

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class ModificaProdottoControl extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private ProductDAO productDAO;
+    public ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
@@ -20,7 +20,7 @@ public class ModificaProdottoControl extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String productCodeStr = request.getParameter("productId");
         if (productCodeStr != null) {
             try {
@@ -30,18 +30,21 @@ public class ModificaProdottoControl extends HttpServlet {
                     request.setAttribute("product", product);
                     request.getRequestDispatcher("/view/prodottiInterface/modificaProdottoForm.jsp").forward(request, response);
                 } else {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+                    request.setAttribute("errorMessage", "Product not found");
+                    request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
                 }
             } catch (SQLException | NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching product");
+                request.setAttribute("errorMessage", "Error fetching product");
+                request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
             }
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product code is required");
+            request.setAttribute("errorMessage", "Product code is required");
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int productCode = Integer.parseInt(request.getParameter("productCode"));
             String name = request.getParameter("name");
@@ -53,7 +56,14 @@ public class ModificaProdottoControl extends HttpServlet {
             String supportedDevice = request.getParameter("supportedDevice");
             String image = request.getParameter("image");
 
-            Product product = productDAO.getProductById(productCode);
+            Product product = null;
+            try {
+                product = productDAO.getProductById(productCode);
+            } catch (SQLException e) {
+                request.setAttribute("errorMessage", "Error accessing product database");
+                request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
+            }
+
             if (product != null) {
                 product.setName(name);
                 product.setReleaseDate(releaseDate);
@@ -64,13 +74,22 @@ public class ModificaProdottoControl extends HttpServlet {
                 product.setSupportedDevice(supportedDevice);
                 product.setImage(image);
 
-                productDAO.updateProduct(product);
+                try {
+                    productDAO.updateProduct(product);
+                } catch (SQLException e) {
+                    request.setAttribute("errorMessage", "Error updating product");
+                    request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
+                    return;
+                }
                 response.sendRedirect(request.getContextPath() + "/gestisciCatalogoProdottiControl");
             } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found");
+                request.setAttribute("errorMessage", "Product not found");
+                request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
             }
-        } catch (SQLException | NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error updating product");
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "Error updating product");
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
+
 }

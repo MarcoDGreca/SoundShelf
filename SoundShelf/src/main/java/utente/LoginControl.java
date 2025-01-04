@@ -18,12 +18,21 @@ public class LoginControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private UtenteRegistratoDAO userDAO;
 
-    @Override
-    public void init() throws ServletException {
-        userDAO = new UtenteRegistratoDAO();
+    public LoginControl() {
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    public void init() throws ServletException {
+        if (userDAO == null) {
+            userDAO = new UtenteRegistratoDAO();
+        }
+    }
+
+    public void setUserDAO(UtenteRegistratoDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = InputSanitizer.sanitize(request.getParameter("email"));
         String password = InputSanitizer.sanitize(request.getParameter("password"));
 
@@ -60,4 +69,3 @@ public class LoginControl extends HttpServlet {
         }
     }
 }
-

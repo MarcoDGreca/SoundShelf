@@ -16,7 +16,7 @@ import java.sql.SQLException;
 @WebServlet("/rimuoviRecensioneControl")
 public class RimuoviRecensioneControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ReviewDAO reviewDAO;
+    public ReviewDAO reviewDAO;
 
     @Override
     public void init() throws ServletException {
@@ -24,24 +24,44 @@ public class RimuoviRecensioneControl extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         UtenteRegistrato user = (UtenteRegistrato) session.getAttribute("user");
 
-        int reviewId = Integer.parseInt(request.getParameter("reviewId"));
-        Review review = null;
-		try {
-			review = reviewDAO.getReviewById(reviewId);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+        String reviewIdParam = request.getParameter("reviewId");
+        if (reviewIdParam == null || reviewIdParam.isEmpty()) {
+            request.setAttribute("errorMessage", "Il codice della recensione è obbligatorio");
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
+            return;
+        }
 
-        if (review != null){
-            try {
-				reviewDAO.deleteReview(reviewId);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+        int reviewId = Integer.parseInt(reviewIdParam);
+        if(reviewId < 0) {
+            	request.setAttribute("errorMessage", "Il codice della recensione non è valido");
+                request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
+        }
+
+        Review review = null;
+        try {
+            review = reviewDAO.getReviewById(reviewId);
+        } catch (SQLException e) {
+            request.setAttribute("errorMessage", "Errore durante la rimozione della recensione");
+            request.getRequestDispatcher("/messaggioErrore").forward(request, response);
+            return;
+        }
+
+        if (review == null) {
+            request.setAttribute("errorMessage", "Recensione non presente.");
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            reviewDAO.deleteReview(reviewId);
+        } catch (SQLException e) {
+            request.setAttribute("errorMessage", "Errore durante la rimozione della recensione");
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
+            return;
         }
 
         response.sendRedirect(request.getContextPath() + "/gestisciRecensioniControl");

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/gestisciRichiestaSupportoControl")
 public class GestisciRichiestaSupportoControl extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private SupportRequestDAO supportRequestDAO;
+    public SupportRequestDAO supportRequestDAO;
 
     @Override
     public void init() throws ServletException {
@@ -20,7 +20,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<SupportRequest> richieste = supportRequestDAO.getAllSupportRequests();
             request.setAttribute("richieste", richieste);
@@ -32,7 +32,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("azione");
 
         if ("richiediInformazioni".equals(action)) {
@@ -50,10 +50,9 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                 if (supportRequest != null) {
                     supportRequest.setInformazioniAggiuntive(informazioniAggiuntive);
                     supportRequestDAO.updateSupportRequest(supportRequest);
-
-                    request.setAttribute("message", "Informazioni aggiuntive aggiornate correttamente.");
                 } else {
                     request.setAttribute("errorMessage", "La richiesta di supporto non esiste.");
+                    request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                 }
 
                 List<SupportRequest> richieste = supportRequestDAO.getAllSupportRequests();
@@ -82,12 +81,13 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                     if (statoEnum != null) {
                         supportRequest.setStato(statoEnum);
                         supportRequestDAO.updateSupportRequest(supportRequest);
-                        request.setAttribute("message", "Stato aggiornato correttamente.");
                     } else {
                         request.setAttribute("errorMessage", "Stato non valido.");
+                        request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                     }
                 } else {
                     request.setAttribute("errorMessage", "La richiesta non esiste.");
+                    request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
                 }
 
                 List<SupportRequest> richieste = supportRequestDAO.getAllSupportRequests();
