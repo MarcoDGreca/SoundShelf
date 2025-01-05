@@ -84,7 +84,7 @@ public class AcquistoControl extends HttpServlet {
             calendar.add(Calendar.DAY_OF_MONTH, 7);
             java.sql.Date dataConsegna = new java.sql.Date(calendar.getTimeInMillis());
             order.setDataConsegna(dataConsegna);
-            order.setStato(StatoOrdine.IN_LAVORAZIONE);
+            order.setStato(StatoOrdine.ATTESA_PAGAMENTO);
 
             try {
                 for (CartItem item : cart.getItems()) {

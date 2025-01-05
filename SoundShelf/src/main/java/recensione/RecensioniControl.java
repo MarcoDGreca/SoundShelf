@@ -91,7 +91,7 @@ public class RecensioniControl extends HttpServlet {
             review.setDataRecensione(new Date(System.currentTimeMillis()));
 
             reviewDAO.saveReview(review);
-            request.getRequestDispatcher("view/recensioneInterface/recensioneForm.jsp").forward(request, response);
+            request.getRequestDispatcher("listaOrdiniUtente").forward(request, response);
         } catch (NumberFormatException e) {
             request.setAttribute("errorMessage", "Errore nei parametri inviati");
             request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);

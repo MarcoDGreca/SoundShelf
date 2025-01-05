@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <h3>Riepilogo Ordine</h3>
-                    <p><strong>Totale:</strong> €<%= totalPrice %></p>
+                    <p><strong>Totale:</strong> &euro;<%= totalPrice %></p>
                     <div class="form-actions">
                         <button type="submit" class="btn-checkout">Procedi con l'Acquisto</button>
                     </div>

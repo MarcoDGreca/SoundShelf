@@ -36,6 +36,7 @@ public class InformazioniControl extends HttpServlet {
 
             if (supportRequest != null) {
                 supportRequest.setInformazioniAggiuntive(informazioniAggiuntive);
+                supportRequest.setStato(StatoSupporto.IN_LAVORAZIONE);
 
                 if (rispostaUtente != null && !rispostaUtente.isEmpty()) {
                     supportRequest.setRispostaUtente(rispostaUtente);
@@ -43,7 +44,6 @@ public class InformazioniControl extends HttpServlet {
 
                 supportRequestDAO.updateSupportRequest(supportRequest);
 
-                supportRequest.setStato(StatoSupporto.IN_LAVORAZIONE);
                 supportRequestDAO.updateSupportRequest(supportRequest);
                 response.sendRedirect("home");
             } else {

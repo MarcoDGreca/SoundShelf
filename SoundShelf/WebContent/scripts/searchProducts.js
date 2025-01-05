@@ -54,10 +54,13 @@ function displayResults(products) {
     } else {
         products.forEach(product => {
             const productElement = document.createElement('div');
-            productElement.className = 'product-item';
+            productElement.className = 'grid-item product';
+
             productElement.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
-                <div class="info">
+                <div class="product-image-container">
+                    <img src="img/${product.image}" alt="${product.name}">
+                </div>
+                <div class="product-details">
                     <h3>${product.name}</h3>
                     <p><strong>Artista:</strong> ${Array.isArray(product.artists) ? product.artists.map(artist => artist.stageName || artist).join(', ') : product.artists}</p>
                     <p><strong>Genere:</strong> ${Array.isArray(product.genres) ? product.genres.map(genre => genre.name || genre).join(', ') : product.genres}</p>
@@ -66,11 +69,21 @@ function displayResults(products) {
                     <p><strong>Descrizione:</strong> ${product.description}</p>
                     <p><strong>Data di Pubblicazione:</strong> ${product.releaseDate}</p>
                     <p><strong>Disponibilità:</strong> ${product.availability}</p>
-                    <a href="/SoundShelf/prodottoControl?productId=${product.productCode}" class="button">Visualizza Prodotto</a>
+                    <form action="/SoundShelf/prodottoControl" method="get">
+                        <input type="hidden" name="productId" value="${product.productCode}">
+                        <button type="submit" class="button">Visualizza Prodotto</button>
+                    </form>
+                    <form action="/SoundShelf/carrelloControl" method="post">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="productId" value="${product.productCode}">
+                        <button type="submit" class="button">Aggiungi al Carrello</button>
+                    </form>
                 </div>
             `;
+
             resultsContainer.appendChild(productElement);
         });
     }
 }
+
 

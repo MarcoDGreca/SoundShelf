@@ -45,9 +45,9 @@
                         	<input type="hidden" name="orderId" value="<%= richiesta.getIdOrdine() %>" />
                 				<button type="submit" class="refund-button">Salva Modifiche</button>
                             	<select name="newState">
-                                	<option value="IN_LAVORAZIONE" <%= richiesta.getStato().equals(StatoRimborso.IN_LAVORAZIONE) ? "selected" : "" %>>In lavorazione</option>
-                                	<option value="ACCETTATO" <%= richiesta.getStato().equals(StatoRimborso.ACCETTATO) ? "selected" : "" %>>Accettato</option>
-                                	<option value="RIFIUTATO" <%= richiesta.getStato().equals(StatoRimborso.RIFIUTATO) ? "selected" : "" %>>Rifiutato</option>
+                                	<option value="In revisione" <%= richiesta.getStato().equals(StatoRimborso.IN_REVISIONE) ? "selected" : "" %>>In lavorazione</option>
+                                	<option value="Accettata" <%= richiesta.getStato().equals(StatoRimborso.ACCETTATO) ? "selected" : "" %>>Accettato</option>
+                                	<option value="Rifiutata" <%= richiesta.getStato().equals(StatoRimborso.RIFIUTATO) ? "selected" : "" %>>Rifiutato</option>
                             	</select>
                             </form>
                         </td>

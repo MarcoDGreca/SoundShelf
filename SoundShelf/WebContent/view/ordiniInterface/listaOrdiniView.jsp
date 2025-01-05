@@ -66,7 +66,7 @@
                                     <button type="submit" class="refund-button">Richiedi Rimborso</button>
                                 </form>
                                 <%
-                                if ("Completato".equals(order.getStato().getStato())) {
+                                if ("Consegnato".equals(order.getStato().getStato())) {
                                 %>
                                 <form action="${pageContext.request.contextPath}/addReview" method="get">
                                     <input type="hidden" name="productCode" value="<%= detail.getIdProdotto() %>">

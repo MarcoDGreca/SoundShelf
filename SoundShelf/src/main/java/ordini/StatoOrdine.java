@@ -2,8 +2,12 @@ package ordini;
 
 public enum StatoOrdine {
     IN_LAVORAZIONE("In lavorazione"),
-    COMPLETATO("Completato"),
-    ANNULLATO("Annullato");
+    COMPLETATO("Consegnato"),
+    ANNULLATO("Annullato"),
+    SPEDITO("Spedito"),
+    AFFIDATO("Affidato"),
+    ATTESA_PAGAMENTO("In attesa di pagamento"),
+    PAGAMENTO_NON_RICEVUTO("Pagamento non ricevuto");
 
     private final String stato;
 

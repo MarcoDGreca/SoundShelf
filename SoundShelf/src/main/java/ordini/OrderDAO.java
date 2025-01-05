@@ -28,7 +28,7 @@ public class OrderDAO {
             ps.setDate(3, order.getDataOrdine());
             ps.setDate(4, order.getDataConsegna());
             ps.setString(5, order.getIndirizzoSpedizione());
-            ps.setString(6, order.getStato().name().replace("_", " "));
+            ps.setString(6, order.getStato().getStato());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
@@ -117,7 +117,7 @@ public class OrderDAO {
             statement.setDate(3, order.getDataOrdine());
             statement.setDate(4, order.getDataConsegna());
             statement.setString(5, order.getIndirizzoSpedizione());
-            statement.setString(6, order.getStato().name().replace("_", " "));
+            statement.setString(6, order.getStato().getStato());
             statement.setInt(7, order.getNumeroOrdine());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -155,7 +155,7 @@ public class OrderDAO {
                     order.setDataOrdine(resultSet.getDate("dataAcquisto"));
                     order.setDataConsegna(resultSet.getDate("dataConsegna"));
                     order.setIndirizzoSpedizione(resultSet.getString("indirizzoSpedizione"));
-                    order.setStato(StatoOrdine.valueOf(resultSet.getString("stato").toUpperCase().replace(" ", "_")));
+                    order.setStato(StatoOrdine.fromString(resultSet.getString("stato")));
                     orders.add(order);
                 }
             }
@@ -165,18 +165,6 @@ public class OrderDAO {
         return orders;
     }
 
-
-    public void requestRefund(int orderId, String emailCliente) throws SQLException {
-        String sql = "UPDATE Ordine SET stato = 'Richiesto Rimborso' WHERE numeroOrdine = ? AND emailCliente = ?";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, orderId);
-            ps.setString(2, emailCliente);
-            ps.executeUpdate();
-        }
-    }
-
-
     public List<Order> filterOrders(String emailCliente, Date dataInizio, Date dataFine) {
         List<Order> orders = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM Ordine WHERE 1=1");
@@ -185,10 +173,10 @@ public class OrderDAO {
             sql.append(" AND emailCliente = ?");
         }
         if (dataInizio != null) {
-            sql.append(" AND dataOrdine >= ?");
+            sql.append(" AND dataAcquisto >= ?");
         }
         if (dataFine != null) {
-            sql.append(" AND dataOrdine <= ?");
+            sql.append(" AND dataAcquisto <= ?");
         }
 
         try (Connection conn = dataSource.getConnection();
@@ -212,7 +200,7 @@ public class OrderDAO {
                     order.setNumeroOrdine(rs.getInt("numeroOrdine"));
                     order.setEmailCliente(rs.getString("emailCliente"));
                     order.setPrezzoTotale(rs.getDouble("prezzoTotale"));
-                    order.setDataOrdine(rs.getDate("dataOrdine"));
+                    order.setDataOrdine(rs.getDate("dataAcquisto"));
                     order.setDataConsegna(rs.getDate("dataConsegna"));
                     order.setIndirizzoSpedizione(rs.getString("indirizzoSpedizione"));
                     order.setStato(StatoOrdine.fromString(rs.getString("stato")));

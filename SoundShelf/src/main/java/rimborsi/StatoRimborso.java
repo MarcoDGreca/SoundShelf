@@ -2,9 +2,9 @@ package rimborsi;
 
 
 public enum StatoRimborso {
-	IN_LAVORAZIONE("In lavorazione"),
-    ACCETTATO("Accettato"),
-    RIFIUTATO("Rifiutato");
+	IN_REVISIONE("In revisione"),
+    ACCETTATO("Accettata"),
+    RIFIUTATO("Rifiutata");
 
     private final String stato;
 

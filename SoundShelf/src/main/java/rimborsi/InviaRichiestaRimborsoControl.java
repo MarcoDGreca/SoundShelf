@@ -91,7 +91,7 @@ public class InviaRichiestaRimborsoControl extends HttpServlet {
                 refundRequest.setEmailCliente(user.getEmail());
                 refundRequest.setMotivo(reason);
                 refundRequest.setIban(iban);
-                refundRequest.setStato(StatoRimborso.IN_LAVORAZIONE);
+                refundRequest.setStato(StatoRimborso.IN_REVISIONE);
 
                 try {
                     refoundRequestDAO.saveRichiestaRimborso(refundRequest);
