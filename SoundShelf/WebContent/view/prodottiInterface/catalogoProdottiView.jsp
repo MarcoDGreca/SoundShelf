@@ -42,7 +42,7 @@
             <tbody>
                 <% for (Product product : products) { %>
                     <tr>
-                        <td><img src="<%= product.getImage() %>" alt="<%= product.getName() %>" class="product-image"></td>
+                        <td><img src="${pageContext.request.contextPath}/img/<%= product.getImage() != null ? product.getImage() : "default.jpg" %>" alt="<%= product.getName() %>"></td>
                         <td><%= product.getName() %></td>
                         <td>&euro;<%= product.getSalePrice() %></td>
                         <td><%= product.getAvailability() %></td>

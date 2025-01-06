@@ -18,14 +18,6 @@
             <p>Telefono: +39 123 456 7890</p>
             <p>Indirizzo: Via della Musica, 10, Roma</p>
         </div>
-        <div class="footer-section">
-            <h4>Seguici</h4>
-            <div class="social-links">
-                <a href="https://facebook.com/soundshelf" target="_blank"><img src="${pageContext.request.contextPath}/img/facebook-icon.png" alt="Facebook"></a>
-                <a href="https://twitter.com/soundshelf" target="_blank"><img src="${pageContext.request.contextPath}/img/twitter-icon.png" alt="Twitter"></a>
-                <a href="https://instagram.com/soundshelf" target="_blank"><img src="${pageContext.request.contextPath}/img/instagram-icon.png" alt="Instagram"></a>
-            </div>
-        </div>
     </div>
     <div class="footer-bottom">
         <p>&copy; 2024 SoundShelf - Tutti i diritti riservati.</p>

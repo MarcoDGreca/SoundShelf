@@ -366,10 +366,10 @@ footer .footer-bottom {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
+    margin-top: 15px;
     font-size: 1rem;
     transition: background-color 0.3s ease;
     cursor: pointer;
-    width: 48%;
 }
 
 .product-details button:hover {
@@ -562,6 +562,7 @@ input[type="number"]:focus {
     border: none;
     padding: 10px 15px;
     border-radius: 5px;
+    margin-top: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -1017,65 +1018,110 @@ input[type="number"]:focus {
     color: #28a745;
 }
 
-.requests-table {
-    width: 100%;
+/* Tabella delle richieste di supporto */
+table.requests-table {
+    width: 80%;
+    margin: 20px auto;
     border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.requests-table th, .requests-table td {
-    padding: 12px;
+table.requests-table th,
+table.requests-table td {
+    padding: 15px;
     text-align: left;
     border: 1px solid #ddd;
 }
 
-.requests-table thead {
-    background-color: #007BFF;
-    color: white;
-}
-
-.requests-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.requests-table tr:hover {
+table.requests-table th {
     background-color: #f1f1f1;
-}
-
-.response-form {
-    margin-top: 10px;
-}
-
-.response-label {
-    display: block;
-    margin-bottom: 5px;
+    color: #333;
     font-weight: bold;
 }
 
-.response-textarea {
+table.requests-table td {
+    background-color: #fafafa;
+}
+
+/* Sezione vuota (quando non ci sono richieste) */
+.empty-request-card {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffebcc;
+    border: 1px solid #ffcc00;
+    margin: 20px auto;
+    width: 80%;
+    border-radius: 8px;
+}
+
+.empty-request-card h3 {
+    font-size: 1.8rem;
+    color: #ff6347;
+}
+
+.empty-request-card p {
+    color: #333;
+}
+
+/* Form di risposta */
+.response-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.response-form .response-label {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.response-form .response-textarea {
     width: 100%;
-    height: 100px;
+    height: 120px;
     padding: 10px;
+    font-size: 1rem;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 1rem;
-    margin-bottom: 10px;
+    resize: vertical;
 }
 
-.response-button {
-    background-color: #007BFF;
-    color: white;
-    padding: 10px 15px;
+.response-form .response-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
     border-radius: 5px;
-    font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
-.response-button:hover {
+.response-form .response-button:hover {
+    background-color: #218838;
+}
+
+/* Pulsante di nuova richiesta */
+.new-request-form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.new-request-button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.new-request-button:hover {
     background-color: #0056b3;
 }
+
 
 .empty-request-card {
     background-color: #f8f9fa;
@@ -1451,38 +1497,66 @@ input[type="number"]:focus {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #fff;
+    background-color: #ffffff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Aggiunge una leggera ombra per un aspetto più moderno */
+    border-radius: 8px; /* Angoli arrotondati per un design più accattivante */
+    overflow: hidden; /* Per evitare che contenuti escano dalla tabella */
 }
 
 .review-table th, .review-table td {
-    padding: 10px;
+    padding: 12px 15px; /* Margine interno per una spaziatura uniforme */
     text-align: left;
-    border: 1px solid #ddd;
+    border: 1px solid #ddd; /* Bordo sottile per separare le celle */
 }
 
 .review-table th {
-    background-color: #f2f2f2;
+    background-color: #f4f4f4; /* Leggera variazione per maggiore leggibilità */
     font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    text-transform: uppercase; /* Maiuscolo per differenziare i titoli */
 }
 
 .review-table td {
+    font-size: 14px;
+    color: #555; /* Colore leggermente attenuato per i contenuti */
     vertical-align: middle;
+    word-wrap: break-word; /* Per gestire testi lunghi */
 }
 
 .review-table td a {
-    color: #333;
+    color: #007bff; /* Colore blu per i link */
     text-decoration: none;
+    font-weight: 500; /* Leggera evidenziazione per i link */
 }
 
 .review-table td a:hover {
     text-decoration: underline;
+    color: #0056b3; /* Colore più scuro per il passaggio del mouse */
 }
 
 .review-table td img {
-    width: 100px;
+    width: 80px; /* Dimensione più piccola per immagini (puoi adattarla) */
     height: auto;
     border-radius: 5px;
+    border: 1px solid #ccc; /* Bordo sottile per le immagini */
 }
+
+.review-table .btn-delete {
+    background-color: #ff4d4f; /* Colore rosso per il pulsante di eliminazione */
+    color: #ffffff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.review-table .btn-delete:hover {
+    background-color: #e33d3f; /* Colore più scuro per il passaggio del mouse */
+}
+
 
 /* Filter Form Styles */
 .filter-form {
@@ -1546,6 +1620,115 @@ input[type="number"]:focus {
 .filter-button:hover {
     background-color: #0056b3;
 }
+
+/* Stili generali per la pagina delle recensioni */
+.review-page-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-form-container {
+    margin-top: 20px;
+}
+
+/* Titolo del form */
+.review-form-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+}
+
+/* Form e campo di input */
+.review-fieldset {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+.review-legend {
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 0 10px;
+    color: #333;
+}
+
+/* Gruppo di input */
+.review-form-group {
+    margin-bottom: 15px;
+}
+
+.review-label {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    display: block;
+    color: #333;
+}
+
+/* Campo di selezione per il voto */
+.review-input-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #fafafa;
+    font-size: 1rem;
+}
+
+.review-input-textarea {
+    width: 100%;
+    padding: 10px;
+    resize: vertical;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #fafafa;
+    font-size: 1rem;
+}
+
+/* Pulsante invio recensione */
+.review-submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.review-submit-btn:hover {
+    background-color: #218838;
+}
+
+/* Messaggio per chi non ha acquistato prodotti */
+.review-no-purchase-message {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ff6347;
+    margin-top: 20px;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .review-page-container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .review-submit-btn {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+}
+
 
 @media (max-width: 768px) {
     header .nav-container {

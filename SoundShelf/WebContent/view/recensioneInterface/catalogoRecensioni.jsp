@@ -20,7 +20,7 @@
         %>
 
         <div class="review-table">
-            <table class="table">
+            <table class="review-table">
                 <thead>
                     <tr>
                         <th>Prodotto</th>

@@ -41,16 +41,20 @@
                 <td><%= richiesta.getInformazioniAggiuntive() != null ? richiesta.getInformazioniAggiuntive() : "Nessuna" %></td>
                 <td>
                     <% 
-                    if (richiesta.getInformazioniAggiuntive() != null && richiesta.getInformazioniAggiuntive().length() > 0) {
+                    if (richiesta.getInformazioniAggiuntive() != null && richiesta.getRispostaUtente() == null) {
                     %>
                     <form action="${pageContext.request.contextPath}/informazioniControl" method="post" class="response-form">
                         <input type="hidden" name="idRichiesta" value="<%= richiesta.getId() %>">
                         <label for="risposta" class="response-label">La tua risposta:</label>
-                        <textarea name="risposta" required class="response-textarea"></textarea>
+                        <textarea name="rispostaUtente" required class="response-textarea"></textarea>
                         <button type="submit" class="response-button">Invia Risposta</button>
                     </form>
                     <% 
-                    }
+                    } else if (richiesta.getRispostaUtente() != null) {
+                    %>
+                    <%= richiesta.getRispostaUtente() != null ? richiesta.getRispostaUtente() : "Nessuna" %>
+                    <% 
+                    } 
                     %>
                 </td>
             </tr>

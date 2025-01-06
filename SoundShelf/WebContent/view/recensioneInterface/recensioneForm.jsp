@@ -16,44 +16,46 @@
 
     <jsp:include page="../pagePieces/header.jsp" />
 
-    <div id="main" class="clear">
+    <div class="review-page-container">
     <% 
         Product purchasedProduct = (Product) request.getAttribute("purchasedProduct");
         if (purchasedProduct != null) {
     %>
-        <h2>Aggiungi una Recensione</h2>
-        <form action="${pageContext.request.contextPath}/addReview" method="post" onsubmit="return confirmSubmission();">
-            <fieldset>
-                <legend>Recensione Prodotto</legend>
-                <div class="form-group">
-                    <label for="productName">Prodotto:</label>
-                    <span id="productName"><%= purchasedProduct.getName() %></span>
-                </div>
-                <div class="form-group">
-                    <label for="rating">Voto:</label>
-                    <select name="rating" id="rating" required>
-                        <option value="">-- Seleziona --</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="comment">Commento:</label>
-                    <textarea name="comment" id="comment" rows="4" required></textarea>
-                </div>
-                <input type="hidden" name="productId" value="<%= purchasedProduct.getProductCode() %>" />
-                <div class="form-group">
-                    <button type="submit">Invia Recensione</button>
-                </div>
-            </fieldset>
-        </form>
+        <div class="review-form-container">
+            <h2 class="review-form-title">Aggiungi una Recensione</h2>
+            <form action="${pageContext.request.contextPath}/addReview" method="post" onsubmit="return confirmSubmission();">
+                <fieldset class="review-fieldset">
+                    <legend class="review-legend">Recensione Prodotto</legend>
+                    <div class="review-form-group">
+                        <label for="productName" class="review-label">Prodotto:</label>
+                        <span id="productName" class="review-product-name"><%= purchasedProduct.getName() %></span>
+                    </div>
+                    <div class="review-form-group">
+                        <label for="rating" class="review-label">Voto:</label>
+                        <select name="rating" id="rating" class="review-input-select" required>
+                            <option value="">-- Seleziona --</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="review-form-group">
+                        <label for="comment" class="review-label">Commento:</label>
+                        <textarea name="comment" id="comment" class="review-input-textarea" rows="4" required></textarea>
+                    </div>
+                    <input type="hidden" name="productId" value="<%= purchasedProduct.getProductCode() %>" />
+                    <div class="review-form-group">
+                        <button type="submit" class="review-submit-btn">Invia Recensione</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
     <% 
         } else {
     %>
-        <h3>Non hai acquistato ancora nessun prodotto per lasciare una recensione.</h3>
+        <h3 class="review-no-purchase-message">Non hai acquistato ancora nessun prodotto per lasciare una recensione.</h3>
     <% 
         } 
     %>

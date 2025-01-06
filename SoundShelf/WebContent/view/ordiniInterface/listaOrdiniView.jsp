@@ -61,13 +61,13 @@
                             <td><%= detail.getQuantita() %></td>
                             <td>&euro;<%= product != null ? product.getSalePrice() * detail.getQuantita() : 0 %></td>
                             <td>
+                             	<%
+                                if ("Consegnato".equals(order.getStato().getStato())) {
+                                %>
                                 <form action="${pageContext.request.contextPath}/inviaRichiestaRimborsoControl" method="get">
                                     <input type="hidden" name="detailCode" value="<%= detail.getId() %>">
                                     <button type="submit" class="refund-button">Richiedi Rimborso</button>
                                 </form>
-                                <%
-                                if ("Consegnato".equals(order.getStato().getStato())) {
-                                %>
                                 <form action="${pageContext.request.contextPath}/addReview" method="get">
                                     <input type="hidden" name="productCode" value="<%= detail.getIdProdotto() %>">
                                     <button type="submit" class="refund-button">Lascia una recensione</button>
@@ -82,7 +82,7 @@
                         %>
                     </table>
                     <%
-                    if (!"Completato".equals(order.getStato().getStato())) {
+                    if ("Spedito".equals(order.getStato().getStato())) {
                     %>
                     <form action="${pageContext.request.contextPath}/OrdineRicevutoControl" method="post" onsubmit="return confirm('Sei sicuro di aver ricevuto questo ordine?');">
                         <input type="hidden" name="ordineId" value="<%= order.getNumeroOrdine() %>">
