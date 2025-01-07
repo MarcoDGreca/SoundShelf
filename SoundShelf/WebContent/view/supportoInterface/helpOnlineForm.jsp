@@ -14,7 +14,7 @@
     <div id="main" class="clear">
         <h2 class="page-title">Invia una Nuova Richiesta di Supporto</h2>
 
-        <form id="supportRequestForm" action="${pageContext.request.contextPath}/richiestaSupportoControl" method="post" onsubmit="return validateForm()" class="support-form">
+        <form id="supportRequestForm" action="${pageContext.request.contextPath}/richiestaSupportoControl" method="post" onsubmit="return confirmSubmission() && validateForm()" class="support-form">
             <label for="name" class="form-label">Nome:</label>
             <input type="text" id="name" name="name" required class="form-input"><br><br>
 
@@ -55,6 +55,10 @@
                 return false;
             }
             return true;
+        }
+
+        function confirmSubmission() {
+            return confirm("Sei sicuro di voler inviare questa richiesta di supporto?");
         }
     </script>
 

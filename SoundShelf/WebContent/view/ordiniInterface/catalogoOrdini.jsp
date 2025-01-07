@@ -128,7 +128,7 @@
 
 				<form
 					action="${pageContext.request.contextPath}/PagamentoNonRicevutoControl"
-					method="post" style="display: inline;">
+					method="post" style="display: inline;" onsubmit="return confirmPaymentCancellation()">
 					<input type="hidden" name="ordineId"
 						value="<%=ordine.getNumeroOrdine()%>" />
 					<button type="submit" class="btn-annulla-pagamento">Annulla
@@ -150,6 +150,12 @@
 	</div>
 
 	<jsp:include page="../pagePieces/footer.jsp" />
+
+	<script type="text/javascript">
+		function confirmPaymentCancellation() {
+			return confirm("Sei sicuro di voler annullare questo ordine per pagamento non ricevuto?");
+		}
+	</script>
 
 </body>
 </html>

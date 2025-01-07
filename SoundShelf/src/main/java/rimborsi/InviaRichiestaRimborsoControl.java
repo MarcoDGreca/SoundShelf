@@ -79,36 +79,61 @@ public class InviaRichiestaRimborsoControl extends HttpServlet {
         String reason = request.getParameter("reason");
         String iban = request.getParameter("iban");
 
-        if (orderDetailID != null && reason != null && iban != null) {
-            int orderDetailId = Integer.parseInt(orderDetailID);
+        // Verifica che i parametri non siano nulli o vuoti
+        if (orderDetailID == null || orderDetailID.isEmpty() || reason == null || reason.isEmpty() || iban == null || iban.isEmpty()) {
+            request.setAttribute("errorMessage", "Tutti i campi sono obbligatori.");
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
+            return;
+        }
 
-            ElementoOrdine product = elementoOrdineDAO.getOrderDetailsById(orderDetailId);
+        // Verifica che orderDetailID sia un intero valido
+        int orderDetailId = -1;
+        try {
+            orderDetailId = Integer.parseInt(orderDetailID);
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "ID dettaglio ordine non valido.");
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
+            return;
+        }
 
-            if (product != null) {
-                RefoundRequest refundRequest = new RefoundRequest();
-                refundRequest.setIdOrdine(product.getIdOrdine());
-                refundRequest.setIdProdotto(product.getIdProdotto());
-                refundRequest.setEmailCliente(user.getEmail());
-                refundRequest.setMotivo(reason);
-                refundRequest.setIban(iban);
-                refundRequest.setStato(StatoRimborso.IN_REVISIONE);
+        // Verifica che l'IBAN sia valido (in questo caso, un semplice controllo di formato)
+        if (!isValidIban(iban)) {
+            request.setAttribute("errorMessage", "IBAN non valido.");
+            request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
+            return;
+        }
 
-                try {
-                    refoundRequestDAO.saveRichiestaRimborso(refundRequest);
-                    request.setAttribute("message", "La tua richiesta di rimborso è stata inviata con successo.");
-                    request.getRequestDispatcher("listaOrdiniUtente").forward(request, response);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    request.setAttribute("errorMessage", "Errore nel salvataggio della richiesta di rimborso.");
-                    request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
-                }
-            } else {
-                request.setAttribute("errorMessage", "Prodotto non trovato.");
+        ElementoOrdine product = elementoOrdineDAO.getOrderDetailsById(orderDetailId);
+
+        if (product != null) {
+            // Tutto è valido, si crea la richiesta di rimborso
+            RefoundRequest refundRequest = new RefoundRequest();
+            refundRequest.setIdOrdine(product.getIdOrdine());
+            refundRequest.setIdProdotto(product.getIdProdotto());
+            refundRequest.setEmailCliente(user.getEmail());
+            refundRequest.setMotivo(reason);
+            refundRequest.setIban(iban);
+            refundRequest.setStato(StatoRimborso.IN_REVISIONE);
+
+            try {
+                refoundRequestDAO.saveRichiestaRimborso(refundRequest);
+                request.setAttribute("message", "La tua richiesta di rimborso è stata inviata con successo.");
+                request.getRequestDispatcher("listaOrdiniUtente").forward(request, response);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                request.setAttribute("errorMessage", "Errore nel salvataggio della richiesta di rimborso.");
                 request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
             }
         } else {
-            request.setAttribute("errorMessage", "Parametri non validi.");
+            request.setAttribute("errorMessage", "Prodotto non trovato.");
             request.getRequestDispatcher("/view/error/messaggioErrore.jsp").forward(request, response);
         }
     }
+
+    // Metodo per validare l'IBAN (utilizzo di una regex semplificata)
+    private boolean isValidIban(String iban) {
+        String regex = "^[A-Z]{2}[0-9]{2}[A-Z0-9]{4}[A-Z0-9]{0,30}$"; // Pattern IBAN base
+        return iban != null && iban.matches(regex);
+    }
+
 }

@@ -27,10 +27,8 @@
         %>
 
             <form action="${pageContext.request.contextPath}/inviaRichiestaRimborsoControl" method="post" onsubmit="return confirmRefund();" class="refund-form">
+            	<label for="orderDetailID" class="form-label">Codice prodotto da rendere:</label>
                 <input type="text" id="orderDetailID" name="orderDetailID" value="<%= elemento.getId() %>" readonly class="form-input"/><br><br>
-
-                <label for="productPrice" class="form-label">Prezzo totale dell'ordine:</label>
-                <input type="text" id="productPrice" name="productPrice" value="<%= totale %>" readonly class="form-input" />&euro;<br><br>
 
                 <label for="reason" class="form-label">Inserisci il motivo del rimborso:</label>
                 <textarea id="reason" name="reason" required class="form-textarea"></textarea><br><br>

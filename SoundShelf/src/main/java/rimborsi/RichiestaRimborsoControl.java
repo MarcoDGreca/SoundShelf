@@ -32,10 +32,12 @@ public class RichiestaRimborsoControl extends HttpServlet {
                 request.setAttribute("refoundRequests", refoundRequests);
             } catch (SQLException e) {
                 e.printStackTrace();
-                request.setAttribute("error", "Si è verificato un errore durante il recupero delle richieste di rimborso.");
+                request.setAttribute("errorMessage", "Errore generico.");
+                request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             }
         } else {
-            request.setAttribute("error", "Devi essere loggato per visualizzare le tue richieste di rimborso.");
+        	request.setAttribute("errorMessage", "Devi essere loggato per visualizzare le richieste di rimborso.");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
 
         request.getRequestDispatcher("view/rimborsiInterface/richiestaRimborsoView.jsp").forward(request, response);

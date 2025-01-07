@@ -17,44 +17,67 @@
 
     <jsp:include page="../pagePieces/header.jsp" />
 
-    <div id="main" class="clear">
-        <h2>Aggiungi Nuovo Prodotto</h2>
+    <div class="add-product-page-container">
+        <h2 class="add-product-title">Aggiungi Nuovo Prodotto</h2>
+        <form action="${pageContext.request.contextPath}/InserisciNuovoProdottoControl" method="post" onsubmit="return confirmAddProduct();">
+            <fieldset class="add-product-fieldset">
+                <legend class="add-product-legend">Inserisci Dettagli del Prodotto</legend>
 
-        <form action="${pageContext.request.contextPath}/InserisciNuovoProdottoControl" method="post" onsubmit="return confirmAddProduct()">
+                <div class="add-product-form-group">
+                    <label for="name" class="add-product-label">Nome Prodotto:</label>
+                    <input type="text" id="name" name="name" class="add-product-input" required><br>
+                </div>
 
-            <label for="name">Nome Prodotto:</label>
-            <input type="text" id="name" name="name" required><br>
+                <div class="add-product-form-group">
+                    <label for="description" class="add-product-label">Descrizione:</label>
+                    <textarea id="description" name="description" class="add-product-textarea" required></textarea><br>
+                </div>
 
-            <label for="description">Descrizione:</label>
-            <textarea id="description" name="description" required></textarea><br>
+                <div class="add-product-form-group">
+                    <label for="salePrice" class="add-product-label">Prezzo di Vendita (€):</label>
+                    <input type="number" step="0.01" id="salePrice" name="salePrice" class="add-product-input" required><br>
+                </div>
 
-            <label for="salePrice">Prezzo di Vendita (&euro;):</label>
-            <input type="number" step="0.01" id="salePrice" name="salePrice" required><br>
+                <div class="add-product-form-group">
+                    <label for="originalPrice" class="add-product-label">Prezzo Originale (€):</label>
+                    <input type="number" step="0.01" id="originalPrice" name="originalPrice" class="add-product-input" required><br>
+                </div>
 
-            <label for="originalPrice">Prezzo Originale (&euro;):</label>
-            <input type="number" step="0.01" id="originalPrice" name="originalPrice" required><br>
+                <div class="add-product-form-group">
+                    <label for="availability" class="add-product-label">Disponibilità:</label>
+                    <input type="number" id="availability" name="availability" class="add-product-input" required><br>
+                </div>
 
-            <label for="availability">Disponibilit&aacute;:</label>
-            <input type="number" id="availability" name="availability" required><br>
+                <div class="add-product-form-group">
+                    <label for="releaseDate" class="add-product-label">Data di Rilascio:</label>
+                    <input type="date" id="releaseDate" name="releaseDate" class="add-product-input" required><br>
+                </div>
 
-            <label for="releaseDate">Data di Rilascio:</label>
-            <input type="date" id="releaseDate" name="releaseDate" required><br>
+                <div class="add-product-form-group">
+                    <label for="image" class="add-product-label">Immagine URL:</label>
+                    <input type="text" id="image" name="image" class="add-product-input" required><br>
+                </div>
 
-            <label for="image">Immagine URL:</label>
-            <input type="text" id="image" name="image" required><br>
-            
-            <label for="image">Formato:</label>
-            <input type="text" id="supportedDevice" name="supportedDevice" required><br>
+                <div class="add-product-form-group">
+                    <label for="supportedDevice" class="add-product-label">Formato:</label>
+                    <input type="text" id="supportedDevice" name="supportedDevice" class="add-product-input" required><br>
+                </div>
 
-            <label for="artists">Artisti (separati da virgola):</label>
-            <input type="text" id="artists" name="artists" required><br>
+                <div class="add-product-form-group">
+                    <label for="artists" class="add-product-label">Artisti (separati da virgola):</label>
+                    <input type="text" id="artists" name="artists" class="add-product-input" required><br>
+                </div>
 
-            <label for="genres">Generi (separati da virgola):</label>
-            <input type="text" id="genres" name="genres" required><br>
+                <div class="add-product-form-group">
+                    <label for="genres" class="add-product-label">Generi (separati da virgola):</label>
+                    <input type="text" id="genres" name="genres" class="add-product-input" required><br>
+                </div>
 
-            <button type="submit">Aggiungi Prodotto</button>
+                <div class="add-product-form-group">
+                    <button type="submit" class="add-product-submit-btn">Aggiungi Prodotto</button>
+                </div>
+            </fieldset>
         </form>
-
     </div>
 
     <jsp:include page="../pagePieces/footer.jsp" />
