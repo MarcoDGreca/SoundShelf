@@ -13,9 +13,6 @@
             <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
             <li><a href="${pageContext.request.contextPath}/carrelloControl">Carrello</a></li>
             <li><a href="${pageContext.request.contextPath}/view/prodottiInterface/ricercaProdottiView.jsp">Cerca</a></li>
-            <li><a href="${pageContext.request.contextPath}/richiestaSupportoControl">Supporto</a></li>
-            <li><a href="${pageContext.request.contextPath}/richiestaRimborsoControl">Rimborso</a></li>
-            <li><a href="${pageContext.request.contextPath}/listaOrdiniUtente">Ordini</a></li>
 
             <% if (utente != null && utente.getRuolo().equals(Ruolo.GESTORESITO)) { %>
                 <li class="admin-section">
@@ -33,10 +30,18 @@
         </ul>
         <div class="auth-buttons">
             <% if (isAuthenticated) { %>
-                <div class="user-menu">
-                    <a href="${pageContext.request.contextPath}/profileControl" class="button">Profilo</a>
-                    <a href="${pageContext.request.contextPath}/logout" class="button">LogOut</a>
-                </div>
+                <ul class="nav-links">
+                    <li class="profile-section">
+                        <a href="#" class="profile-toggle">Profilo</a>
+                        <ul class="profile-dropdown">
+                            <li><a href="${pageContext.request.contextPath}/profileControl">Profilo</a></li>
+                            <li><a href="${pageContext.request.contextPath}/richiestaSupportoControl">Supporto</a></li>
+                            <li><a href="${pageContext.request.contextPath}/richiestaRimborsoControl">Rimborso</a></li>
+                            <li><a href="${pageContext.request.contextPath}/listaOrdiniUtente">Ordini</a></li>
+                            <li><a href="${pageContext.request.contextPath}/logout">LogOut</a></li>
+                        </ul>
+                    </li>
+                </ul>
             <% } else { %>
                 <div class="user-menu">
                     <a href="${pageContext.request.contextPath}/view/utenteInterface/loginForm.jsp" class="button">Login</a>
@@ -46,3 +51,4 @@
         </div>
     </div>
 </header>
+

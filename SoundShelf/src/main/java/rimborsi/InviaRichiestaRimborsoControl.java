@@ -117,7 +117,6 @@ public class InviaRichiestaRimborsoControl extends HttpServlet {
 
             try {
                 refoundRequestDAO.saveRichiestaRimborso(refundRequest);
-                request.setAttribute("message", "La tua richiesta di rimborso è stata inviata con successo.");
                 request.getRequestDispatcher("listaOrdiniUtente").forward(request, response);
             } catch (SQLException e) {
                 e.printStackTrace();

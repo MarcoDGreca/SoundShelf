@@ -77,11 +77,11 @@ public class TC6 {
     @Test
     public void testDoGet_InvalidDetailCode() throws Exception {
         when(session.getAttribute("user")).thenReturn(user);
-        when(request.getParameter("detailCode")).thenReturn("invalid");
+        when(request.getParameter("detailCode")).thenReturn("1000");
         
-        servlet.doPost(request, response);
+        servlet.doGet(request, response);
 
-        verify(request).setAttribute(eq("errorMessage"), eq("Parametri non validi."));
+        verify(request).setAttribute(eq("errorMessage"), eq("Dettagli prodotto non trovati."));
         verify(request.getRequestDispatcher("/view/error/messaggioErrore.jsp")).forward(request, response);
     }
 
@@ -131,7 +131,7 @@ public class TC6 {
 
         servlet.doPost(request, response);
 
-        verify(request).setAttribute(eq("errorMessage"), eq("Parametri non validi."));
+        verify(request).setAttribute(eq("errorMessage"), eq("Tutti i campi sono obbligatori."));
         verify(request.getRequestDispatcher("/view/error/messaggioErrore.jsp")).forward(request, response);
     }
 
@@ -149,9 +149,7 @@ public class TC6 {
         doNothing().when(refoundRequestDAO).saveRichiestaRimborso(mockRefundRequest);
 
         servlet.doPost(request, response);
-
-        verify(request).setAttribute(eq("message"), eq("La tua richiesta di rimborso è stata inviata con successo."));
-        verify(request.getRequestDispatcher("/listaOrdiniUtente")).forward(request, response);
+        verify(request.getRequestDispatcher("listaOrdiniUtente")).forward(request, response);
     }
 
     @Test

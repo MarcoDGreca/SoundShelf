@@ -42,29 +42,45 @@
             <tbody>
                 <% for (Product product : products) { %>
                     <tr>
-                        <td><img src="${pageContext.request.contextPath}/img/<%= product.getImage() != null ? product.getImage() : "default.jpg" %>" alt="<%= product.getName() %>"></td>
+                        <td>
+                            <img src="${pageContext.request.contextPath}/img/<%= product.getImage() != null ? product.getImage() : "default.jpg" %>" alt="<%= product.getName() %>" width="100">
+                        </td>
                         <td><%= product.getName() %></td>
                         <td>&euro;<%= product.getSalePrice() %></td>
                         <td><%= product.getAvailability() %></td>
                         <td><%= product.getReleaseDate() %></td>
                         <td><%= product.getDescription() %></td>
 
-                        <td>
+                        <td class="artists">
                             <% 
-                                List<Artist> artists = product.getArtists();
-                                if (artists != null && !artists.isEmpty()) { 
-                            %>
-                                <%= artists.get(0).getFirstName() %> <% if (artists.size() > 1) { %> e altri <% } %>
-                            <% } %>
+                                        List<prodotti.Artist> artists = product.getArtists();
+                                        if (artists != null && !artists.isEmpty()) {
+                                            for (int i = 0; i < artists.size(); i++) {
+                                                out.print(artists.get(i).getStageName());
+                                                if (i < artists.size() - 1) {
+                                                    out.print(", ");
+                                                }
+                                            }
+                                        } else {
+                                            out.print("Nessun artista disponibile");
+                                        }
+                             %>
                         </td>
 
-                        <td>
+                        <td class="genres">
                             <% 
-                                List<Genre> genres = product.getGenres();
-                                if (genres != null && !genres.isEmpty()) { 
-                            %>
-                                <%= genres.get(0).getName() %> <% if (genres.size() > 1) { %> e altri <% } %>
-                            <% } %>
+                                        List<prodotti.Genre> genres = product.getGenres();
+                                        if (genres != null && !genres.isEmpty()) {
+                                            for (int i = 0; i < genres.size(); i++) {
+                                                out.print(genres.get(i).getName());
+                                                if (i < genres.size() - 1) {
+                                                    out.print(", ");
+                                                }
+                                            }
+                                        } else {
+                                            out.print("Nessun genere disponibile");
+                                        }
+                             %>
                         </td>
 
                         <td>

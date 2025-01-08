@@ -57,9 +57,6 @@ function displayResults(products) {
             productElement.className = 'grid-item product';
 
             productElement.innerHTML = `
-                <div class="product-image-container">
-                    <img src="/img/${product.image}" alt="${product.name}">
-                </div>
                 <div class="product-details">
                     <h3>${product.name}</h3>
                     <p><strong>Artista:</strong> ${Array.isArray(product.artists) ? product.artists.map(artist => artist.stageName || artist).join(', ') : product.artists}</p>

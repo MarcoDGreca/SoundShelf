@@ -23,7 +23,7 @@ List<Review> reviews = (List<Review>) request.getAttribute("reviews");
             </div>
             <div class="product-details">
                 <h1><%=product.getName()%></h1>
-                <p><strong>Artisti:</strong> <%=product.getArtists().stream().map(artist -> artist.getFirstName()).collect(java.util.stream.Collectors.joining(", "))%></p>
+                <p><strong>Artisti:</strong> <%=product.getArtists().stream().map(artist -> artist.getStageName()).collect(java.util.stream.Collectors.joining(", "))%></p>
                 <p><strong>Data di Rilascio:</strong> <%=product.getReleaseDate()%></p>
                 <p><strong>Generi:</strong> <%=product.getGenres().stream().map(genre -> genre.getName()).collect(java.util.stream.Collectors.joining(", "))%></p>
                 <p><strong>Prezzo Scontato:</strong> &euro;<%=product.getSalePrice()%></p>
@@ -44,8 +44,8 @@ List<Review> reviews = (List<Review>) request.getAttribute("reviews");
                 <% if (reviews != null && !reviews.isEmpty()) { %>
                     <% for (Review review : reviews) { %>
                         <div class="review">
-                            <p><strong>Email:</strong> <%=review.getEmailCliente()%></p>
-                            <p><strong>Voto:</strong> <%=review.getVoto()%>/10</p>
+                            <p><strong>Nome utente:</strong> <%=review.getEmailCliente()%></p>
+                            <p><strong>Voto:</strong> <%=review.getVoto()%>/5</p>
                             <p><%=review.getDescrizione()%></p>
                             <p><small><%=review.getDataRecensione()%></small></p>
                         </div>

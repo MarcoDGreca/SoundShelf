@@ -34,17 +34,17 @@
                 </div>
 
                 <div class="add-product-form-group">
-                    <label for="salePrice" class="add-product-label">Prezzo di Vendita (€):</label>
+                    <label for="salePrice" class="add-product-label">Prezzo di Vendita (&euro;):</label>
                     <input type="number" step="0.01" id="salePrice" name="salePrice" class="add-product-input" required><br>
                 </div>
 
                 <div class="add-product-form-group">
-                    <label for="originalPrice" class="add-product-label">Prezzo Originale (€):</label>
+                    <label for="originalPrice" class="add-product-label">Prezzo Originale (&euro;):</label>
                     <input type="number" step="0.01" id="originalPrice" name="originalPrice" class="add-product-input" required><br>
                 </div>
 
                 <div class="add-product-form-group">
-                    <label for="availability" class="add-product-label">Disponibilità:</label>
+                    <label for="availability" class="add-product-label">Disponibilit&aacute;:</label>
                     <input type="number" id="availability" name="availability" class="add-product-input" required><br>
                 </div>
 

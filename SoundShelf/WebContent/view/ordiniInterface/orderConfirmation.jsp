@@ -22,8 +22,7 @@
             <h1>Ordine Completato</h1>
             <p>Grazie per aver effettuato un acquisto su SoundShelf!</p>
             
-            <p><strong>Numero ordine:</strong> <%= (order != null) ? order.getNumeroOrdine() : "N/A" %></p>
-            <p><strong>Totale:</strong> &euro;<%= (order != null) ? order.getPrezzoTotale() : "0.00" %></p>
+            <p><strong>Totale ordine:</strong> &euro;<%= (order != null) ? order.getPrezzoTotale() : "0.00" %></p>
 
             <p>Abbiamo inviato una conferma d'ordine alla tua email (<%= email %>). Riceverai ulteriori istruzioni per il pagamento.</p>
             <p>Per qualsiasi domanda, non esitare a contattare il nostro servizio clienti.</p>

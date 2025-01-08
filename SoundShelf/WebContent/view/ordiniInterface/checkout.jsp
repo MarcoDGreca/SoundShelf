@@ -36,7 +36,7 @@
                     <thead>
                         <tr>
                             <th>Prodotto</th>
-                            <th>Quantità</th>
+                            <th>Quantit&agrave;</th>
                             <th>Prezzo Unitario</th>
                             <th>Totale</th>
                         </tr>

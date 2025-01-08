@@ -38,12 +38,16 @@ public class RegisterControl extends HttpServlet {
         String indirizzo = via + ", " + numero + ", " + cap + ", " + citta + ", " + provincia;
 
         String hashedPassword = hashPassword(password);
-
-        UtenteRegistrato newUser = new UtenteRegistrato(email, hashedPassword, nome, cognome, indirizzo, telefono, Ruolo.UTENTE);
-
-        userDAO.addUser(newUser);
-
-        response.sendRedirect(request.getContextPath() + "/home");
+        
+        if (userDAO.getUserByEmail(email) == null) {
+        	UtenteRegistrato newUser = new UtenteRegistrato(email, hashedPassword, nome, cognome, indirizzo, telefono, Ruolo.UTENTE);
+        	userDAO.addUser(newUser);
+        	response.sendRedirect(request.getContextPath() + "/home");
+        }
+        else {
+        	request.setAttribute("errorMessage", "Hai già creato un account con questa mail. Scegline una nuova.");
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
+        }
     }
     
     private String hashPassword(String password) {

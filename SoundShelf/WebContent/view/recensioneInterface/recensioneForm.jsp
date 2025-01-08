@@ -34,10 +34,11 @@
                         <label for="rating" class="review-label">Voto:</label>
                         <select name="rating" id="rating" class="review-input-select" required>
                             <option value="">-- Seleziona --</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
+                            <option value="1">0</option>
+                            <option value="2">1</option>
+                            <option value="3">2</option>
+                            <option value="4">3</option>
+                            <option value="5">4</option>
                             <option value="5">5</option>
                         </select>
                     </div>

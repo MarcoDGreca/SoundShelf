@@ -82,10 +82,9 @@ public class TC2 {
     }
 
     @Test
-    public void testTC3_2_UnauthenticatedUser() throws ServletException, IOException {
-        when(request.getSession()).thenReturn(session);
+    public void testUnauthenticatedUser() throws ServletException, IOException {
         when(session.getAttribute("user")).thenReturn(null);
-        when(cart.isEmpty()).thenReturn(false); // Carrello non vuoto
+        when(cart.isEmpty()).thenReturn(false);
         when(request.getRequestDispatcher("view/error/messaggioErrore.jsp")).thenReturn(requestDispatcher);
 
         acquistoControl.doGet(request, response);
@@ -95,13 +94,19 @@ public class TC2 {
     }
 
     @Test
-    public void testTC3_3_AuthenticatedUserWithSavedAddress() throws ServletException, IOException, SQLException {
-        String shippingAddress = "Via Orsetti Gommosi 17";
+    public void testAuthenticatedUserWithNewAddress() throws ServletException, IOException, SQLException {
+        String useNewAddress = "on";
         double totalPrice = 100.0;
 
         when(cart.isEmpty()).thenReturn(false);
         when(cart.getTotalPrice()).thenReturn(totalPrice);
-        when(request.getParameter("shippingAddress")).thenReturn(shippingAddress);
+        when(request.getParameter("useNewAddress")).thenReturn(useNewAddress);
+        when(request.getParameter("via")).thenReturn("Pellicano");
+        when(request.getParameter("numeroCivico")).thenReturn("1");
+        when(request.getParameter("cap")).thenReturn("11111");
+        when(request.getParameter("citta")).thenReturn("Ancona");
+        when(request.getParameter("provincia")).thenReturn("SA");
+        
         when(orderDAO.addOrder(any(Order.class))).thenReturn(1);
         when(product.getAvailability()).thenReturn(10);
 
@@ -116,10 +121,10 @@ public class TC2 {
     }
 
     @Test
-    public void testTC3_4_ProductNotAvailable() throws ServletException, IOException, SQLException {
+    public void testProductNotAvailable() throws ServletException, IOException, SQLException {
         when(cart.isEmpty()).thenReturn(false);
         when(cart.getTotalPrice()).thenReturn(100.0);
-        when(request.getParameter("shippingAddress")).thenReturn("Indirizzo Valido");
+        when(request.getParameter("useNewAddress")).thenReturn("off");
 
         when(product.getAvailability()).thenReturn(0); // Prodotto non disponibile
         when(product.getName()).thenReturn("Prodotto Test");
@@ -128,12 +133,37 @@ public class TC2 {
         items.add(new CartItem(product, 1));
         when(cart.getItems()).thenReturn(items);
         when(request.getRequestDispatcher("view/error/messaggioErrore.jsp")).thenReturn(requestDispatcher);
-
+        
+        when(user.getIndirizzo()).thenReturn("Via Brombei, 17, Napoli, NA");
         acquistoControl.doPost(request, response);
 
         verify(request).setAttribute("errorMessage", "Il prodotto Prodotto Test non è disponibile nella quantità richiesta.");
         verify(requestDispatcher).forward(request, response);
     }
 
+    @Test
+    public void testShippingAddressValidation() throws ServletException, IOException {
+        when(cart.isEmpty()).thenReturn(false);
+        when(request.getParameter("useNewAddress")).thenReturn("off"); // Indirizzo non valido
+        when(user.getIndirizzo()).thenReturn("Via");
+
+        when(request.getRequestDispatcher("view/error/messaggioErrore.jsp")).thenReturn(requestDispatcher);
+
+        acquistoControl.doPost(request, response);
+
+        verify(request).setAttribute("errorMessage", "L'indirizzo di spedizione non è valido. Assicurati che contenga almeno 10 caratteri.");
+        verify(requestDispatcher).forward(request, response);
+    }
+
+    @Test
+    public void testEmptyCart() throws ServletException, IOException {
+        when(cart.isEmpty()).thenReturn(true); // Carrello vuoto
+        when(request.getRequestDispatcher("view/error/messaggioErrore.jsp")).thenReturn(requestDispatcher);
+
+        acquistoControl.doPost(request, response);
+
+        verify(request).setAttribute("errorMessage", "Il carrello è vuoto.");
+        verify(requestDispatcher).forward(request, response);
+    }
 
 }

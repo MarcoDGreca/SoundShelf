@@ -31,8 +31,11 @@
         </form>
         
         <div id="errorMessage" style="color: red; display: none;"></div>
+ 
         
-        <div id="results" class="results"></div>
+         <section id="prodotti" class="products-section">
+            <div id="results" class="main-content grid"></div>
+         </section>
     </div>
     
     <jsp:include page="../pagePieces/footer.jsp" />

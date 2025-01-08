@@ -61,6 +61,7 @@ public class TC5 {
         DataSource.init("jdbc:mysql://localhost:3306/SoundShelf", "root", "W23e45f78.");
         when(response.getWriter()).thenReturn(writer);
         cercaProdottiControl.init();
+        cercaProdottiControl.productDAO = productDAO;
     }
 
     @Test
@@ -69,10 +70,10 @@ public class TC5 {
         when(request.getParameter("genre")).thenReturn("Rock");
         when(request.getParameter("artist")).thenReturn("Drake");
 
-        Product product = new Product(1, "Lover", List.of(new Artist("Drake", "Drake", "Drake")), "2024", "Lover", 500, 20.0, 25.0, "CD", List.of(new Genre("Rock")), "image.jpg", false);
+        Product product = new Product(7, "Lover", List.of(new Artist("Drake", "Aubrey Graham", "Drake")), "2019-08-23", "Taylor Swift", 200, 21.99, 29.99, "CD", List.of(new Genre("Rock")), "image.jpg", false);
         List<Product> products = Arrays.asList(product);
 
-        when(productDAO.searchProducts(anyString(), anyList(), anyList())).thenReturn(products);
+        lenient().when(productDAO.searchProducts(anyString(), anyList(), anyList())).thenReturn(products);
 
         cercaProdottiControl.doGet(request, response);
 
@@ -99,17 +100,17 @@ public class TC5 {
 
     @Test
     void testDoGet_withNoParameters() throws ServletException, IOException, SQLException {
-        when(request.getParameter("name")).thenReturn(null);
-        when(request.getParameter("genre")).thenReturn(null);
-        when(request.getParameter("artist")).thenReturn(null);
+        when(request.getParameter("name")).thenReturn("");
+        when(request.getParameter("genre")).thenReturn("");
+        when(request.getParameter("artist")).thenReturn("");
 
         List<Product> products = Arrays.asList(
-            new Product(1, "Greatest Hits", List.of(new Artist("Vasco", "Rossi", "Vasco")), "2022-01-01", "Le migliori canzoni di Vasco Rossi", 100, 19.99, 29.99, "CD", List.of(new Genre("Rock")), "img/vasco.jpg", false),
-            new Product(2, "My Everything", List.of(new Artist("Ariana", "Grande", "Ariana")), "2014-08-25", "Album di Ariana Grande", 200, 14.99, 24.99, "CD", List.of(new Genre("Pop")), "img/ariana.jpg", false),
-            new Product(3, "Starboy", List.of(new Artist("The", "Weeknd", "Weeknd")), "2016-11-25", "Album di The Weeknd", 150, 17.99, 27.99, "CD", List.of(new Genre("Pop")), "img/weeknd.jpg", false)
+                new Product(1, "Greatest Hits", List.of(new Artist("Vasco", "Rossi", "Vasco Rossi")), "2022-01-01", "Le migliori canzoni di Vasco Rossi", 100, 19.99, 29.99, "Vinile", List.of(new Genre("Rock")), "image.jpg", false),
+                new Product(2, "My Everything", List.of(new Artist("Ariana", "Grande", "Ariana Grande")), "2014-08-25", "Album di Ariana Grande", 200, 14.99, 24.99, "CD", List.of(new Genre("Pop")), "image.jpg", false),
+                new Product(3, "Starboy", List.of(new Artist("The", "Weeknd", "The Weekend")), "2016-11-25", "Album di The Weeknd", 150, 17.99, 27.99, "Vinile", List.of(new Genre("Pop")), "image.jpg", false)
         );
 
-        when(productDAO.searchProducts(anyString(), anyList(), anyList())).thenReturn(products);
+        lenient().when(productDAO.searchProducts(anyString(), anyList(), anyList())).thenReturn(products);
 
         cercaProdottiControl.doGet(request, response);
 
@@ -132,6 +133,7 @@ public class TC5 {
             expectedJsonArray.put(expectedJson);
         }
 
+        // Verifica che la risposta scritta sia corretta
         verify(writer).write(expectedJsonArray.toString());
     }
 

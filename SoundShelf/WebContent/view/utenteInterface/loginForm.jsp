@@ -19,7 +19,7 @@
             </div>
         </form>
 
-        <p>Non hai un account? <a href="register.jsp">Registrati qui</a>.</p>
+        <p>Non hai un account? <a href="registerForm.jsp">Registrati qui</a>.</p>
     </div>
 </main>
 <jsp:include page="../pagePieces/footer.jsp" />

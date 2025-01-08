@@ -35,18 +35,38 @@
                             <div class="product-details">
                                 <h3><%= product.getName() %></h3>
                                 <p><strong>Artisti:</strong>
-                                    <% for (prodotti.Artist artist : product.getArtists()) { %>
-                                        <%= artist.getFirstName() %><%= product.getArtists().indexOf(artist) < product.getArtists().size() - 1 ? ", " : "" %>
-                                    <% } %>
+                                    <% 
+                                        List<prodotti.Artist> artists = product.getArtists();
+                                        if (artists != null && !artists.isEmpty()) {
+                                            for (int i = 0; i < artists.size(); i++) {
+                                                out.print(artists.get(i).getStageName());
+                                                if (i < artists.size() - 1) {
+                                                    out.print(", ");
+                                                }
+                                            }
+                                        } else {
+                                            out.print("Nessun artista disponibile");
+                                        }
+                                    %>
                                 </p>
                                 <p><strong>Data di Rilascio:</strong> <%= product.getReleaseDate() %></p>
                                 <p><strong>Generi:</strong>
-                                    <% for (prodotti.Genre genre : product.getGenres()) { %>
-                                        <%= genre.getName() %><%= product.getGenres().indexOf(genre) < product.getGenres().size() - 1 ? ", " : "" %>
-                                    <% } %>
+                                    <% 
+                                        List<prodotti.Genre> genres = product.getGenres();
+                                        if (genres != null && !genres.isEmpty()) {
+                                            for (int i = 0; i < genres.size(); i++) {
+                                                out.print(genres.get(i).getName());
+                                                if (i < genres.size() - 1) {
+                                                    out.print(", ");
+                                                }
+                                            }
+                                        } else {
+                                            out.print("Nessun genere disponibile");
+                                        }
+                                    %>
                                 </p>
-                                <p><strong>Prezzo Scontato:</strong>&euro;<%= product.getSalePrice() %></p>
-                                <p><strong>Prezzo Originale:</strong>&euro;<%= product.getOriginalPrice() %></p>
+                                <p><strong>Prezzo Scontato:</strong> &euro;<%= product.getSalePrice() %></p>
+                                <p><strong>Prezzo Originale:</strong> &euro;<%= product.getOriginalPrice() %></p>
                                 <p><strong>Disponibilit&aacute;:</strong> <%= product.getAvailability() %></p>
                                 <form action="${pageContext.request.contextPath}/prodottoControl" method="get">
                                     <input type="hidden" name="productId" value="<%= product.getProductCode() %>">

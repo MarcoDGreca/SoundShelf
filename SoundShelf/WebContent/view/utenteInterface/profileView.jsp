@@ -59,11 +59,6 @@
                 <label for="cognome" class="form-label">Cognome:</label>
                 <input type="text" id="cognome" name="cognome" value="<%= user.getCognome() %>" required class="form-input">
             </div>
-            
-            <div class="form-group">
-                <label for="cognome" class="form-label">Email:</label>
-                <input type="text" id="email" name="email" value="<%= user.getEmail() %>" required class="form-input">
-            </div>
 
             <div class="form-group">
                 <label for="indirizzo" class="form-label">Indirizzo:</label>
