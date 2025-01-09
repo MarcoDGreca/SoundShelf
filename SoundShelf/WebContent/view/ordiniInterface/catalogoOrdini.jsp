@@ -16,29 +16,6 @@
 	<div id="main" class="clear">
 		<h2>Catalogo Ordini</h2>
 
-		<form
-			action="${pageContext.request.contextPath}/gestisciCatalogoOrdiniControl"
-			method="post" class="filter-form">
-			<fieldset class="filter-fieldset">
-				<legend class="filter-legend">Filtra Ordini</legend>
-				<div class="filter-group">
-					<label for="emailCliente" class="filter-label">Email
-						Cliente:</label> <input type="email" name="emailCliente" id="emailCliente"
-						placeholder="Inserisci email cliente" class="filter-input" />
-				</div>
-				<div class="filter-group">
-					<label for="dataInizio" class="filter-label">Data Inizio:</label> <input
-						type="date" name="dataInizio" id="dataInizio" class="filter-input" />
-				</div>
-				<div class="filter-group">
-					<label for="dataFine" class="filter-label">Data Fine:</label> <input
-						type="date" name="dataFine" id="dataFine" class="filter-input" />
-				</div>
-				<button type="submit" class="filter-button">Filtra</button>
-			</fieldset>
-		</form>
-
-
 		<%
 		List<Order> ordini = (List<Order>) request.getAttribute("ordini");
 		Map<Integer, List<ElementoOrdine>> ordineDetailsMap = (Map<Integer, List<ElementoOrdine>>) request
@@ -116,8 +93,8 @@
 						<%
 						for (StatoOrdine stato : StatoOrdine.values()) {
 						%>
-						<option value="<%=stato.name()%>"
-							<%=stato.name().equals(ordine.getStato().getStato()) ? "selected" : ""%>><%=stato.getStato()%></option>
+						<option value="<%=stato.getStato()%>"
+							<%=stato.getStato().equals(ordine.getStato().getStato()) ? "selected" : ""%>><%=stato.getStato()%></option>
 						<%
 						}
 						%>

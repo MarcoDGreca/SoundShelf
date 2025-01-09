@@ -89,7 +89,7 @@ public class AcquistoControl extends HttpServlet {
                 return;
             }
 
-            shippingAddress = street + " " + civicNumber + ", " + postalCode + " " + city + "," + province;
+            shippingAddress = street + " , " + civicNumber + " , " + postalCode + " , " + city + " , " + province;
         } else {
             shippingAddress = user.getIndirizzo();
         }

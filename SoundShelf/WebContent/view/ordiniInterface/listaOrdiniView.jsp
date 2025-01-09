@@ -82,9 +82,9 @@
                         %>
                     </table>
                     <%
-                    if ("Spedito".equals(order.getStato().getStato())) {
+                    if ("Affidato al corriere".equals(order.getStato().getStato())) {
                     %>
-                    <form action="${pageContext.request.contextPath}/OrdineRicevutoControl" method="post" onsubmit="return confirm('Sei sicuro di aver ricevuto questo ordine?');">
+                    <form action="${pageContext.request.contextPath}/OrdineRicevutoControl" method="post">
                         <input type="hidden" name="ordineId" value="<%= order.getNumeroOrdine() %>">
                         <input type="hidden" name="confermaRicezione" value="si">
                         <button type="submit" class="confirm-receipt-button">Conferma Ricezione</button>

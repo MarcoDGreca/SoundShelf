@@ -13,20 +13,6 @@
             <li><a href="${pageContext.request.contextPath}/home">Home</a></li>
             <li><a href="${pageContext.request.contextPath}/carrelloControl">Carrello</a></li>
             <li><a href="${pageContext.request.contextPath}/view/prodottiInterface/ricercaProdottiView.jsp">Cerca</a></li>
-
-            <% if (utente != null && utente.getRuolo().equals(Ruolo.GESTORESITO)) { %>
-                <li class="admin-section">
-                    <a href="#" class="admin-toggle">Amministrazione</a>
-                    <ul class="admin-dropdown">
-                        <li><a href="${pageContext.request.contextPath}/gestisciRichiesteRimborsoControl">Rimborsi</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoOrdiniControl">Ordini</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoUtentiControl">Utenti</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciRichiestaSupportoControl">Supporto</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoProdottiControl">Prodotti</a></li>
-                        <li><a href="${pageContext.request.contextPath}/gestisciRecensioniControl">Recensioni</a></li>
-                    </ul>
-                </li>
-            <% } %>
         </ul>
         <div class="auth-buttons">
             <% if (isAuthenticated) { %>
@@ -41,6 +27,19 @@
                             <li><a href="${pageContext.request.contextPath}/logout">LogOut</a></li>
                         </ul>
                     </li>
+                    <% if (utente != null && utente.getRuolo().equals(Ruolo.GESTORESITO)) { %>
+                <li class="profile-section">
+                    <a href="#" class="profile-toggle">Amministrazione</a>
+                    <ul class="profile-dropdown">
+                        <li><a href="${pageContext.request.contextPath}/gestisciRichiesteRimborsoControl">Rimborsi</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoOrdiniControl">Ordini</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoUtentiControl">Utenti</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciRichiestaSupportoControl">Supporto</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciCatalogoProdottiControl">Prodotti</a></li>
+                        <li><a href="${pageContext.request.contextPath}/gestisciRecensioniControl">Recensioni</a></li>
+                    </ul>
+                </li>
+            <% } %>
                 </ul>
             <% } else { %>
                 <div class="user-menu">

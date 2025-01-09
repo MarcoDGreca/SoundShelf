@@ -50,6 +50,7 @@ public class GestisciRichiestaSupportoControl extends HttpServlet {
                 if (supportRequest != null) {
                     supportRequest.setInformazioniAggiuntive(informazioniAggiuntive);
                     supportRequest.setStato(StatoSupporto.ATTESA_INFO);
+                    supportRequest.setRispostaUtente(null);
                     supportRequestDAO.updateSupportRequest(supportRequest);
                 } else {
                     request.setAttribute("errorMessage", "La richiesta di supporto non esiste.");

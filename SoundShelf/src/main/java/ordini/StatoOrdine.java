@@ -4,8 +4,7 @@ public enum StatoOrdine {
     IN_LAVORAZIONE("In lavorazione"),
     COMPLETATO("Consegnato"),
     ANNULLATO("Annullato"),
-    SPEDITO("Spedito"),
-    AFFIDATO("Affidato"),
+    AFFIDATO_CORRIERE("Affidato al corriere"),
     ATTESA_PAGAMENTO("In attesa di pagamento"),
     PAGAMENTO_NON_RICEVUTO("Pagamento non ricevuto");
 

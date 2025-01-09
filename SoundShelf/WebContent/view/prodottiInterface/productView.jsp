@@ -29,6 +29,7 @@ List<Review> reviews = (List<Review>) request.getAttribute("reviews");
                 <p><strong>Prezzo Scontato:</strong> &euro;<%=product.getSalePrice()%></p>
                 <p><strong>Prezzo Originale:</strong> &euro;<%=product.getOriginalPrice()%></p>
                 <p><strong>Disponibilit&aacute;:</strong> <%=product.getAvailability()%></p>
+                <p><strong>Formato:</strong> <%= product.getSupportedDevice() %></p>
 
                 <form action="${pageContext.request.contextPath}/carrelloControl" method="post">
                     <input type="hidden" name="action" value="add">
@@ -44,7 +45,7 @@ List<Review> reviews = (List<Review>) request.getAttribute("reviews");
                 <% if (reviews != null && !reviews.isEmpty()) { %>
                     <% for (Review review : reviews) { %>
                         <div class="review">
-                            <p><strong>Nome utente:</strong> <%=review.getEmailCliente()%></p>
+                            <p><strong>Email utente:</strong> <%=review.getEmailCliente()%></p>
                             <p><strong>Voto:</strong> <%=review.getVoto()%>/5</p>
                             <p><%=review.getDescrizione()%></p>
                             <p><small><%=review.getDataRecensione()%></small></p>

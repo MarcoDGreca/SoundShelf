@@ -25,17 +25,19 @@ public class AggiornaStatoOrdineControl extends HttpServlet {
             String nuovoStato = request.getParameter("nuovoStato");
             System.out.println(nuovoStato);
             StatoOrdine statoOrdine = StatoOrdine.fromString(nuovoStato);
-            System.out.println(statoOrdine);
-            boolean success = orderDAO.updateOrderStatus(numeroOrdine, statoOrdine.name());
+            System.out.println(statoOrdine.getStato());
+            boolean success = orderDAO.updateOrderStatus(numeroOrdine, statoOrdine.getStato());
 
             if (!success) {
                 request.setAttribute("errorMessage", "Errore durante l'aggiornamento dello stato ordine.");
                 request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
             }
+            response.sendRedirect(request.getContextPath() + "/gestisciCatalogoOrdiniControl");
 
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Errore: " + e.getMessage());
+            request.getRequestDispatcher("view/error/messaggioErrore.jsp").forward(request, response);
         }
-        response.sendRedirect(request.getContextPath() + "/gestisciCatalogoOrdiniControl");
+        
     }
 }

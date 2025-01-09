@@ -59,9 +59,13 @@
                 </div>
 
                 <div class="add-product-form-group">
-                    <label for="supportedDevice" class="add-product-label">Formato:</label>
-                    <input type="text" id="supportedDevice" name="supportedDevice" class="add-product-input" required><br>
-                </div>
+    				<label for="supportedDevice" class="add-product-label">Formato:</label>
+    				<select id="supportedDevice" name="supportedDevice" class="add-product-input" required>
+        				<option value="CD">CD</option>
+        				<option value="Vinile">Vinile</option>
+    				</select><br>
+				</div>
+
 
                 <div class="add-product-form-group">
                     <label for="artists" class="add-product-label">Artisti (separati da virgola):</label>

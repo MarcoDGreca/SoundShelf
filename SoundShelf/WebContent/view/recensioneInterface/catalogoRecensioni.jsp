@@ -35,7 +35,7 @@
                     <% for (Review recensione : recensioni) { %>
                         <tr>
                             <td><%= recensione.getIdProdotto() %></td>
-                            <td><%= recensione.getVoto() %>/10</td>
+                            <td><%= recensione.getVoto() %>/5</td>
                             <td><%= recensione.getEmailCliente() %></td>
                             <td><%= recensione.getDataRecensione() %></td>
                             <td><%= recensione.getDescrizione() %></td>

@@ -100,9 +100,9 @@ public class TC5 {
 
     @Test
     void testDoGet_withNoParameters() throws ServletException, IOException, SQLException {
-        when(request.getParameter("name")).thenReturn("");
-        when(request.getParameter("genre")).thenReturn("");
-        when(request.getParameter("artist")).thenReturn("");
+        when(request.getParameter("name")).thenReturn(null);
+        when(request.getParameter("genre")).thenReturn(null);
+        when(request.getParameter("artist")).thenReturn(null);
 
         List<Product> products = Arrays.asList(
                 new Product(1, "Greatest Hits", List.of(new Artist("Vasco", "Rossi", "Vasco Rossi")), "2022-01-01", "Le migliori canzoni di Vasco Rossi", 100, 19.99, 29.99, "Vinile", List.of(new Genre("Rock")), "image.jpg", false),
@@ -110,7 +110,7 @@ public class TC5 {
                 new Product(3, "Starboy", List.of(new Artist("The", "Weeknd", "The Weekend")), "2016-11-25", "Album di The Weeknd", 150, 17.99, 27.99, "Vinile", List.of(new Genre("Pop")), "image.jpg", false)
         );
 
-        lenient().when(productDAO.searchProducts(anyString(), anyList(), anyList())).thenReturn(products);
+        lenient().when(productDAO.searchProducts(null, null, null)).thenReturn(products);
 
         cercaProdottiControl.doGet(request, response);
 
@@ -133,7 +133,6 @@ public class TC5 {
             expectedJsonArray.put(expectedJson);
         }
 
-        // Verifica che la risposta scritta sia corretta
         verify(writer).write(expectedJsonArray.toString());
     }
 
